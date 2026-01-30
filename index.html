@@ -18,6 +18,11 @@
             background: radial-gradient(1200px 500px at 50% 40%, #ffffff 0%, #f3f6fb 55%, #eaf0f8 100%);
         }
 
+        /* Premium blue background ONLY for selected slides (opt-in via JS matcher). */
+        .main-carousel .carousel-item.premium-blue-bg {
+            background: linear-gradient(135deg, #062a6a 0%, #0b3b91 45%, #082a66 100%);
+        }
+
         /* Show the FULL image (no cropping). */
         .main-carousel .carousel-item img {
             width: 100%;
@@ -43,6 +48,40 @@
         (function () {
             var INSTASIZE_IMAGE_URL = "https://instasize.com/api/image/6fd70c0449522d9522322826f92df1fd78f60dcd2855d7ab93a32b37f737ff41.jpeg";
             var MAIN_CAROUSEL_API_URL = "https://islec.herokuapp.com/api/carousels/main";
+
+            // Slides whose image src matches any of these get the premium blue background.
+            // Add/remove filenames here to control which slider images get the blue bg.
+            var PREMIUM_BLUE_BG_MATCHERS = [
+                /instasize\.com\/api\/image\//i,
+                /\/allimages\/mainSlider\/instasize-slide\.jpe?g(\?|$)/i,
+                /\/allimages\/mainSlider\/hackaton2024\.png(\?|$)/i
+            ];
+
+            function applyPremiumBlueBgToSelectedSlides() {
+                var carousel = document.querySelector('.main-carousel.carousel');
+                if (!carousel) return false;
+
+                var items = carousel.querySelectorAll('.carousel-item');
+                for (var i = 0; i < items.length; i++) {
+                    var item = items[i];
+                    var img = item.querySelector('img');
+                    if (!img) continue;
+
+                    var src = img.currentSrc || img.src || '';
+                    var matched = false;
+                    for (var j = 0; j < PREMIUM_BLUE_BG_MATCHERS.length; j++) {
+                        if (PREMIUM_BLUE_BG_MATCHERS[j].test(src)) {
+                            matched = true;
+                            break;
+                        }
+                    }
+
+                    if (matched) item.classList.add('premium-blue-bg');
+                    else item.classList.remove('premium-blue-bg');
+                }
+
+                return true;
+            }
 
             function addMainCarouselClass() {
                 var img = document.querySelector('img[alt="CE Carousel Images"]');
@@ -165,6 +204,7 @@
             function tryInit() {
                 var ok = addMainCarouselClass();
                 if (ok) injectInstasizeFirstSlide();
+                if (ok) applyPremiumBlueBgToSelectedSlides();
                 return ok;
             }
 
@@ -173,6 +213,29 @@
                     if (tryInit()) observer.disconnect();
                 });
                 observer.observe(document.documentElement, { childList: true, subtree: true });
+            }
+
+            // If React/Bootstrap mutates slides later, keep the blue background in sync.
+            // Lightweight observer scoped to the carousel once it exists.
+            var premiumObserver = new MutationObserver(function () {
+                applyPremiumBlueBgToSelectedSlides();
+            });
+
+            function attachPremiumObserver() {
+                var carousel = document.querySelector('.main-carousel.carousel');
+                if (!carousel) return false;
+                var inner = carousel.querySelector('.carousel-inner');
+                if (!inner) return false;
+                premiumObserver.observe(inner, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] });
+                applyPremiumBlueBgToSelectedSlides();
+                return true;
+            }
+
+            if (!attachPremiumObserver()) {
+                var attachObserver = new MutationObserver(function () {
+                    if (attachPremiumObserver()) attachObserver.disconnect();
+                });
+                attachObserver.observe(document.documentElement, { childList: true, subtree: true });
             }
         })();
     </script>
