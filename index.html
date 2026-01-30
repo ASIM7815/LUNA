@@ -12,6 +12,171 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="manifest" href="./manifest.json" />
     <title>ISL Engineering College</title>
+
+    <style>
+        .main-carousel .carousel-item {
+            background: radial-gradient(1200px 500px at 50% 40%, #ffffff 0%, #f3f6fb 55%, #eaf0f8 100%);
+        }
+
+        /* Show the FULL image (no cropping). */
+        .main-carousel .carousel-item img {
+            width: 100%;
+            height: clamp(300px, 65vh, 640px);
+            object-fit: contain;
+            object-position: center;
+            background: transparent;
+        }
+
+        .main-carousel.carousel-fade .carousel-item {
+            transition-duration: 700ms;
+            transition-timing-function: cubic-bezier(.22, .61, .36, 1);
+        }
+
+        @media (max-width: 576px) {
+            .main-carousel .carousel-item img {
+                height: clamp(220px, 45vh, 420px);
+            }
+        }
+    </style>
+
+    <script>
+        (function () {
+            var INSTASIZE_IMAGE_URL = "https://instasize.com/api/image/6fd70c0449522d9522322826f92df1fd78f60dcd2855d7ab93a32b37f737ff41.jpeg";
+            var MAIN_CAROUSEL_API_URL = "https://islec.herokuapp.com/api/carousels/main";
+
+            function addMainCarouselClass() {
+                var img = document.querySelector('img[alt="CE Carousel Images"]');
+                var carousel = img && img.closest && img.closest('.carousel');
+                if (!carousel) return false;
+                carousel.classList.add('main-carousel', 'carousel-fade');
+                return true;
+            }
+
+            function injectInstasizeFirstSlide() {
+                var carousel = document.querySelector('.main-carousel.carousel');
+                if (!carousel) return false;
+
+                var inner = carousel.querySelector('.carousel-inner');
+                if (!inner) return false;
+
+                if (inner.querySelector('[data-injected="instasize-hero"]')) return true;
+
+                // Create injected first item
+                var injectedItem = document.createElement('div');
+                injectedItem.className = 'carousel-item active';
+                injectedItem.setAttribute('data-injected', 'instasize-hero');
+
+                var img = document.createElement('img');
+                img.src = INSTASIZE_IMAGE_URL;
+                img.className = 'img-fluid d-block w-100';
+                img.alt = 'Main Slider';
+                injectedItem.appendChild(img);
+
+                // Deactivate any existing active slide
+                var currentActive = inner.querySelector('.carousel-item.active');
+                if (currentActive) currentActive.classList.remove('active');
+
+                // Insert first
+                inner.insertBefore(injectedItem, inner.firstChild);
+
+                // Rebuild indicators to match new slide count
+                var indicators = carousel.querySelector('.carousel-indicators');
+                if (indicators) {
+                    indicators.innerHTML = '';
+                    var items = inner.querySelectorAll('.carousel-item');
+                    for (var i = 0; i < items.length; i++) {
+                        var btn = document.createElement('button');
+                        btn.type = 'button';
+                        btn.setAttribute('data-bs-target', '#' + (carousel.id || ''));
+                        btn.setAttribute('data-bs-slide-to', String(i));
+                        btn.setAttribute('aria-label', 'Slide ' + (i + 1));
+                        if (i === 0) {
+                            btn.className = 'active';
+                            btn.setAttribute('aria-current', 'true');
+                        }
+                        indicators.appendChild(btn);
+                    }
+                }
+
+                return true;
+            }
+
+            // Best-effort: prepend our slide into the API response so React renders it as the first slide.
+            // This avoids editing the compiled JS bundle.
+            try {
+                var OriginalXHR = window.XMLHttpRequest;
+                if (OriginalXHR) {
+                    function PatchedXHR() {
+                        var xhr = new OriginalXHR();
+                        var requestUrl = "";
+                        var originalOpen = xhr.open;
+
+                        xhr.open = function (method, url) {
+                            requestUrl = url;
+                            return originalOpen.apply(xhr, arguments);
+                        };
+
+                        xhr.addEventListener('readystatechange', function () {
+                            if (xhr.readyState !== 4) return;
+                            if (typeof requestUrl !== 'string' || requestUrl.indexOf(MAIN_CAROUSEL_API_URL) === -1) return;
+                            if (xhr.status < 200 || xhr.status >= 300) return;
+
+                            try {
+                                var json = JSON.parse(xhr.responseText);
+                                var injected = { _id: 'instasize-hero', img: INSTASIZE_IMAGE_URL, title: '' };
+
+                                var patched = json;
+                                if (Array.isArray(json)) {
+                                    var alreadyThere = json.some(function (x) { return x && x._id === injected._id; });
+                                    patched = alreadyThere ? json : [injected].concat(json);
+                                } else if (json && Array.isArray(json.data)) {
+                                    var alreadyThere2 = json.data.some(function (x) { return x && x._id === injected._id; });
+                                    patched = alreadyThere2 ? json : Object.assign({}, json, { data: [injected].concat(json.data) });
+                                }
+
+                                var text = JSON.stringify(patched);
+                                try {
+                                    Object.defineProperty(xhr, 'responseText', { get: function () { return text; } });
+                                    Object.defineProperty(xhr, 'response', { get: function () { return text; } });
+                                } catch (e) {
+                                    // If the browser blocks overriding responseText/response, we still keep UI sizing/animation.
+                                }
+                            } catch (e) {
+                                // Ignore parse failures.
+                            }
+                        });
+
+                        return xhr;
+                    }
+
+                    PatchedXHR.prototype = OriginalXHR.prototype;
+                    PatchedXHR.UNSENT = OriginalXHR.UNSENT;
+                    PatchedXHR.OPENED = OriginalXHR.OPENED;
+                    PatchedXHR.HEADERS_RECEIVED = OriginalXHR.HEADERS_RECEIVED;
+                    PatchedXHR.LOADING = OriginalXHR.LOADING;
+                    PatchedXHR.DONE = OriginalXHR.DONE;
+
+                    window.XMLHttpRequest = PatchedXHR;
+                }
+            } catch (e) {
+                // Ignore hook failures.
+            }
+
+            function tryInit() {
+                var ok = addMainCarouselClass();
+                if (ok) injectInstasizeFirstSlide();
+                return ok;
+            }
+
+            if (!tryInit()) {
+                var observer = new MutationObserver(function () {
+                    if (tryInit()) observer.disconnect();
+                });
+                observer.observe(document.documentElement, { childList: true, subtree: true });
+            }
+        })();
+    </script>
+
     <script defer="defer" src="./static/js/main.64d07445.js"></script>
     <script defer="defer" src="./academic-council-pdf.js"></script>
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
