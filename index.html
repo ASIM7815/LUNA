@@ -14,9 +14,28 @@
     <title>ISL Engineering College</title>
 
     <style>
+        /* Make all Bootstrap carousels animate smoothly on Next/Prev click */
+        .carousel {
+            --bs-carousel-transition: transform 700ms cubic-bezier(.22, .61, .36, 1);
+        }
+
+        .carousel.carousel-fade {
+            --bs-carousel-transition: opacity 700ms cubic-bezier(.22, .61, .36, 1);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .carousel {
+                --bs-carousel-transition: none;
+            }
+        }
+
         .main-carousel .carousel-item {
             /* Premium blue background for ALL slides in the main image slider */
             background: linear-gradient(135deg, #062a6a 0%, #0b3b91 45%, #082a66 100%);
+        }
+
+        .main-carousel .carousel-inner {
+            overflow: hidden;
         }
 
         /* Show the FULL image (no cropping). */
@@ -29,8 +48,19 @@
         }
 
         .main-carousel.carousel-fade .carousel-item {
-            transition-duration: 700ms;
-            transition-timing-function: cubic-bezier(.22, .61, .36, 1);
+            /* Explicit transition property prevents jitter from other CSS overrides */
+            transition: opacity 700ms cubic-bezier(.22, .61, .36, 1),
+                transform 700ms cubic-bezier(.22, .61, .36, 1);
+            will-change: opacity, transform;
+            transform: scale(0.995);
+            backface-visibility: hidden;
+        }
+
+        /* Keep the active (and entering) slide crisp and fully visible */
+        .main-carousel.carousel-fade .carousel-item.active,
+        .main-carousel.carousel-fade .carousel-item-next.carousel-item-start,
+        .main-carousel.carousel-fade .carousel-item-prev.carousel-item-end {
+            transform: scale(1);
         }
 
         @media (max-width: 576px) {
@@ -133,6 +163,66 @@
                 return true;
             }
 
+            function preloadMainCarouselImages() {
+                var carousel = document.querySelector('.main-carousel.carousel');
+                if (!carousel) return false;
+
+                var inner = carousel.querySelector('.carousel-inner');
+                if (!inner) return false;
+
+                function getItems() {
+                    return Array.prototype.slice.call(inner.querySelectorAll('.carousel-item'));
+                }
+
+                function getImgSrc(item) {
+                    var img = item && item.querySelector ? item.querySelector('img') : null;
+                    if (!img) return null;
+                    // Hint the browser to decode asynchronously and fetch eagerly for smoother transitions.
+                    try { img.decoding = 'async'; } catch (e) { }
+                    try { img.loading = 'eager'; } catch (e) { }
+                    return img.currentSrc || img.src || null;
+                }
+
+                function warm(src) {
+                    if (!src) return;
+                    var i = new Image();
+                    i.decoding = 'async';
+                    i.src = src;
+                }
+
+                function warmByIndex(index, lookAheadCount) {
+                    var items = getItems();
+                    if (!items.length) return;
+
+                    var count = typeof lookAheadCount === 'number' ? lookAheadCount : 2;
+                    for (var step = 0; step <= count; step++) {
+                        var idx = (index + step) % items.length;
+                        warm(getImgSrc(items[idx]));
+                    }
+                }
+
+                // Warm initial set (active + next couple slides)
+                var initialItems = getItems();
+                var activeIndex = 0;
+                for (var k = 0; k < initialItems.length; k++) {
+                    if (initialItems[k].classList && initialItems[k].classList.contains('active')) {
+                        activeIndex = k;
+                        break;
+                    }
+                }
+                warmByIndex(activeIndex, 3);
+
+                // Warm upcoming slides on each transition.
+                // Bootstrap 5 provides event.to (next index) on slide events.
+                carousel.addEventListener('slide.bs.carousel', function (ev) {
+                    var to = ev && typeof ev.to === 'number' ? ev.to : null;
+                    if (to === null) return;
+                    warmByIndex(to, 3);
+                });
+
+                return true;
+            }
+
             // Best-effort: prepend our slide into the API response so React renders it as the first slide.
             // This avoids editing the compiled JS bundle.
             try {
@@ -205,7 +295,10 @@
 
             function tryInit() {
                 var ok = addMainCarouselClass();
-                if (ok) injectInstasizeFirstSlide();
+                if (ok) {
+                    injectInstasizeFirstSlide();
+                    preloadMainCarouselImages();
+                }
                 return ok;
             }
 
