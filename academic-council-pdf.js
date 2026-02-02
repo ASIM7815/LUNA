@@ -1,8 +1,18 @@
 (function () {
   'use strict';
 
-  var TARGET_SUFFIX = '/about/academicouncil';
-  var PDF_FILE = 'ISL Second Acad Council-MOM-26 July 2025 Signed FINAL.pdf';
+  var ROUTE_CONFIGS = [
+    {
+      suffix: '/about/academicouncil',
+      title: 'Academic Council – Minutes of Meeting (26 July 2025)',
+      pdfFile: 'ISL Second Acad Council-MOM-26 July 2025 Signed FINAL.pdf'
+    },
+    {
+      suffix: '/about/governingbody',
+      title: 'Governing Body – ISLGC',
+      pdfFile: 'ISLGC.pdf'
+    }
+  ];
   var PDF_HASH = 'toolbar=0&navpanes=0&scrollbar=0';
   var GALLERY_IMAGES = [
     { file: '1ac.jpeg', alt: 'Academic Council – Image 1' },
@@ -14,14 +24,18 @@
     return (window.location.pathname || '').replace(/\/+$/, '');
   }
 
-  function isAcademicCouncilRoute() {
-    return normalizedPathname().toLowerCase().endsWith(TARGET_SUFFIX);
+  function getRouteConfig() {
+    var path = normalizedPathname().toLowerCase();
+    for (var i = 0; i < ROUTE_CONFIGS.length; i++) {
+      if (path.endsWith(ROUTE_CONFIGS[i].suffix)) return ROUTE_CONFIGS[i];
+    }
+    return null;
   }
 
-  function getPdfUrl() {
+  function getPdfUrl(pdfFile) {
     // The route is `/about/academicouncil` (2 levels deep), while the PDF lives at the site root.
     // Using a relative URL keeps it working even if the site is deployed under a sub-path.
-    var url = new URL('../../' + PDF_FILE, window.location.href);
+    var url = new URL('../../' + pdfFile, window.location.href);
     return url.toString() + '#' + PDF_HASH;
   }
 
@@ -92,21 +106,28 @@
   }
 
   function injectPdfViewer() {
-    if (!isAcademicCouncilRoute()) return;
+    var routeConfig = getRouteConfig();
+    if (!routeConfig) return;
 
     var root = document.getElementById('root');
     if (!root) return;
 
     if (root.querySelector('[data-academic-council-pdf="1"]')) return;
 
-    var pdfUrl = getPdfUrl();
+    var pdfUrl = getPdfUrl(routeConfig.pdfFile);
 
-    // The current app renders a 404 image inside a `.pt-90.pb-90.text-center` section.
-    // Replace only that inner section so the existing header/footer remain intact.
+    // Replace only the inner content area so the existing header/footer remain intact.
     var notFoundImg = root.querySelector('img[alt="404"], img[src*="404.png"]');
     var target = notFoundImg
       ? notFoundImg.closest('.pt-90') || notFoundImg.parentElement
       : null;
+
+    if (!target && routeConfig.suffix === '/about/governingbody') {
+      var table = root.querySelector('table');
+      if (table) {
+        target = table.closest('.pt-90') || table.closest('section') || table.parentElement;
+      }
+    }
 
     var shouldReplaceChildren = true;
     if (!target) {
@@ -128,13 +149,13 @@
     wrapper.style.padding = '0 16px';
 
     var title = document.createElement('h3');
-    title.textContent = 'Academic Council – Minutes of Meeting (26 July 2025)';
+    title.textContent = routeConfig.title;
     title.style.margin = '0 0 16px 0';
     title.style.fontWeight = '600';
 
     var frame = document.createElement('iframe');
     frame.src = pdfUrl;
-    frame.title = 'Academic Council PDF Preview';
+    frame.title = routeConfig.title + ' PDF Preview';
     frame.style.width = '100%';
     frame.style.height = '85vh';
     frame.style.border = '0';
@@ -144,7 +165,9 @@
 
     wrapper.appendChild(title);
     wrapper.appendChild(frame);
-    wrapper.appendChild(createGallerySection());
+    if (routeConfig.suffix === '/about/academicouncil') {
+      wrapper.appendChild(createGallerySection());
+    }
 
     if (shouldReplaceChildren) {
       target.appendChild(wrapper);
