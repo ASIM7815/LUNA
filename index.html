@@ -71,7 +71,19 @@
     </style>
 
     <script>
+        // GitHub Pages SPA redirect handler
+        (function(){
+            var redirect = sessionStorage.redirect;
+            delete sessionStorage.redirect;
+            if (redirect && redirect != location.href) {
+                history.replaceState(null, null, redirect);
+            }
+        })();
+    </script>
+
+    <script>
         (function () {
+            var SHAFISIR_IMAGE_URL = "./SHAFISIR.jpeg";
             var INSTASIZE_IMAGE_URL = "https://instasize.com/api/image/6fd70c0449522d9522322826f92df1fd78f60dcd2855d7ab93a32b37f737ff41.jpeg";
             var INSTASIZE_SECOND_IMAGE_URL = "https://instasize.com/api/image/1424d7eb8e36b98ff5962e649448e39876d9adfe99b81ad7c4bcdbb10baed88d.jpeg";
             var MAIN_CAROUSEL_API_URL = "https://islec.herokuapp.com/api/carousels/main";
@@ -114,14 +126,35 @@
                 var inner = carousel.querySelector('.carousel-inner');
                 if (!inner) return false;
 
+                var existingShafir = inner.querySelector('[data-injected="shafir-hero"]');
                 var existingFirst = inner.querySelector('[data-injected="instasize-hero"]');
                 var existingSecond = inner.querySelector('[data-injected="instasize-hero-2"]');
-                if (existingFirst && existingSecond) return true;
+                if (existingShafir && existingFirst && existingSecond) return true;
 
-                // Ensure first injected item exists (active)
+                // Ensure SHAFISIR image exists as first slide (active)
+                if (!existingShafir) {
+                    var shafirItem = document.createElement('div');
+                    shafirItem.className = 'carousel-item active';
+                    shafirItem.setAttribute('data-injected', 'shafir-hero');
+
+                    var shafirImg = document.createElement('img');
+                    shafirImg.src = SHAFISIR_IMAGE_URL;
+                    shafirImg.className = 'img-fluid d-block w-100';
+                    shafirImg.alt = 'Main Slider';
+                    shafirItem.appendChild(shafirImg);
+
+                    // Deactivate any existing active slide
+                    var currentActive = inner.querySelector('.carousel-item.active');
+                    if (currentActive) currentActive.classList.remove('active');
+
+                    inner.insertBefore(shafirItem, inner.firstChild);
+                    existingShafir = shafirItem;
+                }
+
+                // Ensure first injected item exists (second slide)
                 if (!existingFirst) {
                     var injectedItem = document.createElement('div');
-                    injectedItem.className = 'carousel-item active';
+                    injectedItem.className = 'carousel-item';
                     injectedItem.setAttribute('data-injected', 'instasize-hero');
 
                     var img = document.createElement('img');
@@ -130,15 +163,16 @@
                     img.alt = 'Main Slider';
                     injectedItem.appendChild(img);
 
-                    // Deactivate any existing active slide
-                    var currentActive = inner.querySelector('.carousel-item.active');
-                    if (currentActive) currentActive.classList.remove('active');
-
-                    inner.insertBefore(injectedItem, inner.firstChild);
+                    // Insert after SHAFISIR slide
+                    if (existingShafir && existingShafir.nextSibling) {
+                        inner.insertBefore(injectedItem, existingShafir.nextSibling);
+                    } else {
+                        inner.appendChild(injectedItem);
+                    }
                     existingFirst = injectedItem;
                 }
 
-                // Ensure second injected item exists right after the first
+                // Ensure second injected item exists (third slide)
                 if (!existingSecond) {
                     var injectedItem2 = document.createElement('div');
                     injectedItem2.className = 'carousel-item';
@@ -245,21 +279,26 @@
 
                             try {
                                 var json = JSON.parse(xhr.responseText);
+                                var injectedShafir = { _id: 'shafir-hero', img: SHAFISIR_IMAGE_URL, title: '' };
                                 var injected1 = { _id: 'instasize-hero', img: INSTASIZE_IMAGE_URL, title: '' };
                                 var injected2 = { _id: 'instasize-hero-2', img: INSTASIZE_SECOND_IMAGE_URL, title: '' };
 
                                 var patched = json;
                                 if (Array.isArray(json)) {
+                                    var hasShafir = json.some(function (x) { return x && x._id === injectedShafir._id; });
                                     var has1 = json.some(function (x) { return x && x._id === injected1._id; });
                                     var has2 = json.some(function (x) { return x && x._id === injected2._id; });
                                     var prefix = [];
+                                    if (!hasShafir) prefix.push(injectedShafir);
                                     if (!has1) prefix.push(injected1);
                                     if (!has2) prefix.push(injected2);
                                     patched = prefix.length ? prefix.concat(json) : json;
                                 } else if (json && Array.isArray(json.data)) {
+                                    var hasShafir2 = json.data.some(function (x) { return x && x._id === injectedShafir._id; });
                                     var has12 = json.data.some(function (x) { return x && x._id === injected1._id; });
                                     var has22 = json.data.some(function (x) { return x && x._id === injected2._id; });
                                     var prefix2 = [];
+                                    if (!hasShafir2) prefix2.push(injectedShafir);
                                     if (!has12) prefix2.push(injected1);
                                     if (!has22) prefix2.push(injected2);
                                     patched = prefix2.length ? Object.assign({}, json, { data: prefix2.concat(json.data) }) : json;
@@ -313,6 +352,7 @@
 
     <script defer="defer" src="./static/js/main.64d07445.js"></script>
     <script defer="defer" src="./academic-council-pdf.js"></script>
+    <script defer="defer" src="./navigation-pdf-handler.js"></script>
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
 </head>
 

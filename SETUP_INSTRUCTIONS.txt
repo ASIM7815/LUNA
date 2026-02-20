@@ -1,0 +1,99 @@
+========================================
+NAVIGATION BUTTONS FIX - SETUP COMPLETE
+========================================
+
+✅ COMPLETED TASKS:
+
+1. Created DATA folder structure with all required subfolders
+   - DATA/NAAC/ (60 PDF files needed)
+   - DATA/AQAR/ (48 PDF files needed)
+   - DATA/CO/ (7 PDF files needed)
+   - DATA/HNS/ (4 PDF files needed)
+   - DATA/Publications/ (1 PDF file needed)
+   - DATA/Research/ (3 PDF files needed)
+   - DATA/Syllabus/MTECH/ (1 PDF file needed)
+   - Other files (2 PDF files needed)
+
+2. Created navigation-pdf-handler.js
+   - Handles all navigation button routes (NAAC, AQAR, DVV, IQAC, NIRF, RTI, IIC, NISP, HR Policy, FDP, Committees)
+   - Displays PDF file lists for sections with multiple documents
+   - Shows single PDF viewer for sections with one document
+   - Works with React Router (SPA navigation)
+
+3. Updated index.html
+   - Added navigation-pdf-handler.js script reference
+
+4. Updated .gitattributes
+   - Configured proper handling of PDF and image files for GitHub
+
+5. Created helper scripts:
+   - download_pdfs_from_drive.py - Check which PDFs are missing
+   - organize_pdfs.sh - Organize downloaded PDFs into correct folders
+   - DATA/README.md - Complete documentation
+
+========================================
+NEXT STEPS - IMPORTANT:
+========================================
+
+You need to download the PDF files from Google Drive and place them in the DATA folder:
+
+1. Download PDFs from Google Drive:
+   https://drive.google.com/drive/folders/1tFfFui9M_xjxow3mJwsPUoiJpLcg7daW
+
+2. Option A - Manual placement:
+   - Match filenames from Drive to the paths in DATA folder
+   - Example: "1.1.2.pdf" from Drive → "DATA/AQAR/1/1.1.2.pdf"
+
+3. Option B - Use the organize script:
+   - Download all PDFs to a folder (e.g., ~/Downloads/DATA_PDFs)
+   - Run: ./organize_pdfs.sh ~/Downloads/DATA_PDFs
+   - The script will automatically place files in correct locations
+
+4. Verify files are in place:
+   python3 download_pdfs_from_drive.py
+
+5. Commit and push to GitHub:
+   git add DATA/ navigation-pdf-handler.js index.html .gitattributes
+   git commit -m "Fix navigation buttons - Add DATA folder and PDF handler"
+   git push
+
+========================================
+HOW IT WORKS:
+========================================
+
+When users click navigation buttons (NAAC, AQAR, etc.):
+
+1. The navigation-pdf-handler.js intercepts the route
+2. For sections with multiple PDFs (NAAC, AQAR):
+   - Shows a grid of clickable document links
+   - Each link opens the PDF in a new tab
+3. For sections with single PDF (NISP, HR Policy):
+   - Shows the PDF directly in an iframe viewer
+4. If PDFs are missing:
+   - Shows "Documents will be available soon" message
+
+========================================
+TESTING:
+========================================
+
+After placing PDFs and pushing to GitHub:
+
+1. Visit your website
+2. Click on NAAC button → Should show list of NAAC documents
+3. Click on AQAR button → Should show list of AQAR documents
+4. Click on NISP button → Should show NISP_Policy.pdf
+5. Click on HR Policy button → Should show hrpolicy.pdf
+
+If you see 404 errors:
+- Check if PDF files exist in DATA folder
+- Check browser console for specific file paths
+- Verify filenames match exactly (case-sensitive)
+
+========================================
+TOTAL FILES NEEDED: 126 PDFs
+========================================
+
+Run this command to see the complete list:
+python3 download_pdfs_from_drive.py
+
+========================================
