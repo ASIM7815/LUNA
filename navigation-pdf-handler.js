@@ -39,13 +39,6 @@
       title: 'HR Policy',
       pdfFile: 'DATA/hrpolicy.pdf'
     },
-    // FDP Section
-    {
-      suffix: '/fdp',
-      title: 'FDP - Faculty Development Program',
-      pdfFolder: 'DATA/FDP',
-      showFileList: true
-    },
     // Committees Section
     {
       suffix: '/committees',
@@ -306,7 +299,6 @@
       '/rti': 'The Right to Information (RTI) Act empowers citizens to seek information from public authorities, promoting transparency and accountability.',
       '/iic': 'The Institution Innovation Council (IIC) is established to systematically foster the culture of innovation in institutions.',
       '/hrpolicy': 'The HR Policy outlines the human resource management practices, guidelines, and procedures followed by the institution.',
-      '/fdp': 'Faculty Development Programs (FDP) are designed to enhance the teaching, research, and professional skills of faculty members.',
       '/committees': 'Various committees are constituted to ensure smooth functioning and governance of the institution.'
     };
     
