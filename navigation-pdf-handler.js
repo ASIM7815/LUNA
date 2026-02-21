@@ -33,12 +33,6 @@
       pdfFolder: 'DATA/IIC',
       showFileList: true
     },
-    // NISP Section
-    {
-      suffix: '/nisp',
-      title: 'NISP Policy',
-      pdfFile: 'DATA/NISP_Policy.pdf'
-    },
     // HR Policy Section
     {
       suffix: '/hrpolicy',
@@ -311,7 +305,6 @@
       '/iqac': 'The Internal Quality Assurance Cell (IQAC) is a quality sustenance and quality enhancement mechanism in higher education institutions.',
       '/rti': 'The Right to Information (RTI) Act empowers citizens to seek information from public authorities, promoting transparency and accountability.',
       '/iic': 'The Institution Innovation Council (IIC) is established to systematically foster the culture of innovation in institutions.',
-      '/nisp': 'The National Innovation and Start-up Policy (NISP) provides guidelines for promoting innovation and entrepreneurship in educational institutions.',
       '/hrpolicy': 'The HR Policy outlines the human resource management practices, guidelines, and procedures followed by the institution.',
       '/fdp': 'Faculty Development Programs (FDP) are designed to enhance the teaching, research, and professional skills of faculty members.',
       '/committees': 'Various committees are constituted to ensure smooth functioning and governance of the institution.'
