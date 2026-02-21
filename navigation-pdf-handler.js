@@ -12,13 +12,6 @@
       pdfFolder: 'DATA/NAAC',
       showFileList: true
     },
-    // AQAR Section
-    {
-      suffix: '/aqar',
-      title: 'AQAR - Annual Quality Assurance Report',
-      pdfFolder: 'DATA/AQAR',
-      showFileList: true
-    },
     // DVV Section
     {
       suffix: '/dvv',
@@ -321,7 +314,6 @@
     // Set description based on route
     var descriptions = {
       '/naac': 'The National Assessment and Accreditation Council (NAAC) is an autonomous body established by the University Grants Commission (UGC) of India to assess and accredit institutions of higher education in the country.',
-      '/aqar': 'The Annual Quality Assurance Report (AQAR) is a self-evaluative report submitted annually by institutions to NAAC, highlighting the quality initiatives undertaken during the academic year.',
       '/dvv': 'Data Validation and Verification (DVV) is the process of ensuring the accuracy and authenticity of data submitted by institutions for accreditation purposes.',
       '/iqac': 'The Internal Quality Assurance Cell (IQAC) is a quality sustenance and quality enhancement mechanism in higher education institutions.',
       '/nirf': 'The National Institutional Ranking Framework (NIRF) is a methodology adopted by the Ministry of Education, Government of India, to rank institutions of higher education in India.',
