@@ -19,13 +19,6 @@
       pdfFolder: 'DATA/DVV',
       showFileList: true
     },
-    // NIRF Section
-    {
-      suffix: '/nirf',
-      title: 'NIRF - National Institutional Ranking Framework',
-      pdfFolder: 'DATA/NIRF',
-      showFileList: true
-    },
     // RTI Section
     {
       suffix: '/rti',
@@ -316,7 +309,6 @@
       '/naac': 'The National Assessment and Accreditation Council (NAAC) is an autonomous body established by the University Grants Commission (UGC) of India to assess and accredit institutions of higher education in the country.',
       '/dvv': 'Data Validation and Verification (DVV) is the process of ensuring the accuracy and authenticity of data submitted by institutions for accreditation purposes.',
       '/iqac': 'The Internal Quality Assurance Cell (IQAC) is a quality sustenance and quality enhancement mechanism in higher education institutions.',
-      '/nirf': 'The National Institutional Ranking Framework (NIRF) is a methodology adopted by the Ministry of Education, Government of India, to rank institutions of higher education in India.',
       '/rti': 'The Right to Information (RTI) Act empowers citizens to seek information from public authorities, promoting transparency and accountability.',
       '/iic': 'The Institution Innovation Council (IIC) is established to systematically foster the culture of innovation in institutions.',
       '/nisp': 'The National Innovation and Start-up Policy (NISP) provides guidelines for promoting innovation and entrepreneurship in educational institutions.',
