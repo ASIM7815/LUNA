@@ -19,13 +19,6 @@
       pdfFolder: 'DATA/DVV',
       showFileList: true
     },
-    // RTI Section
-    {
-      suffix: '/rti',
-      title: 'RTI - Right to Information',
-      pdfFolder: 'DATA/RTI',
-      showFileList: true
-    },
     // IIC Section
     {
       suffix: '/iic',
@@ -296,7 +289,6 @@
       '/naac': 'The National Assessment and Accreditation Council (NAAC) is an autonomous body established by the University Grants Commission (UGC) of India to assess and accredit institutions of higher education in the country.',
       '/dvv': 'Data Validation and Verification (DVV) is the process of ensuring the accuracy and authenticity of data submitted by institutions for accreditation purposes.',
       '/iqac': 'The Internal Quality Assurance Cell (IQAC) is a quality sustenance and quality enhancement mechanism in higher education institutions.',
-      '/rti': 'The Right to Information (RTI) Act empowers citizens to seek information from public authorities, promoting transparency and accountability.',
       '/iic': 'The Institution Innovation Council (IIC) is established to systematically foster the culture of innovation in institutions.',
       '/hrpolicy': 'The HR Policy outlines the human resource management practices, guidelines, and procedures followed by the institution.',
       '/committees': 'Various committees are constituted to ensure smooth functioning and governance of the institution.'
