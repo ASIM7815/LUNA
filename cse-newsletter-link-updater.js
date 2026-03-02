@@ -3,7 +3,8 @@
 
     var NEWSLETTER_LINKS = {
         'CSE Newsletter 2025': 'https://drive.google.com/file/d/1GKBZU9QOayf9SzYJc_dnD-OLjyYYCPLL/view?usp=sharing',
-        'CSE Newsletter 2024-25': 'https://drive.google.com/file/d/1xYvzRFbDNrkXBzCy_hQtaRTsxlcfE9Nv/view?usp=sharing'
+        'CSE Newsletter 2024-25': 'https://drive.google.com/file/d/1xYvzRFbDNrkXBzCy_hQtaRTsxlcfE9Nv/view?usp=sharing',
+        "Magazine 23'": 'https://drive.google.com/file/d/1FU80c-jf_Un_atWNiccCtTauRgUB3cUI/view?usp=drive_link'
     };
 
     function updateCSENewsletterLink() {
