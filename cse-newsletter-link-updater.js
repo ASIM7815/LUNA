@@ -1,28 +1,34 @@
 (function() {
     'use strict';
 
-    var GOOGLE_DRIVE_PDF_URL = 'https://drive.google.com/file/d/1GKBZU9QOayf9SzYJc_dnD-OLjyYYCPLL/view?usp=sharing';
+    var NEWSLETTER_LINKS = {
+        'CSE Newsletter 2025': 'https://drive.google.com/file/d/1GKBZU9QOayf9SzYJc_dnD-OLjyYYCPLL/view?usp=sharing',
+        'CSE Newsletter 2024-25': 'https://drive.google.com/file/d/1xYvzRFbDNrkXBzCy_hQtaRTsxlcfE9Nv/view?usp=sharing'
+    };
 
     function updateCSENewsletterLink() {
         // Find all links on the page
         var links = document.querySelectorAll('a');
+        var updatedCount = 0;
         
         for (var i = 0; i < links.length; i++) {
             var link = links[i];
-            var text = link.textContent || link.innerText || '';
+            var text = (link.textContent || link.innerText || '').trim();
             
-            // Check if this is the CSE Newsletter 2025 link
-            if (text.indexOf('CSE Newsletter 2025') !== -1) {
-                // Update the href to point to Google Drive
-                link.href = GOOGLE_DRIVE_PDF_URL;
-                link.target = '_blank';
-                link.rel = 'noopener noreferrer';
-                console.log('Updated CSE Newsletter 2025 link to Google Drive');
-                return true;
+            // Check each newsletter link
+            for (var linkText in NEWSLETTER_LINKS) {
+                if (text.indexOf(linkText) !== -1) {
+                    // Update the href to point to Google Drive
+                    link.href = NEWSLETTER_LINKS[linkText];
+                    link.target = '_blank';
+                    link.rel = 'noopener noreferrer';
+                    console.log('Updated ' + linkText + ' link to Google Drive');
+                    updatedCount++;
+                }
             }
         }
         
-        return false;
+        return updatedCount > 0;
     }
 
     function tryUpdate() {
