@@ -14,7 +14,6 @@
     <title>ISL Engineering College</title>
 
     <style>
-        /* Make all Bootstrap carousels animate smoothly on Next/Prev click */
         .carousel {
             --bs-carousel-transition: transform 700ms cubic-bezier(.22, .61, .36, 1);
         }
@@ -29,16 +28,44 @@
             }
         }
 
-        .main-carousel .carousel-item {
-            /* Premium blue background for ALL slides in the main image slider */
-            background: linear-gradient(135deg, #062a6a 0%, #0b3b91 45%, #082a66 100%);
-        }
-
-        .main-carousel .carousel-inner {
+        .js-fallback-carousel .carousel-inner {
+            position: relative;
             overflow: hidden;
         }
 
-        /* Show the FULL image (no cropping). */
+        .js-fallback-carousel .carousel-item {
+            display: block !important;
+            position: absolute;
+            inset: 0;
+            float: none;
+            width: 100%;
+            margin-right: 0;
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 700ms cubic-bezier(.22, .61, .36, 1),
+                transform 700ms cubic-bezier(.22, .61, .36, 1);
+            transform: scale(0.995);
+            backface-visibility: hidden;
+        }
+
+        .js-fallback-carousel .carousel-item.active {
+            position: relative;
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+            transform: scale(1);
+            z-index: 1;
+        }
+
+        .js-fallback-carousel .carousel-indicators li {
+            cursor: pointer;
+        }
+
+        .main-carousel .carousel-item {
+            background: linear-gradient(135deg, #062a6a 0%, #0b3b91 45%, #082a66 100%);
+        }
+
         .main-carousel .carousel-item img {
             width: 100%;
             height: clamp(300px, 65vh, 640px);
@@ -47,25 +74,26 @@
             background: transparent;
         }
 
-        .main-carousel.carousel-fade .carousel-item {
-            /* Explicit transition property prevents jitter from other CSS overrides */
-            transition: opacity 700ms cubic-bezier(.22, .61, .36, 1),
-                transform 700ms cubic-bezier(.22, .61, .36, 1);
-            will-change: opacity, transform;
-            transform: scale(0.995);
-            backface-visibility: hidden;
+        .highlights-carousel .carousel-inner {
+            border-radius: 8px;
+            background: #edf1f7;
         }
 
-        /* Keep the active (and entering) slide crisp and fully visible */
-        .main-carousel.carousel-fade .carousel-item.active,
-        .main-carousel.carousel-fade .carousel-item-next.carousel-item-start,
-        .main-carousel.carousel-fade .carousel-item-prev.carousel-item-end {
-            transform: scale(1);
+        .highlights-carousel .carousel-item img {
+            width: 100%;
+            height: clamp(240px, 28vw, 350px);
+            object-fit: cover;
+            object-position: center;
+            background: #edf1f7;
         }
 
         @media (max-width: 576px) {
             .main-carousel .carousel-item img {
                 height: clamp(220px, 45vh, 420px);
+            }
+
+            .highlights-carousel .carousel-item img {
+                height: 240px;
             }
         }
     </style>
@@ -83,297 +111,235 @@
 
     <script>
         (function () {
-            var HACK_IMAGE_URL = "./hack.jpeg";
-            var SHAFISIR_IMAGE_URL = "./SHAFISIR.jpeg";
-            var INSTASIZE_IMAGE_URL = "https://instasize.com/api/image/6fd70c0449522d9522322826f92df1fd78f60dcd2855d7ab93a32b37f737ff41.jpeg";
-            var INSTASIZE_SECOND_IMAGE_URL = "https://instasize.com/api/image/1424d7eb8e36b98ff5962e649448e39876d9adfe99b81ad7c4bcdbb10baed88d.jpeg";
-            var MAIN_CAROUSEL_API_URL = "https://islec.herokuapp.com/api/carousels/main";
+            var HERO_SLIDES = [
+                { id: "hero-hacking", src: "./hacking.png", alt: "Hackathon Event" },
+                { id: "hero-shafisir", src: "./SHAFISIR.jpeg", alt: "Faculty Highlights" },
+                { id: "hero-hack23", src: "./allimages/mainSlider/hack23.jpg", alt: "Hackathon Highlights" },
+                { id: "hero-topper25", src: "./allimages/mainSlider/topper25.jpg", alt: "Topper Highlights" }
+            ];
 
-            function addMainCarouselClass() {
-                var img = document.querySelector('img[alt="CE Carousel Images"]');
-                var carousel = img && img.closest && img.closest('.carousel');
-                if (!carousel) return false;
-                carousel.classList.add('main-carousel', 'carousel-fade');
-                return true;
+            var HIGHLIGHT_SLIDES = [
+                { id: "highlight-recognition", src: "./allimages/mainSlider/Recognition25.jpg", alt: "Recognition 2025" },
+                { id: "highlight-orientation", src: "./allimages/mainSlider/orientation24.jpeg", alt: "Orientation Highlights" },
+                { id: "highlight-judo", src: "./allimages/mainSlider/judo2024.jpg", alt: "Sports Highlights" },
+                { id: "highlight-antidrug", src: "./allimages/mainSlider/antidrug2024.jpg", alt: "Campus Highlights" }
+            ];
+
+            function toArray(list) {
+                return Array.prototype.slice.call(list || []);
             }
 
-            function rebuildIndicators(carousel) {
-                var inner = carousel && carousel.querySelector && carousel.querySelector('.carousel-inner');
-                if (!inner) return;
+            function warmImage(src) {
+                if (!src) return;
+                var img = new Image();
+                try { img.decoding = "async"; } catch (e) { }
+                img.src = src;
+            }
 
-                var indicators = carousel.querySelector('.carousel-indicators');
-                if (!indicators) return;
+            function createSlide(slide, isActive) {
+                var item = document.createElement("div");
+                item.className = "carousel-item" + (isActive ? " active" : "");
+                item.setAttribute("data-local-slide", slide.id);
 
-                indicators.innerHTML = '';
-                var items = inner.querySelectorAll('.carousel-item');
-                for (var i = 0; i < items.length; i++) {
-                    var btn = document.createElement('button');
-                    btn.type = 'button';
-                    btn.setAttribute('data-bs-target', '#' + (carousel.id || ''));
-                    btn.setAttribute('data-bs-slide-to', String(i));
-                    btn.setAttribute('aria-label', 'Slide ' + (i + 1));
+                var img = document.createElement("img");
+                img.src = slide.src;
+                img.className = "img-fluid d-block w-100";
+                img.alt = slide.alt || "Slide";
+                try { img.loading = isActive ? "eager" : "lazy"; } catch (e) { }
+                try { img.decoding = "async"; } catch (e) { }
+
+                item.appendChild(img);
+                return item;
+            }
+
+            function rebuildIndicators(carousel, count) {
+                var indicators = carousel.querySelector(".carousel-indicators");
+                if (!indicators) {
+                    indicators = document.createElement("ol");
+                    indicators.className = "carousel-indicators";
+                    carousel.insertBefore(indicators, carousel.firstChild);
+                }
+
+                indicators.innerHTML = "";
+                for (var i = 0; i < count; i++) {
+                    var indicator = document.createElement("li");
+                    indicator.setAttribute("data-slide-to", String(i));
+                    indicator.setAttribute("tabindex", "0");
+                    indicator.setAttribute("role", "button");
+                    indicator.setAttribute("aria-label", "Slide " + (i + 1));
                     if (i === 0) {
-                        btn.className = 'active';
-                        btn.setAttribute('aria-current', 'true');
+                        indicator.className = "active";
+                        indicator.setAttribute("aria-current", "true");
                     }
-                    indicators.appendChild(btn);
+                    indicators.appendChild(indicator);
+                }
+
+                return indicators;
+            }
+
+            function setControlsVisible(carousel, isVisible) {
+                var displayValue = isVisible ? "" : "none";
+                var controls = carousel.querySelectorAll(".carousel-control-prev, .carousel-control-next, .carousel-indicators");
+                for (var i = 0; i < controls.length; i++) {
+                    controls[i].style.display = displayValue;
                 }
             }
 
-            function injectInstasizeFirstSlide() {
-                var carousel = document.querySelector('.main-carousel.carousel');
+            function enhanceCarousel(carousel, slides, extraClasses, intervalMs) {
                 if (!carousel) return false;
+                if (carousel.getAttribute("data-local-carousel-ready") === "true") return true;
 
-                var inner = carousel.querySelector('.carousel-inner');
-                if (!inner) return false;
+                var inner = carousel.querySelector(".carousel-inner");
+                if (!inner || !slides || !slides.length) return false;
 
-                var existingHack = inner.querySelector('[data-injected="hack-hero"]');
-                var existingShafir = inner.querySelector('[data-injected="shafir-hero"]');
-                var existingFirst = inner.querySelector('[data-injected="instasize-hero"]');
-                var existingSecond = inner.querySelector('[data-injected="instasize-hero-2"]');
-                if (existingHack && existingShafir && existingFirst && existingSecond) return true;
+                carousel.setAttribute("data-local-carousel-ready", "true");
+                carousel.classList.add("js-fallback-carousel");
 
-                // Ensure HACK image exists as first slide (active)
-                if (!existingHack) {
-                    var hackItem = document.createElement('div');
-                    hackItem.className = 'carousel-item active';
-                    hackItem.setAttribute('data-injected', 'hack-hero');
-
-                    var hackImg = document.createElement('img');
-                    hackImg.src = HACK_IMAGE_URL;
-                    hackImg.className = 'img-fluid d-block w-100';
-                    hackImg.alt = 'Main Slider';
-                    hackItem.appendChild(hackImg);
-
-                    // Deactivate any existing active slide
-                    var currentActive = inner.querySelector('.carousel-item.active');
-                    if (currentActive) currentActive.classList.remove('active');
-
-                    inner.insertBefore(hackItem, inner.firstChild);
-                    existingHack = hackItem;
+                for (var classIndex = 0; classIndex < extraClasses.length; classIndex++) {
+                    carousel.classList.add(extraClasses[classIndex]);
                 }
 
-                // Ensure SHAFISIR image exists as second slide
-                if (!existingShafir) {
-                    var shafirItem = document.createElement('div');
-                    shafirItem.className = 'carousel-item';
-                    shafirItem.setAttribute('data-injected', 'shafir-hero');
-
-                    var shafirImg = document.createElement('img');
-                    shafirImg.src = SHAFISIR_IMAGE_URL;
-                    shafirImg.className = 'img-fluid d-block w-100';
-                    shafirImg.alt = 'Main Slider';
-                    shafirItem.appendChild(shafirImg);
-
-                    // Insert after HACK slide
-                    if (existingHack && existingHack.nextSibling) {
-                        inner.insertBefore(shafirItem, existingHack.nextSibling);
-                    } else {
-                        inner.appendChild(shafirItem);
-                    }
-                    existingShafir = shafirItem;
+                inner.innerHTML = "";
+                for (var i = 0; i < slides.length; i++) {
+                    inner.appendChild(createSlide(slides[i], i === 0));
                 }
 
-                // Ensure first injected item exists (third slide)
-                if (!existingFirst) {
-                    var injectedItem = document.createElement('div');
-                    injectedItem.className = 'carousel-item';
-                    injectedItem.setAttribute('data-injected', 'instasize-hero');
+                var indicators = rebuildIndicators(carousel, slides.length);
+                var items = toArray(inner.querySelectorAll(".carousel-item"));
+                var indicatorItems = toArray(indicators.children);
+                var currentIndex = 0;
+                var cycleTimer = null;
 
-                    var img = document.createElement('img');
-                    img.src = INSTASIZE_IMAGE_URL;
-                    img.className = 'img-fluid d-block w-100';
-                    img.alt = 'Main Slider';
-                    injectedItem.appendChild(img);
-
-                    // Insert after SHAFISIR slide
-                    if (existingShafir && existingShafir.nextSibling) {
-                        inner.insertBefore(injectedItem, existingShafir.nextSibling);
-                    } else {
-                        inner.appendChild(injectedItem);
-                    }
-                    existingFirst = injectedItem;
-                }
-
-                // Ensure second injected item exists (fourth slide)
-                if (!existingSecond) {
-                    var injectedItem2 = document.createElement('div');
-                    injectedItem2.className = 'carousel-item';
-                    injectedItem2.setAttribute('data-injected', 'instasize-hero-2');
-
-                    var img2 = document.createElement('img');
-                    img2.src = INSTASIZE_SECOND_IMAGE_URL;
-                    img2.className = 'img-fluid d-block w-100';
-                    img2.alt = 'Main Slider';
-                    injectedItem2.appendChild(img2);
-
-                    // Insert immediately after the first injected slide
-                    if (existingFirst && existingFirst.nextSibling) {
-                        inner.insertBefore(injectedItem2, existingFirst.nextSibling);
-                    } else {
-                        inner.appendChild(injectedItem2);
-                    }
-                }
-
-                rebuildIndicators(carousel);
-
-                return true;
-            }
-
-            function preloadMainCarouselImages() {
-                var carousel = document.querySelector('.main-carousel.carousel');
-                if (!carousel) return false;
-
-                var inner = carousel.querySelector('.carousel-inner');
-                if (!inner) return false;
-
-                function getItems() {
-                    return Array.prototype.slice.call(inner.querySelectorAll('.carousel-item'));
-                }
-
-                function getImgSrc(item) {
-                    var img = item && item.querySelector ? item.querySelector('img') : null;
-                    if (!img) return null;
-                    // Hint the browser to decode asynchronously and fetch eagerly for smoother transitions.
-                    try { img.decoding = 'async'; } catch (e) { }
-                    try { img.loading = 'eager'; } catch (e) { }
-                    return img.currentSrc || img.src || null;
-                }
-
-                function warm(src) {
-                    if (!src) return;
-                    var i = new Image();
-                    i.decoding = 'async';
-                    i.src = src;
-                }
-
-                function warmByIndex(index, lookAheadCount) {
-                    var items = getItems();
+                function applySlide(index) {
                     if (!items.length) return;
+                    currentIndex = (index + items.length) % items.length;
 
-                    var count = typeof lookAheadCount === 'number' ? lookAheadCount : 2;
-                    for (var step = 0; step <= count; step++) {
-                        var idx = (index + step) % items.length;
-                        warm(getImgSrc(items[idx]));
+                    for (var itemIndex = 0; itemIndex < items.length; itemIndex++) {
+                        var isActive = itemIndex === currentIndex;
+                        items[itemIndex].classList.toggle("active", isActive);
                     }
+
+                    for (var indicatorIndex = 0; indicatorIndex < indicatorItems.length; indicatorIndex++) {
+                        var indicatorActive = indicatorIndex === currentIndex;
+                        indicatorItems[indicatorIndex].classList.toggle("active", indicatorActive);
+                        if (indicatorActive) {
+                            indicatorItems[indicatorIndex].setAttribute("aria-current", "true");
+                        } else {
+                            indicatorItems[indicatorIndex].removeAttribute("aria-current");
+                        }
+                    }
+
+                    warmImage(slides[currentIndex].src);
+                    warmImage(slides[(currentIndex + 1) % slides.length].src);
                 }
 
-                // Warm initial set (active + next couple slides)
-                var initialItems = getItems();
-                var activeIndex = 0;
-                for (var k = 0; k < initialItems.length; k++) {
-                    if (initialItems[k].classList && initialItems[k].classList.contains('active')) {
-                        activeIndex = k;
-                        break;
-                    }
+                function startCycle() {
+                    if (cycleTimer || items.length < 2) return;
+                    cycleTimer = window.setInterval(function () {
+                        applySlide(currentIndex + 1);
+                    }, intervalMs);
                 }
-                warmByIndex(activeIndex, 3);
 
-                // Warm upcoming slides on each transition.
-                // Bootstrap 5 provides event.to (next index) on slide events.
-                carousel.addEventListener('slide.bs.carousel', function (ev) {
-                    var to = ev && typeof ev.to === 'number' ? ev.to : null;
-                    if (to === null) return;
-                    warmByIndex(to, 3);
-                });
+                function stopCycle() {
+                    if (!cycleTimer) return;
+                    window.clearInterval(cycleTimer);
+                    cycleTimer = null;
+                }
+
+                function restartCycle() {
+                    stopCycle();
+                    startCycle();
+                }
+
+                var prevControl = carousel.querySelector(".carousel-control-prev");
+                if (prevControl) {
+                    prevControl.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        applySlide(currentIndex - 1);
+                        restartCycle();
+                    });
+                }
+
+                var nextControl = carousel.querySelector(".carousel-control-next");
+                if (nextControl) {
+                    nextControl.addEventListener("click", function (event) {
+                        event.preventDefault();
+                        applySlide(currentIndex + 1);
+                        restartCycle();
+                    });
+                }
+
+                for (var indicatorItemIndex = 0; indicatorItemIndex < indicatorItems.length; indicatorItemIndex++) {
+                    (function (targetIndex) {
+                        var indicator = indicatorItems[targetIndex];
+                        indicator.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            applySlide(targetIndex);
+                            restartCycle();
+                        });
+                        indicator.addEventListener("keydown", function (event) {
+                            if (event.key !== "Enter" && event.key !== " ") return;
+                            event.preventDefault();
+                            applySlide(targetIndex);
+                            restartCycle();
+                        });
+                    })(indicatorItemIndex);
+                }
+
+                carousel.addEventListener("mouseenter", stopCycle);
+                carousel.addEventListener("mouseleave", startCycle);
+                carousel.addEventListener("focusin", stopCycle);
+                carousel.addEventListener("focusout", startCycle);
+
+                applySlide(0);
+                setControlsVisible(carousel, items.length > 1);
+                startCycle();
 
                 return true;
             }
 
-            // Best-effort: prepend our slide into the API response so React renders it as the first slide.
-            // This avoids editing the compiled JS bundle.
-            try {
-                var OriginalXHR = window.XMLHttpRequest;
-                if (OriginalXHR) {
-                    function PatchedXHR() {
-                        var xhr = new OriginalXHR();
-                        var requestUrl = "";
-                        var originalOpen = xhr.open;
+            function findMainCarousel() {
+                var carousels = toArray(document.querySelectorAll(".carousel"));
+                var firstCarousel = null;
 
-                        xhr.open = function (method, url) {
-                            requestUrl = url;
-                            return originalOpen.apply(xhr, arguments);
-                        };
-
-                        xhr.addEventListener('readystatechange', function () {
-                            if (xhr.readyState !== 4) return;
-                            if (typeof requestUrl !== 'string' || requestUrl.indexOf(MAIN_CAROUSEL_API_URL) === -1) return;
-                            if (xhr.status < 200 || xhr.status >= 300) return;
-
-                            try {
-                                var json = JSON.parse(xhr.responseText);
-                                var injectedHack = { _id: 'hack-hero', img: HACK_IMAGE_URL, title: '' };
-                                var injectedShafir = { _id: 'shafir-hero', img: SHAFISIR_IMAGE_URL, title: '' };
-                                var injected1 = { _id: 'instasize-hero', img: INSTASIZE_IMAGE_URL, title: '' };
-                                var injected2 = { _id: 'instasize-hero-2', img: INSTASIZE_SECOND_IMAGE_URL, title: '' };
-
-                                var patched = json;
-                                if (Array.isArray(json)) {
-                                    var hasHack = json.some(function (x) { return x && x._id === injectedHack._id; });
-                                    var hasShafir = json.some(function (x) { return x && x._id === injectedShafir._id; });
-                                    var has1 = json.some(function (x) { return x && x._id === injected1._id; });
-                                    var has2 = json.some(function (x) { return x && x._id === injected2._id; });
-                                    var prefix = [];
-                                    if (!hasHack) prefix.push(injectedHack);
-                                    if (!hasShafir) prefix.push(injectedShafir);
-                                    if (!has1) prefix.push(injected1);
-                                    if (!has2) prefix.push(injected2);
-                                    patched = prefix.length ? prefix.concat(json) : json;
-                                } else if (json && Array.isArray(json.data)) {
-                                    var hasHack2 = json.data.some(function (x) { return x && x._id === injectedHack._id; });
-                                    var hasShafir2 = json.data.some(function (x) { return x && x._id === injectedShafir._id; });
-                                    var has12 = json.data.some(function (x) { return x && x._id === injected1._id; });
-                                    var has22 = json.data.some(function (x) { return x && x._id === injected2._id; });
-                                    var prefix2 = [];
-                                    if (!hasHack2) prefix2.push(injectedHack);
-                                    if (!hasShafir2) prefix2.push(injectedShafir);
-                                    if (!has12) prefix2.push(injected1);
-                                    if (!has22) prefix2.push(injected2);
-                                    patched = prefix2.length ? Object.assign({}, json, { data: prefix2.concat(json.data) }) : json;
-                                }
-
-                                var text = JSON.stringify(patched);
-                                try {
-                                    Object.defineProperty(xhr, 'responseText', { get: function () { return text; } });
-                                    Object.defineProperty(xhr, 'response', { get: function () { return text; } });
-                                } catch (e) {
-                                    // If the browser blocks overriding responseText/response, we still keep UI sizing/animation.
-                                }
-                            } catch (e) {
-                                // Ignore parse failures.
-                            }
-                        });
-
-                        return xhr;
-                    }
-
-                    PatchedXHR.prototype = OriginalXHR.prototype;
-                    PatchedXHR.UNSENT = OriginalXHR.UNSENT;
-                    PatchedXHR.OPENED = OriginalXHR.OPENED;
-                    PatchedXHR.HEADERS_RECEIVED = OriginalXHR.HEADERS_RECEIVED;
-                    PatchedXHR.LOADING = OriginalXHR.LOADING;
-                    PatchedXHR.DONE = OriginalXHR.DONE;
-
-                    window.XMLHttpRequest = PatchedXHR;
+                for (var i = 0; i < carousels.length; i++) {
+                    var carousel = carousels[i];
+                    if (!carousel.querySelector(".carousel-inner")) continue;
+                    if (!firstCarousel) firstCarousel = carousel;
+                    if (!carousel.closest(".pt-25.col-md-4")) return carousel;
                 }
-            } catch (e) {
-                // Ignore hook failures.
+
+                return firstCarousel;
+            }
+
+            function findHighlightsCarousel() {
+                var headings = toArray(document.querySelectorAll("h1, h2, h3, h4, h5, h6"));
+                for (var i = 0; i < headings.length; i++) {
+                    var headingText = (headings[i].textContent || "").replace(/\s+/g, " ").trim().toLowerCase();
+                    if (headingText !== "highlights") continue;
+                    var section = headings[i].closest("section");
+                    if (!section) continue;
+                    var carousel = section.querySelector(".carousel");
+                    if (carousel) return carousel;
+                }
+                return null;
             }
 
             function tryInit() {
-                var ok = addMainCarouselClass();
-                if (ok) {
-                    injectInstasizeFirstSlide();
-                    preloadMainCarouselImages();
-                }
-                return ok;
+                var mainReady = enhanceCarousel(findMainCarousel(), HERO_SLIDES, ["main-carousel", "carousel-fade"], 4500);
+                var highlightsReady = enhanceCarousel(findHighlightsCarousel(), HIGHLIGHT_SLIDES, ["highlights-carousel"], 5000);
+                return mainReady && highlightsReady;
             }
 
             if (!tryInit()) {
                 var observer = new MutationObserver(function () {
                     if (tryInit()) observer.disconnect();
                 });
+
                 observer.observe(document.documentElement, { childList: true, subtree: true });
+                window.setTimeout(function () {
+                    observer.disconnect();
+                }, 15000);
             }
         })();
     </script>
@@ -382,7 +348,6 @@
     <script defer="defer" src="./academic-council-pdf.js"></script>
     <script defer="defer" src="./navigation-pdf-handler.js"></script>
     <script defer="defer" src="./cse-newsletter-link-updater.js"></script>
-    <script defer="defer" src="./carousel-image-injector.js"></script>
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
 </head>
 
