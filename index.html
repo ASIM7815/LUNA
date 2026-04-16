@@ -498,15 +498,6 @@
             mobile.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;';
             form.appendChild(createField('Mobile Number *', mobile));
             
-            // Email
-            var email = document.createElement('input');
-            email.type = 'email';
-            email.name = 'email';
-            email.required = true;
-            email.placeholder = 'Enter your email address';
-            email.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;';
-            form.appendChild(createField('Email Address *', email));
-            
             // Course Select
             var courseSelect = document.createElement('select');
             courseSelect.name = 'course';
@@ -591,15 +582,56 @@
             city.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;';
             form.appendChild(createField('City *', city));
             
-            // Message
-            var message = document.createElement('textarea');
-            message.name = 'message';
-            message.rows = 3;
-            message.placeholder = 'Any additional information';
-            message.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;resize:vertical;';
-            var msgDiv = createField('Message (Optional)', message);
-            msgDiv.style.marginBottom = '20px';
-            form.appendChild(msgDiv);
+            // Entrance Exam
+            var examSelect = document.createElement('select');
+            examSelect.name = 'entranceExam';
+            examSelect.id = 'examSelect';
+            examSelect.required = true;
+            examSelect.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;background:white;cursor:pointer;-webkit-appearance:menulist!important;-moz-appearance:menulist!important;appearance:menulist!important;';
+            
+            var examOpt1 = document.createElement('option');
+            examOpt1.value = '';
+            examOpt1.textContent = 'Select Entrance Exam';
+            examOpt1.style.cssText = 'display:block!important;padding:8px;background:white;color:black;';
+            examSelect.appendChild(examOpt1);
+            
+            var examOpt2 = document.createElement('option');
+            examOpt2.value = 'EAPCET';
+            examOpt2.textContent = 'EAPCET';
+            examOpt2.style.cssText = 'display:block!important;padding:8px;background:white;color:black;';
+            examSelect.appendChild(examOpt2);
+            
+            var examOpt3 = document.createElement('option');
+            examOpt3.value = 'ECET';
+            examOpt3.textContent = 'ECET';
+            examOpt3.style.cssText = 'display:block!important;padding:8px;background:white;color:black;';
+            examSelect.appendChild(examOpt3);
+            
+            var examOpt4 = document.createElement('option');
+            examOpt4.value = 'ICET';
+            examOpt4.textContent = 'ICET';
+            examOpt4.style.cssText = 'display:block!important;padding:8px;background:white;color:black;';
+            examSelect.appendChild(examOpt4);
+            
+            var examOpt5 = document.createElement('option');
+            examOpt5.value = 'PGECET';
+            examOpt5.textContent = 'PGECET';
+            examOpt5.style.cssText = 'display:block!important;padding:8px;background:white;color:black;';
+            examSelect.appendChild(examOpt5);
+            
+            form.appendChild(createField('Entrance Exam *', examSelect));
+            
+            // Rank
+            var rankInput = document.createElement('input');
+            rankInput.type = 'text';
+            rankInput.name = 'rank';
+            rankInput.id = 'rankInput';
+            rankInput.placeholder = 'Enter your rank';
+            rankInput.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;';
+            var rankDiv = createField('Rank *', rankInput);
+            rankDiv.id = 'rankDiv';
+            rankDiv.style.cssText = 'margin-bottom:20px;display:none;';
+            form.appendChild(rankDiv);
             
             // Submit Button
             var submitBtn = document.createElement('button');
@@ -637,6 +669,18 @@
                 }
             };
             
+            // Exam change handler
+            examSelect.onchange = function() {
+                if (this.value) {
+                    rankDiv.style.display = 'block';
+                    rankInput.required = true;
+                } else {
+                    rankDiv.style.display = 'none';
+                    rankInput.removeAttribute('required');
+                    rankInput.value = '';
+                }
+            };
+            
             // Form submit handler
             form.onsubmit = function(e) {
                 e.preventDefault();
@@ -648,7 +692,6 @@
                 var msg = '*New Admission Inquiry - ISL Engineering College*\n\n';
                 msg += '*Name:* ' + fd.get('fullName') + '\n';
                 msg += '*Mobile:* ' + fd.get('mobile') + '\n';
-                msg += '*Email:* ' + fd.get('email') + '\n';
                 msg += '*Course:* ' + courseInfo + '\n';
                 
                 if (course === 'B.E' || course === 'PHARMACY') {
@@ -658,7 +701,8 @@
                 }
                 
                 msg += '*City:* ' + fd.get('city') + '\n';
-                if (fd.get('message')) msg += '*Message:* ' + fd.get('message') + '\n';
+                msg += '*Entrance Exam:* ' + fd.get('entranceExam') + '\n';
+                msg += '*Rank:* ' + fd.get('rank') + '\n';
                 msg += '\n_Submitted via Website_';
 
                 formContainer.innerHTML = '<div style="padding:60px 40px;text-align:center;"><div style="width:80px;height:80px;background:#4CAF50;border-radius:50%;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></div><h2 style="color:#192f59;margin:0 0 12px;font-size:24px;">Thank You!</h2><p style="color:#666;margin:0 0 8px;">Your application has been submitted.</p><p style="color:#666;margin:0;font-size:14px;">Redirecting to WhatsApp...</p></div>';
