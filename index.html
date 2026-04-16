@@ -386,12 +386,290 @@
     <script defer="defer" src="./academic-council-pdf.js"></script>
     <script defer="defer" src="./navigation-pdf-handler.js"></script>
     <script defer="defer" src="./cse-newsletter-link-updater.js"></script>
-    <script defer="defer" src="./admission-form-popup.js"></script>
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
+    
+    <style>
+        /* Force dropdown options to be visible */
+        #admissionFormModal select {
+            -webkit-appearance: menulist !important;
+            -moz-appearance: menulist !important;
+            appearance: menulist !important;
+        }
+        #admissionFormModal select option {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            padding: 8px !important;
+            background: white !important;
+            color: black !important;
+        }
+    </style>
 </head>
 
 <body><noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
+
+    <!-- Admission Form Popup -->
+    <script>
+    (function() {
+        var WHATSAPP_NUMBER = '918686300801';
+        var FORM_KEY = 'islec_form_v6';
+
+        if (localStorage.getItem(FORM_KEY) === 'true') {
+            return;
+        }
+
+        setTimeout(function() {
+            // Create overlay
+            var overlay = document.createElement('div');
+            overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:999999;display:flex;justify-content:center;align-items:center;padding:20px;overflow-y:auto;';
+            
+            // Create modal container
+            var modal = document.createElement('div');
+            modal.style.cssText = 'background:white;border-radius:12px;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;';
+            
+            // Create header
+            var header = document.createElement('div');
+            header.style.cssText = 'background:linear-gradient(135deg,#192f59,#2d5aa0);color:white;padding:24px;border-radius:12px 12px 0 0;position:relative;';
+            var title = document.createElement('h2');
+            title.style.cssText = 'margin:0 0 8px;font-size:22px;';
+            title.textContent = 'ISL Engineering College - Admission Form';
+            var subtitle = document.createElement('p');
+            subtitle.style.cssText = 'margin:0;font-size:14px;opacity:0.9;';
+            subtitle.textContent = 'Please fill in your details to apply for admission';
+            var closeBtn = document.createElement('button');
+            closeBtn.innerHTML = '&times;';
+            closeBtn.type = 'button';
+            closeBtn.style.cssText = 'position:absolute;top:16px;right:16px;background:transparent;border:none;color:white;font-size:32px;cursor:pointer;width:36px;height:36px;border-radius:50%;line-height:1;';
+            closeBtn.onclick = function() {
+                localStorage.setItem(FORM_KEY, 'true');
+                document.body.removeChild(overlay);
+            };
+            header.appendChild(title);
+            header.appendChild(subtitle);
+            header.appendChild(closeBtn);
+            
+            // Create form container
+            var formContainer = document.createElement('div');
+            formContainer.style.cssText = 'padding:24px;';
+            
+            // Create form
+            var form = document.createElement('form');
+            form.id = 'admissionForm';
+            
+            // Helper function to create form field
+            function createField(label, input) {
+                var div = document.createElement('div');
+                div.style.cssText = 'margin-bottom:16px;';
+                var lbl = document.createElement('label');
+                lbl.style.cssText = 'display:block;margin-bottom:6px;font-weight:500;color:#333;';
+                lbl.textContent = label;
+                div.appendChild(lbl);
+                div.appendChild(input);
+                return div;
+            }
+            
+            // Full Name
+            var fullName = document.createElement('input');
+            fullName.type = 'text';
+            fullName.name = 'fullName';
+            fullName.required = true;
+            fullName.placeholder = 'Enter your full name';
+            fullName.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;';
+            form.appendChild(createField('Full Name *', fullName));
+            
+            // Mobile
+            var mobile = document.createElement('input');
+            mobile.type = 'tel';
+            mobile.name = 'mobile';
+            mobile.required = true;
+            mobile.pattern = '[0-9]{10}';
+            mobile.placeholder = 'Enter 10-digit mobile number';
+            mobile.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;';
+            form.appendChild(createField('Mobile Number *', mobile));
+            
+            // Email
+            var email = document.createElement('input');
+            email.type = 'email';
+            email.name = 'email';
+            email.required = true;
+            email.placeholder = 'Enter your email address';
+            email.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;';
+            form.appendChild(createField('Email Address *', email));
+            
+            // Course Select
+            var courseSelect = document.createElement('select');
+            courseSelect.name = 'course';
+            courseSelect.id = 'courseSelect';
+            courseSelect.required = true;
+            courseSelect.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;background:white;cursor:pointer;-webkit-appearance:menulist!important;-moz-appearance:menulist!important;appearance:menulist!important;';
+            
+            // Create options one by one
+            var opt1 = document.createElement('option');
+            opt1.value = '';
+            opt1.textContent = 'Select Course';
+            opt1.style.cssText = 'display:block!important;padding:8px;background:white;color:black;';
+            courseSelect.appendChild(opt1);
+            
+            var opt2 = document.createElement('option');
+            opt2.value = 'B.E';
+            opt2.textContent = 'B.E (Bachelor of Engineering)';
+            opt2.style.cssText = 'display:block!important;padding:8px;background:white;color:black;';
+            courseSelect.appendChild(opt2);
+            
+            var opt3 = document.createElement('option');
+            opt3.value = 'PHARMACY';
+            opt3.textContent = 'PHARMACY';
+            opt3.style.cssText = 'display:block!important;padding:8px;background:white;color:black;';
+            courseSelect.appendChild(opt3);
+            
+            var opt4 = document.createElement('option');
+            opt4.value = 'MBA';
+            opt4.textContent = 'MBA';
+            opt4.style.cssText = 'display:block!important;padding:8px;background:white;color:black;';
+            courseSelect.appendChild(opt4);
+            
+            var opt5 = document.createElement('option');
+            opt5.value = 'M.TECH';
+            opt5.textContent = 'M.TECH';
+            opt5.style.cssText = 'display:block!important;padding:8px;background:white;color:black;';
+            courseSelect.appendChild(opt5);
+            
+            form.appendChild(createField('Course Interested In *', courseSelect));
+            
+            // B.E Specialization
+            var beSpecSelect = document.createElement('select');
+            beSpecSelect.name = 'beSpec';
+            beSpecSelect.id = 'beSpec';
+            beSpecSelect.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;background:white;cursor:pointer;-webkit-appearance:menulist!important;-moz-appearance:menulist!important;appearance:menulist!important;';
+            beSpecSelect.innerHTML = '<option value="" style="display:block!important;padding:8px;">Select Specialization</option><option value="Computer Science Engineering" style="display:block!important;padding:8px;">Computer Science Engineering</option><option value="Electronics and Communication Engineering" style="display:block!important;padding:8px;">Electronics and Communication Engineering</option><option value="AIDS" style="display:block!important;padding:8px;">AIDS</option>';
+            var beSpecDiv = createField('B.E Specialization *', beSpecSelect);
+            beSpecDiv.id = 'beSpecDiv';
+            beSpecDiv.style.display = 'none';
+            form.appendChild(beSpecDiv);
+            
+            // Intermediate Percentage
+            var interPercent = document.createElement('input');
+            interPercent.type = 'text';
+            interPercent.name = 'interPercent';
+            interPercent.id = 'interPercent';
+            interPercent.placeholder = 'e.g., 85%';
+            interPercent.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;';
+            var interDiv = createField('Intermediate Percentage *', interPercent);
+            interDiv.id = 'interDiv';
+            interDiv.style.display = 'none';
+            form.appendChild(interDiv);
+            
+            // Graduation Percentage
+            var gradPercent = document.createElement('input');
+            gradPercent.type = 'text';
+            gradPercent.name = 'gradPercent';
+            gradPercent.id = 'gradPercent';
+            gradPercent.placeholder = 'e.g., 75%';
+            gradPercent.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;';
+            var gradDiv = createField('Graduation Percentage *', gradPercent);
+            gradDiv.id = 'gradDiv';
+            gradDiv.style.display = 'none';
+            form.appendChild(gradDiv);
+            
+            // City
+            var city = document.createElement('input');
+            city.type = 'text';
+            city.name = 'city';
+            city.required = true;
+            city.placeholder = 'Enter your city';
+            city.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;';
+            form.appendChild(createField('City *', city));
+            
+            // Message
+            var message = document.createElement('textarea');
+            message.name = 'message';
+            message.rows = 3;
+            message.placeholder = 'Any additional information';
+            message.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;resize:vertical;';
+            var msgDiv = createField('Message (Optional)', message);
+            msgDiv.style.marginBottom = '20px';
+            form.appendChild(msgDiv);
+            
+            // Submit Button
+            var submitBtn = document.createElement('button');
+            submitBtn.type = 'submit';
+            submitBtn.textContent = 'Submit Application';
+            submitBtn.style.cssText = 'width:100%;padding:14px;background:linear-gradient(135deg,#192f59,#2d5aa0);color:white;border:none;border-radius:6px;font-size:16px;font-weight:600;cursor:pointer;';
+            form.appendChild(submitBtn);
+            
+            // Course change handler
+            courseSelect.onchange = function() {
+                beSpecDiv.style.display = 'none';
+                interDiv.style.display = 'none';
+                gradDiv.style.display = 'none';
+                beSpecSelect.removeAttribute('required');
+                interPercent.removeAttribute('required');
+                gradPercent.removeAttribute('required');
+                beSpecSelect.value = '';
+                interPercent.value = '';
+                gradPercent.value = '';
+
+                if (this.value === 'B.E') {
+                    beSpecDiv.style.display = 'block';
+                    beSpecSelect.required = true;
+                    interDiv.style.display = 'block';
+                    interPercent.required = true;
+                } else if (this.value === 'PHARMACY') {
+                    interDiv.style.display = 'block';
+                    interPercent.required = true;
+                } else if (this.value === 'MBA') {
+                    gradDiv.style.display = 'block';
+                    gradPercent.required = true;
+                } else if (this.value === 'M.TECH') {
+                    gradDiv.style.display = 'block';
+                    gradPercent.required = true;
+                }
+            };
+            
+            // Form submit handler
+            form.onsubmit = function(e) {
+                e.preventDefault();
+                var fd = new FormData(form);
+                var course = fd.get('course');
+                var courseInfo = course;
+                if (course === 'B.E') courseInfo = 'B.E - ' + fd.get('beSpec');
+
+                var msg = '*New Admission Inquiry - ISL Engineering College*\n\n';
+                msg += '*Name:* ' + fd.get('fullName') + '\n';
+                msg += '*Mobile:* ' + fd.get('mobile') + '\n';
+                msg += '*Email:* ' + fd.get('email') + '\n';
+                msg += '*Course:* ' + courseInfo + '\n';
+                
+                if (course === 'B.E' || course === 'PHARMACY') {
+                    msg += '*Intermediate Percentage:* ' + fd.get('interPercent') + '\n';
+                } else if (course === 'MBA' || course === 'M.TECH') {
+                    msg += '*Graduation Percentage:* ' + fd.get('gradPercent') + '\n';
+                }
+                
+                msg += '*City:* ' + fd.get('city') + '\n';
+                if (fd.get('message')) msg += '*Message:* ' + fd.get('message') + '\n';
+                msg += '\n_Submitted via Website_';
+
+                formContainer.innerHTML = '<div style="padding:60px 40px;text-align:center;"><div style="width:80px;height:80px;background:#4CAF50;border-radius:50%;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></div><h2 style="color:#192f59;margin:0 0 12px;font-size:24px;">Thank You!</h2><p style="color:#666;margin:0 0 8px;">Your application has been submitted.</p><p style="color:#666;margin:0;font-size:14px;">Redirecting to WhatsApp...</p></div>';
+                
+                localStorage.setItem(FORM_KEY, 'true');
+                
+                setTimeout(function() {
+                    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
+                    document.body.removeChild(overlay);
+                }, 1500);
+            };
+            
+            formContainer.appendChild(form);
+            modal.appendChild(header);
+            modal.appendChild(formContainer);
+            overlay.appendChild(modal);
+            document.body.appendChild(overlay);
+        }, 2000);
+    })();
+    </script>
 </body>
 
 </html>
