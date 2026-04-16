@@ -1,23 +1,51 @@
 [
   {
-    "_id": "seminar-1",
-    "title": "Faculty development program",
-    "descp": "Faculty development program activities and workshop sessions hosted by the college.",
+    "_id": "seminar-2025-workshop",
+    "title": "2025 Workshop Highlights",
+    "descp": "Workshop and seminar activity highlights captured during the 2025 academic year.",
+    "img": "./allimages/IMG-20250419-WA0006.jpg",
+    "link": ""
+  },
+  {
+    "_id": "seminar-2023-research",
+    "title": "2023 Research Presentation Session",
+    "descp": "Research-focused seminar activity and academic presentation highlights from 2023.",
+    "img": "./allimages/rp1.jpg",
+    "link": ""
+  },
+  {
+    "_id": "seminar-2023-nptel",
+    "title": "2023 NPTEL Recognition Seminar",
+    "descp": "Seminar and recognition event celebrating certification and online learning achievement in 2023.",
+    "img": "./allimages/nptel1.jpg",
+    "link": ""
+  },
+  {
+    "_id": "seminar-2023-book",
+    "title": "2023 Book Publication and Research Talk",
+    "descp": "Academic publication and research discussion session organized during 2023.",
+    "img": "./allimages/bookpublished.jpg",
+    "link": ""
+  },
+  {
+    "_id": "seminar-2022-certification",
+    "title": "2022 Certification and Skill Workshop",
+    "descp": "Skill-building and certification-oriented workshop session conducted in 2022.",
+    "img": "./allimages/certi.jpeg",
+    "link": ""
+  },
+  {
+    "_id": "seminar-2022-fdp",
+    "title": "2022 Faculty Development Program",
+    "descp": "Faculty development and workshop sessions hosted on campus during 2022.",
     "img": "./allimages/fdp/fdp1.jpg",
     "link": "./allimages/fdp/fdp-report.pdf"
   },
   {
-    "_id": "seminar-2",
-    "title": "Technical workshop",
-    "descp": "Technical workshop highlights featuring practical learning and expert interaction.",
-    "img": "./allimages/fdp/fdp3.jpg",
-    "link": "./allimages/fdp/fdp-broucher.pdf"
-  },
-  {
-    "_id": "seminar-3",
-    "title": "Seminar sessions",
-    "descp": "Seminar sessions designed to strengthen academic and professional skills.",
-    "img": "./allimages/fdp/fdp5.jpg",
+    "_id": "seminar-2021-ignite",
+    "title": "2021 Ignite Technical Workshop",
+    "descp": "Technical workshop and student engagement program conducted during 2021.",
+    "img": "./allimages/ignite2021.jpeg",
     "link": ""
   }
 ]
