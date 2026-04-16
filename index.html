@@ -344,6 +344,44 @@
         })();
     </script>
 
+    <script>
+        (function () {
+            var fallbackMap = {
+                "https://islec.herokuapp.com/api/blogs/all": "./DATA/events/all.json",
+                "https://islec.herokuapp.com/api/blogs/sw": "./DATA/events/seminars.json",
+                "https://islec.herokuapp.com/api/blogs/ie": "./DATA/events/inbounds.json",
+                "https://islec.herokuapp.com/api/blogs/oi": "./DATA/events/outbounds.json",
+                "https://islec.herokuapp.com/api/blogs/sp": "./DATA/events/sports.json",
+                "https://sore-plum-shrug.cyclic.app/api/sidebars/events": "./DATA/events/quicklinks.json"
+            };
+
+            function getFallbackUrl(url) {
+                return typeof url === "string" && fallbackMap[url] ? fallbackMap[url] : url;
+            }
+
+            if (window.fetch) {
+                var originalFetch = window.fetch;
+                window.fetch = function (input, init) {
+                    var url = typeof input === "string" ? input : input && input.url;
+                    var fallbackUrl = getFallbackUrl(url);
+                    if (fallbackUrl !== url && typeof input === "string") {
+                        input = fallbackUrl;
+                    }
+                    return originalFetch.call(this, input, init);
+                };
+            }
+
+            if (window.XMLHttpRequest && window.XMLHttpRequest.prototype) {
+                var originalOpen = window.XMLHttpRequest.prototype.open;
+                window.XMLHttpRequest.prototype.open = function () {
+                    var args = Array.prototype.slice.call(arguments);
+                    args[1] = getFallbackUrl(args[1]);
+                    return originalOpen.apply(this, args);
+                };
+            }
+        })();
+    </script>
+
     <script defer="defer" src="./static/js/main.64d07445.js"></script>
     <script defer="defer" src="./academic-council-pdf.js"></script>
     <script defer="defer" src="./navigation-pdf-handler.js"></script>

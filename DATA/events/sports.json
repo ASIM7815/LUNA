@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "sports-1",
+    "title": "Sports meet",
+    "descp": "Sports meets and physical activity programs for all-round student development.",
+    "img": "./allimages/mainSlider/judo2024.jpg",
+    "link": ""
+  },
+  {
+    "_id": "sports-2",
+    "title": "Championship highlights",
+    "descp": "Team and individual championship moments celebrated on campus.",
+    "img": "./allimages/Champions.webp",
+    "link": ""
+  },
+  {
+    "_id": "sports-3",
+    "title": "Field activity",
+    "descp": "Outdoor games and regular physical activity that strengthen campus participation.",
+    "img": "./allimages/footc.jpeg",
+    "link": ""
+  }
+]

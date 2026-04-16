@@ -1,0 +1,44 @@
+[
+  {
+    "_id": "all-1",
+    "title": "Seminars and workshop sessions",
+    "descp": "Hands-on faculty development programs and workshop sessions conducted on campus.",
+    "img": "./allimages/fdp/fdp1.jpg",
+    "link": "./allimages/fdp/fdp-report.pdf"
+  },
+  {
+    "_id": "all-2",
+    "title": "Orientation and induction programs",
+    "descp": "Student orientation, campus engagement and inbound institutional events.",
+    "img": "./allimages/mainSlider/orientation24.jpeg",
+    "link": ""
+  },
+  {
+    "_id": "all-3",
+    "title": "Industrial visits and outbound exposure",
+    "descp": "Outbound activities and industrial exposure visits for real-world learning.",
+    "img": "./allimages/OUTBI.jpg",
+    "link": ""
+  },
+  {
+    "_id": "all-4",
+    "title": "Sports and physical activity",
+    "descp": "Sports meets, team events and physical activity across the campus community.",
+    "img": "./allimages/mainSlider/judo2024.jpg",
+    "link": ""
+  },
+  {
+    "_id": "all-5",
+    "title": "Classrooms and labs",
+    "descp": "Academic blocks, laboratories and learning spaces that support day-to-day instruction.",
+    "img": "./allimages/Infrastructure/ca1.jpg",
+    "link": "/Infrastructure/AcademicFacilities"
+  },
+  {
+    "_id": "all-6",
+    "title": "Computing and innovation facilities",
+    "descp": "Computing resources and technical facilities available to students and faculty.",
+    "img": "./allimages/Infrastructure/c6.jpg",
+    "link": "/Infrastructure/ComputingFacilities"
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "_id": "quicklink-1",
+    "title": "World Class Facilities",
+    "link": "/Infrastructure/WorldClassFacilities"
+  },
+  {
+    "_id": "quicklink-2",
+    "title": "Academic Facilities",
+    "link": "/Infrastructure/AcademicFacilities"
+  },
+  {
+    "_id": "quicklink-3",
+    "title": "Computing Facilities",
+    "link": "/Infrastructure/ComputingFacilities"
+  },
+  {
+    "_id": "quicklink-4",
+    "title": "Canteen Facility",
+    "link": "/Infrastructure/CanteenFacilities"
+  },
+  {
+    "_id": "quicklink-5",
+    "title": "Transport Facility",
+    "link": "/Infrastructure/TransportFacilities"
+  },
+  {
+    "_id": "quicklink-6",
+    "title": "Medical Facility",
+    "link": "/Infrastructure/MedicalFacilities"
+  },
+  {
+    "_id": "quicklink-7",
+    "title": "Studio Facility",
+    "link": "/Infrastructure/StudioFacilities"
+  }
+]

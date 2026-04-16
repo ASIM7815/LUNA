@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "outbound-1",
+    "title": "Industrial visit",
+    "descp": "Industrial visit activities that connect classroom learning with field exposure.",
+    "img": "./allimages/OUTBI.jpg",
+    "link": ""
+  },
+  {
+    "_id": "outbound-2",
+    "title": "Outbound student activity",
+    "descp": "Outbound programs that build observation, collaboration and practical understanding.",
+    "img": "./allimages/OUTBI.webp",
+    "link": ""
+  },
+  {
+    "_id": "outbound-3",
+    "title": "Transport-supported outreach",
+    "descp": "Transport-enabled visits and off-campus engagement supported by the institution.",
+    "img": "./allimages/Infrastructure/tr2.jpg",
+    "link": "/Infrastructure/TransportFacilities"
+  }
+]

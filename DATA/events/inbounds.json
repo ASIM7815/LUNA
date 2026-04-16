@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "inbound-1",
+    "title": "Orientation event",
+    "descp": "Orientation and inbound campus events that welcome students into academic life.",
+    "img": "./allimages/mainSlider/orientation24.jpeg",
+    "link": ""
+  },
+  {
+    "_id": "inbound-2",
+    "title": "Campus recognition event",
+    "descp": "Institutional recognition and campus milestone celebrations held in the college.",
+    "img": "./allimages/mainSlider/Recognition25.jpg",
+    "link": ""
+  },
+  {
+    "_id": "inbound-3",
+    "title": "Hackathon and student engagement",
+    "descp": "Inbound student events focused on participation, teamwork and innovation.",
+    "img": "./allimages/mainSlider/hack23.jpg",
+    "link": ""
+  }
+]

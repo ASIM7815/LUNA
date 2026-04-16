@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "seminar-1",
+    "title": "Faculty development program",
+    "descp": "Faculty development program activities and workshop sessions hosted by the college.",
+    "img": "./allimages/fdp/fdp1.jpg",
+    "link": "./allimages/fdp/fdp-report.pdf"
+  },
+  {
+    "_id": "seminar-2",
+    "title": "Technical workshop",
+    "descp": "Technical workshop highlights featuring practical learning and expert interaction.",
+    "img": "./allimages/fdp/fdp3.jpg",
+    "link": "./allimages/fdp/fdp-broucher.pdf"
+  },
+  {
+    "_id": "seminar-3",
+    "title": "Seminar sessions",
+    "descp": "Seminar sessions designed to strengthen academic and professional skills.",
+    "img": "./allimages/fdp/fdp5.jpg",
+    "link": ""
+  }
+]
