@@ -61,11 +61,6 @@
       </div>
 
       <div style="margin-bottom:16px;">
-        <label style="display:block;margin-bottom:6px;font-weight:500;color:#333;font-size:14px;">Email Address *</label>
-        <input type="email" name="email" required placeholder="Enter your email address" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;">
-      </div>
-
-      <div style="margin-bottom:16px;">
         <label style="display:block;margin-bottom:6px;font-weight:500;color:#333;font-size:14px;">Course Interested In *</label>
         <select name="course" id="courseSelect" required style="width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;background:white;cursor:pointer;">
           <option value="">Select Course</option>
@@ -114,9 +109,20 @@
         <input type="text" name="city" required placeholder="Enter your city" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;">
       </div>
 
-      <div style="margin-bottom:20px;">
-        <label style="display:block;margin-bottom:6px;font-weight:500;color:#333;font-size:14px;">Message (Optional)</label>
-        <textarea name="message" rows="3" placeholder="Any additional information" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;resize:vertical;"></textarea>
+      <div style="margin-bottom:16px;">
+        <label style="display:block;margin-bottom:6px;font-weight:500;color:#333;font-size:14px;">Entrance Exam *</label>
+        <select name="entranceExam" id="examSelect" required style="width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;background:white;cursor:pointer;">
+          <option value="">Select Entrance Exam</option>
+          <option value="EAPCET">EAPCET</option>
+          <option value="ECET">ECET</option>
+          <option value="ICET">ICET</option>
+          <option value="PGECET">PGECET</option>
+        </select>
+      </div>
+
+      <div id="rankDiv" style="margin-bottom:20px;display:none;">
+        <label style="display:block;margin-bottom:6px;font-weight:500;color:#333;font-size:14px;">Rank *</label>
+        <input type="text" name="rank" id="rankInput" required placeholder="Enter your rank" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;font-size:14px;box-sizing:border-box;">
       </div>
 
       <button type="submit" style="width:100%;padding:14px;background:linear-gradient(135deg,#192f59 0%,#2d5aa0 100%);color:white;border:none;border-radius:6px;font-size:16px;font-weight:600;cursor:pointer;">Submit Application</button>
@@ -132,6 +138,9 @@
     var interPercent = form.querySelector('#interPercent');
     var gradPercentDiv = form.querySelector('#gradPercentDiv');
     var gradPercent = form.querySelector('#gradPercent');
+    var examSelect = form.querySelector('#examSelect');
+    var rankDiv = form.querySelector('#rankDiv');
+    var rankInput = form.querySelector('#rankInput');
 
     courseSelect.addEventListener('change', function() {
       var course = this.value;
@@ -174,6 +183,17 @@
       }
     });
 
+    examSelect.addEventListener('change', function() {
+      if (this.value) {
+        rankDiv.style.display = 'block';
+        rankInput.setAttribute('required', 'required');
+      } else {
+        rankDiv.style.display = 'none';
+        rankInput.removeAttribute('required');
+        rankInput.value = '';
+      }
+    });
+
     // Form submission
     form.onsubmit = function(e) {
       e.preventDefault();
@@ -194,7 +214,6 @@
       var message = '*New Admission Inquiry - ISL Engineering College*\n\n';
       message += '*Name:* ' + data.fullName + '\n';
       message += '*Mobile:* ' + data.mobile + '\n';
-      message += '*Email:* ' + data.email + '\n';
       message += '*Course:* ' + courseInfo + '\n';
       
       if (data.course === 'B.E' || data.course === 'PHARMACY') {
@@ -204,9 +223,8 @@
       }
       
       message += '*City:* ' + data.city + '\n';
-      if (data.message) {
-        message += '*Message:* ' + data.message + '\n';
-      }
+      message += '*Entrance Exam:* ' + data.entranceExam + '\n';
+      message += '*Rank:* ' + data.rank + '\n';
       message += '\n_Submitted via Website_';
 
       var whatsappURL = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message);

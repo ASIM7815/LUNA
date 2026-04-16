@@ -62,18 +62,6 @@
         mobileDiv.appendChild(mobileInput);
         form.appendChild(mobileDiv);
         
-        // Email
-        var emailDiv = document.createElement('div');
-        emailDiv.style.marginBottom = '16px';
-        emailDiv.innerHTML = '<label style="display:block;margin-bottom:6px;font-weight:500;">Email Address *</label>';
-        var emailInput = document.createElement('input');
-        emailInput.type = 'email';
-        emailInput.name = 'email';
-        emailInput.required = true;
-        emailInput.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;';
-        emailDiv.appendChild(emailInput);
-        form.appendChild(emailDiv);
-        
         // Course Select
         var courseDiv = document.createElement('div');
         courseDiv.style.marginBottom = '16px';
@@ -180,16 +168,32 @@
         cityDiv.appendChild(cityInput);
         form.appendChild(cityDiv);
         
-        // Message
-        var msgDiv = document.createElement('div');
-        msgDiv.style.marginBottom = '20px';
-        msgDiv.innerHTML = '<label style="display:block;margin-bottom:6px;font-weight:500;">Message (Optional)</label>';
-        var msgInput = document.createElement('textarea');
-        msgInput.name = 'message';
-        msgInput.rows = 3;
-        msgInput.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;resize:vertical;';
-        msgDiv.appendChild(msgInput);
-        form.appendChild(msgDiv);
+        // Entrance Exam
+        var examDiv = document.createElement('div');
+        examDiv.style.marginBottom = '16px';
+        examDiv.innerHTML = '<label style="display:block;margin-bottom:6px;font-weight:500;">Entrance Exam *</label>';
+        var examSelect = document.createElement('select');
+        examSelect.name = 'entranceExam';
+        examSelect.id = 'examSelect';
+        examSelect.required = true;
+        examSelect.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;background:white;font-size:14px;';
+        examSelect.innerHTML = '<option value="">Select Entrance Exam</option><option value="EAPCET">EAPCET</option><option value="ECET">ECET</option><option value="ICET">ICET</option><option value="PGECET">PGECET</option>';
+        examDiv.appendChild(examSelect);
+        form.appendChild(examDiv);
+        
+        // Rank (hidden initially)
+        var rankDiv = document.createElement('div');
+        rankDiv.id = 'rankDiv';
+        rankDiv.style.cssText = 'margin-bottom:20px;display:none;';
+        rankDiv.innerHTML = '<label style="display:block;margin-bottom:6px;font-weight:500;">Rank *</label>';
+        var rankInput = document.createElement('input');
+        rankInput.type = 'text';
+        rankInput.name = 'rank';
+        rankInput.id = 'rankInput';
+        rankInput.placeholder = 'Enter your rank';
+        rankInput.style.cssText = 'width:100%;padding:12px;border:1px solid #ddd;border-radius:6px;box-sizing:border-box;';
+        rankDiv.appendChild(rankInput);
+        form.appendChild(rankDiv);
         
         // Submit
         var submitBtn = document.createElement('button');
@@ -228,6 +232,18 @@
             }
         });
         
+        // Exam change handler
+        examSelect.addEventListener('change', function() {
+            if (this.value) {
+                rankDiv.style.display = 'block';
+                rankInput.required = true;
+            } else {
+                rankDiv.style.display = 'none';
+                rankInput.removeAttribute('required');
+                rankInput.value = '';
+            }
+        });
+        
         // Form submit
         form.onsubmit = function(e) {
             e.preventDefault();
@@ -240,7 +256,6 @@
             var msg = '*New Admission Inquiry - ISL Engineering College*\n\n';
             msg += '*Name:* ' + fd.get('fullName') + '\n';
             msg += '*Mobile:* ' + fd.get('mobile') + '\n';
-            msg += '*Email:* ' + fd.get('email') + '\n';
             msg += '*Course:* ' + courseInfo + '\n';
             
             if (course === 'B.E' || course === 'PHARMACY') {
@@ -250,7 +265,8 @@
             }
             
             msg += '*City:* ' + fd.get('city') + '\n';
-            if (fd.get('message')) msg += '*Message:* ' + fd.get('message') + '\n';
+            msg += '*Entrance Exam:* ' + fd.get('entranceExam') + '\n';
+            msg += '*Rank:* ' + fd.get('rank') + '\n';
             msg += '\n_Submitted via Website_';
             
             formDiv.innerHTML = '<div style="padding:40px;text-align:center;"><div style="width:80px;height:80px;background:#4CAF50;border-radius:50%;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></div><h2 style="color:#192f59;margin:0 0 12px;">Thank You!</h2><p style="color:#666;margin:0;">Redirecting to WhatsApp...</p></div>';
