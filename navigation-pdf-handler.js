@@ -31,13 +31,6 @@
       suffix: '/hrpolicy',
       title: 'HR Policy',
       pdfFile: 'DATA/hrpolicy.pdf'
-    },
-    // Committees Section
-    {
-      suffix: '/committees',
-      title: 'Committees',
-      pdfFolder: 'DATA/Committees',
-      showFileList: true
     }
   ];
 
@@ -290,8 +283,7 @@
       '/dvv': 'Data Validation and Verification (DVV) is the process of ensuring the accuracy and authenticity of data submitted by institutions for accreditation purposes.',
       '/iqac': 'The Internal Quality Assurance Cell (IQAC) is a quality sustenance and quality enhancement mechanism in higher education institutions.',
       '/iic': 'The Institution Innovation Council (IIC) is established to systematically foster the culture of innovation in institutions.',
-      '/hrpolicy': 'The HR Policy outlines the human resource management practices, guidelines, and procedures followed by the institution.',
-      '/committees': 'Various committees are constituted to ensure smooth functioning and governance of the institution.'
+      '/hrpolicy': 'The HR Policy outlines the human resource management practices, guidelines, and procedures followed by the institution.'
     };
     
     description.textContent = descriptions[routeConfig.suffix] || 'Welcome to ' + routeConfig.title + ' section.';
