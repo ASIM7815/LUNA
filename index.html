@@ -389,9 +389,22 @@
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
     
     <style>
-        /* Override React CSS that hides all options */
+        /* CRITICAL: Override React CSS that hides select and option elements */
+        #admissionFormOverlay select,
+        #admissionFormModal select,
+        #admissionForm select {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            -webkit-appearance: menulist !important;
+            -moz-appearance: menulist !important;
+            appearance: menulist !important;
+            height: auto !important;
+            min-height: 44px !important;
+        }
+        #admissionFormOverlay select option,
         #admissionFormModal select option,
-        #admissionFormOverlay select option {
+        #admissionForm select option {
             display: block !important;
             visibility: visible !important;
             opacity: 1 !important;
@@ -399,12 +412,6 @@
             padding: 8px !important;
             background: white !important;
             color: black !important;
-        }
-        #admissionFormModal select,
-        #admissionFormOverlay select {
-            -webkit-appearance: menulist !important;
-            -moz-appearance: menulist !important;
-            appearance: menulist !important;
         }
     </style>
 </head>
@@ -539,6 +546,12 @@
             courseSelect.appendChild(opt5);
             
             form.appendChild(createField('Course Interested In *', courseSelect));
+            
+            // Debug logging
+            console.log('Course select created:', courseSelect);
+            console.log('Course select has', courseSelect.options.length, 'options');
+            console.log('Course select display:', window.getComputedStyle(courseSelect).display);
+            console.log('Course select visibility:', window.getComputedStyle(courseSelect).visibility);
             
             // B.E Specialization
             var beSpecSelect = document.createElement('select');
