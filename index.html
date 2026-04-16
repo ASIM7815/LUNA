@@ -547,12 +547,6 @@
             
             form.appendChild(createField('Course Interested In *', courseSelect));
             
-            // Debug logging
-            console.log('Course select created:', courseSelect);
-            console.log('Course select has', courseSelect.options.length, 'options');
-            console.log('Course select display:', window.getComputedStyle(courseSelect).display);
-            console.log('Course select visibility:', window.getComputedStyle(courseSelect).visibility);
-            
             // B.E Specialization
             var beSpecSelect = document.createElement('select');
             beSpecSelect.name = 'beSpec';
@@ -682,6 +676,11 @@
             modal.appendChild(formContainer);
             overlay.appendChild(modal);
             document.body.appendChild(overlay);
+            
+            // Debug after adding to DOM
+            console.log('Admission form loaded successfully');
+            console.log('Course select element:', document.getElementById('courseSelect'));
+            console.log('Course select options:', document.getElementById('courseSelect').options.length);
         }, 2000);
     })();
     </script>
