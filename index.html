@@ -389,13 +389,9 @@
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
     
     <style>
-        /* Force dropdown options to be visible */
-        #admissionFormModal select {
-            -webkit-appearance: menulist !important;
-            -moz-appearance: menulist !important;
-            appearance: menulist !important;
-        }
-        #admissionFormModal select option {
+        /* Override React CSS that hides all options */
+        #admissionFormModal select option,
+        #admissionFormOverlay select option {
             display: block !important;
             visibility: visible !important;
             opacity: 1 !important;
@@ -403,6 +399,12 @@
             padding: 8px !important;
             background: white !important;
             color: black !important;
+        }
+        #admissionFormModal select,
+        #admissionFormOverlay select {
+            -webkit-appearance: menulist !important;
+            -moz-appearance: menulist !important;
+            appearance: menulist !important;
         }
     </style>
 </head>
