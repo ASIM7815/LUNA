@@ -82,7 +82,7 @@
             var row1Cells = rows[1].querySelectorAll('td');
             if (row1Cells.length >= 3) {
                 row1Cells[1].textContent = 'DR. M.A. RABBANI';
-                row1Cells[2].textContent = 'ASSOCIATE PROFESSOR MECHANICAL DEPARTMENT';
+                row1Cells[2].textContent = 'Associate Professor Mechanical Department';
                 console.log('Updated Row 1: Dr. M.A. RABBANI');
             }
             

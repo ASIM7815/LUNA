@@ -19,7 +19,7 @@ Added functionality to automatically update the staff table on the Exam Branch p
 ### NEW TABLE (After):
 | S.NO | NAME OF THE FACULTY | DESIGNATION | ROLE |
 |------|---------------------|-------------|------|
-| 1 | **DR. M.A. RABBANI** | **ASSOCIATE PROFESSOR MECHANICAL DEPARTMENT** | Controller of Examinations with Chief Superintendent |
+| 1 | **DR. M.A. RABBANI** | **Associate Professor Mechanical Department** | Controller of Examinations with Chief Superintendent |
 | 2 | **MR. SMK AMJAD ALI KHAN** | Admin Department | Office Superintendent |
 | 3 | **SYED ABRAR ALI** | Admin Department | Office Superintendent |
 | 4 | **MRS. KAVITHA** | Clerk | System Admin |
@@ -29,7 +29,7 @@ Added functionality to automatically update the staff table on the Exam Branch p
 
 ### Row 1 - Dr. M.A. RABBANI:
 - ✅ Name: Capitalized to **DR. M.A. RABBANI**
-- ✅ Designation: Changed from "Controller of Examinations" to **"ASSOCIATE PROFESSOR MECHANICAL DEPARTMENT"**
+- ✅ Designation: Changed from "Controller of Examinations" to **"Associate Professor Mechanical Department"**
 - ✅ Role: Remains "Controller of Examinations with Chief Superintendent"
 
 ### Row 2 - Mr. SMK AMJAD ALI KHAN:
@@ -95,7 +95,7 @@ No manual intervention required!
 
 After deployment, verify:
 - [ ] All names are in CAPITAL LETTERS
-- [ ] Dr. Rabbani's designation shows "ASSOCIATE PROFESSOR MECHANICAL DEPARTMENT"
+- [ ] Dr. Rabbani's designation shows "Associate Professor Mechanical Department"
 - [ ] Syed ABRAR ALI is in Row 3
 - [ ] Mr. Ahraj Ali is in Row 5
 - [ ] All roles are spelled correctly
