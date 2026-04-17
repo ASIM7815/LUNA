@@ -6,6 +6,7 @@
     var updateAttempts = 0;
     var maxAttempts = 20;
     var sectionAdded = false;
+    var tableUpdated = false;
     
     function updateExamBranchContent() {
         updateAttempts++;
@@ -40,6 +41,93 @@
             }
             
             return removed;
+        }
+        
+        // Update the staff table
+        function updateStaffTable() {
+            if (tableUpdated) {
+                return true;
+            }
+            
+            // Find all tables
+            var tables = document.querySelectorAll('table');
+            var targetTable = null;
+            
+            for (var i = 0; i < tables.length; i++) {
+                var table = tables[i];
+                var text = table.textContent;
+                
+                // Check if this is the exam branch staff table
+                if (text.includes('Dr. M.A. RABBANI') && text.includes('Controller of Examinations') && 
+                    (text.includes('Mr. Ahraj Ali') || text.includes('Mrs. Kavitha'))) {
+                    targetTable = table;
+                    console.log('Found exam branch staff table');
+                    break;
+                }
+            }
+            
+            if (!targetTable) {
+                console.log('Staff table not found yet...');
+                return false;
+            }
+            
+            // Get all rows
+            var rows = targetTable.querySelectorAll('tr');
+            if (rows.length < 6) {
+                console.log('Table structure unexpected');
+                return false;
+            }
+            
+            // Update Row 1 - Dr. M.A. RABBANI
+            var row1Cells = rows[1].querySelectorAll('td');
+            if (row1Cells.length >= 3) {
+                row1Cells[1].textContent = 'DR. M.A. RABBANI';
+                row1Cells[2].textContent = 'ASSOCIATE PROFESSOR MECHANICAL DEPARTMENT';
+                console.log('Updated Row 1: Dr. M.A. RABBANI');
+            }
+            
+            // Update Row 2 - Mr. SMK AMJAD ALI KHAN
+            var row2Cells = rows[2].querySelectorAll('td');
+            if (row2Cells.length >= 3) {
+                row2Cells[1].textContent = 'MR. SMK AMJAD ALI KHAN';
+                row2Cells[2].textContent = 'Admin Department';
+                row2Cells[3].textContent = 'Office Superintendent';
+                console.log('Updated Row 2: Mr. SMK AMJAD ALI KHAN');
+            }
+            
+            // Row 3 - Move Syed ABRAR ALI here
+            var row3Cells = rows[3].querySelectorAll('td');
+            if (row3Cells.length >= 3) {
+                row3Cells[0].textContent = '3';
+                row3Cells[1].textContent = 'SYED ABRAR ALI';
+                row3Cells[2].textContent = 'Admin Department';
+                row3Cells[3].textContent = 'Office Superintendent';
+                console.log('Updated Row 3: Syed ABRAR ALI');
+            }
+            
+            // Row 4 - Mrs. Kavitha
+            var row4Cells = rows[4].querySelectorAll('td');
+            if (row4Cells.length >= 3) {
+                row4Cells[0].textContent = '4';
+                row4Cells[1].textContent = 'MRS. KAVITHA';
+                row4Cells[2].textContent = 'Clerk';
+                row4Cells[3].textContent = 'System Admin';
+                console.log('Updated Row 4: Mrs. Kavitha');
+            }
+            
+            // Row 5 - Mr. Ahraj Ali
+            var row5Cells = rows[5].querySelectorAll('td');
+            if (row5Cells.length >= 3) {
+                row5Cells[0].textContent = '5';
+                row5Cells[1].textContent = 'MR. AHRAJ ALI';
+                row5Cells[2].textContent = 'System Administration';
+                row5Cells[3].textContent = 'System In charge';
+                console.log('Updated Row 5: Mr. Ahraj Ali');
+            }
+            
+            tableUpdated = true;
+            console.log('✓ Staff table updated successfully!');
+            return true;
         }
         
         // Add the new Controller of Examinations section
@@ -111,15 +199,16 @@
         
         // Execute the updates
         var textRemoved = removeUnwantedText();
+        var tableUpdatedNow = updateStaffTable();
         var sectionAddedNow = addControllerSection();
         
         // If we haven't succeeded and haven't exceeded max attempts, try again
-        if (!sectionAddedNow && updateAttempts < maxAttempts) {
+        if ((!sectionAddedNow || !tableUpdatedNow) && updateAttempts < maxAttempts) {
             setTimeout(updateExamBranchContent, 500);
-        } else if (sectionAddedNow) {
+        } else if (sectionAddedNow && tableUpdatedNow) {
             console.log('✓ Exam Branch page updated successfully!');
         } else {
-            console.log('Max attempts reached. Section may not be on this page.');
+            console.log('Max attempts reached. Some updates may not have been applied.');
         }
     }
     
@@ -153,6 +242,7 @@
                 console.log('Route changed to exam branch, updating...');
                 updateAttempts = 0;
                 sectionAdded = false;
+                tableUpdated = false;
                 setTimeout(updateExamBranchContent, 300);
             }
         }
