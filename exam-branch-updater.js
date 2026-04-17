@@ -78,51 +78,54 @@
                 return false;
             }
             
-            // Update Row 1 - Dr. M.A. RABBANI
+            // Update Row 1 - DR. M.A. RABBANI
             var row1Cells = rows[1].querySelectorAll('td');
             if (row1Cells.length >= 3) {
+                row1Cells[0].textContent = '1';
                 row1Cells[1].textContent = 'DR. M.A. RABBANI';
                 row1Cells[2].textContent = 'Associate Professor Mechanical Department';
-                console.log('Updated Row 1: Dr. M.A. RABBANI');
+                row1Cells[3].textContent = 'Controller of Examinations with Chief Superintendent';
+                console.log('Updated Row 1: DR. M.A. RABBANI');
             }
             
-            // Update Row 2 - Mr. SMK AMJAD ALI KHAN
+            // Update Row 2 - MR. SMK AMJAD ALI KHAN
             var row2Cells = rows[2].querySelectorAll('td');
             if (row2Cells.length >= 3) {
+                row2Cells[0].textContent = '2';
                 row2Cells[1].textContent = 'MR. SMK AMJAD ALI KHAN';
                 row2Cells[2].textContent = 'Admin Department';
                 row2Cells[3].textContent = 'Office Superintendent';
-                console.log('Updated Row 2: Mr. SMK AMJAD ALI KHAN');
+                console.log('Updated Row 2: MR. SMK AMJAD ALI KHAN');
             }
             
-            // Row 3 - Move Syed ABRAR ALI here
+            // Row 3 - SYED ABRAR ALI (moved from row 5)
             var row3Cells = rows[3].querySelectorAll('td');
             if (row3Cells.length >= 3) {
                 row3Cells[0].textContent = '3';
                 row3Cells[1].textContent = 'SYED ABRAR ALI';
                 row3Cells[2].textContent = 'Admin Department';
                 row3Cells[3].textContent = 'Office Superintendent';
-                console.log('Updated Row 3: Syed ABRAR ALI');
+                console.log('Updated Row 3: SYED ABRAR ALI');
             }
             
-            // Row 4 - Mrs. Kavitha
+            // Row 4 - MRS. KAVITHA
             var row4Cells = rows[4].querySelectorAll('td');
             if (row4Cells.length >= 3) {
                 row4Cells[0].textContent = '4';
                 row4Cells[1].textContent = 'MRS. KAVITHA';
                 row4Cells[2].textContent = 'Clerk';
                 row4Cells[3].textContent = 'System Admin';
-                console.log('Updated Row 4: Mrs. Kavitha');
+                console.log('Updated Row 4: MRS. KAVITHA');
             }
             
-            // Row 5 - Mr. Ahraj Ali
+            // Row 5 - MR. AHRAJ ALI (moved from row 3)
             var row5Cells = rows[5].querySelectorAll('td');
             if (row5Cells.length >= 3) {
                 row5Cells[0].textContent = '5';
                 row5Cells[1].textContent = 'MR. AHRAJ ALI';
                 row5Cells[2].textContent = 'System Administration';
                 row5Cells[3].textContent = 'System In charge';
-                console.log('Updated Row 5: Mr. Ahraj Ali');
+                console.log('Updated Row 5: MR. AHRAJ ALI');
             }
             
             tableUpdated = true;
