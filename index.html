@@ -99,13 +99,29 @@
     </style>
 
     <script>
-        // GitHub Pages SPA redirect handler
+        // Enhanced GitHub Pages SPA redirect handler with error recovery
         (function(){
             var redirect = sessionStorage.redirect;
             delete sessionStorage.redirect;
             if (redirect && redirect != location.href) {
                 history.replaceState(null, null, redirect);
             }
+            
+            // Additional check: if we're on a non-root path and React hasn't loaded yet
+            // This handles cases where .htaccess isn't working
+            setTimeout(function() {
+                var root = document.getElementById('root');
+                if (root && (!root.innerHTML || root.innerHTML.trim() === '')) {
+                    // React hasn't rendered, likely because the page didn't load index.html
+                    // Force redirect to home and let React Router handle it
+                    var currentPath = window.location.pathname;
+                    if (currentPath !== '/' && currentPath !== '/index.html') {
+                        console.warn('SPA routing issue detected, storing path and redirecting...');
+                        sessionStorage.redirect = window.location.href;
+                        window.location.href = '/';
+                    }
+                }
+            }, 2000);
         })();
     </script>
 

@@ -2,15 +2,49 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>ISL Engineering College</title>
+    <title>Redirecting - ISL Engineering College</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #192f59 0%, #2d5aa0 100%);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        .loader {
+            text-align: center;
+        }
+        .spinner {
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
     <script>
-        // GitHub Pages SPA redirect hack
-        // This script takes the current url and converts the path into a query string
-        // parameter so that the main index.html can handle the routing
-        sessionStorage.redirect = location.href;
+        // GitHub Pages SPA redirect - store the path and redirect to home
+        (function() {
+            sessionStorage.redirect = location.href;
+            // Redirect immediately
+            window.location.replace('/');
+        })();
     </script>
-    <meta http-equiv="refresh" content="0;URL='/'"></meta>
 </head>
 <body>
+    <div class="loader">
+        <div class="spinner"></div>
+        <p>Redirecting to ISL Engineering College...</p>
+    </div>
 </body>
 </html>
