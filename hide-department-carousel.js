@@ -5,8 +5,11 @@
     var debounceTimer = null;
 
     function hideEmptyCarousels() {
-        // Check if we're on the homepage by looking for specific homepage elements
-        var isHomePage = window.location.pathname === '/' || 
+        // Check if we're on the homepage by looking at the URL hash (React Router uses hash routing)
+        var isHomePage = window.location.hash === '' || 
+                        window.location.hash === '#/' || 
+                        window.location.hash === '#' ||
+                        window.location.pathname === '/' || 
                         window.location.pathname === '/index.html' ||
                         window.location.pathname === '';
         
@@ -18,7 +21,8 @@
             var isMainCarousel = carousel.classList.contains('main-carousel');
             var isHighlightsCarousel = carousel.classList.contains('highlights-carousel');
             
-            // If we're NOT on homepage OR if it's not main/highlights carousel, hide it
+            // If we're NOT on homepage, hide ALL carousels (including main/highlights)
+            // If we ARE on homepage, show ONLY main and highlights carousels
             if (!isHomePage || (!isMainCarousel && !isHighlightsCarousel)) {
                 // Aggressive hiding
                 carousel.style.display = 'none';
@@ -30,16 +34,26 @@
                 carousel.style.overflow = 'hidden';
                 carousel.style.position = 'absolute';
                 carousel.style.left = '-9999px';
+                carousel.setAttribute('aria-hidden', 'true');
                 
-                // Hide parent container too
-                var parent = carousel.closest('.pt-25');
-                if (parent) {
+                // Hide parent container too if it looks like a carousel wrapper
+                var parent = carousel.closest('.pt-25, .carousel-wrapper, [class*="carousel"]');
+                if (parent && parent !== carousel) {
                     parent.style.display = 'none';
                 }
+            } else if (isHomePage && (isMainCarousel || isHighlightsCarousel)) {
+                // Ensure homepage carousels are visible
+                carousel.style.display = '';
+                carousel.style.visibility = '';
+                carousel.style.opacity = '';
+                carousel.style.height = '';
+                carousel.style.position = '';
+                carousel.style.left = '';
+                carousel.removeAttribute('aria-hidden');
             }
         });
         
-        // Also aggressively hide carousel-inner elements without images
+        // Also aggressively hide carousel-inner elements
         var carouselInners = document.querySelectorAll('.carousel-inner');
         carouselInners.forEach(function(inner) {
             var parentCarousel = inner.closest('.carousel');
@@ -51,6 +65,20 @@
                 inner.style.background = 'transparent';
             }
         });
+        
+        // Hide any carousel images that contain hack23.jpg on non-homepage
+        if (!isHomePage) {
+            var carouselImages = document.querySelectorAll('.carousel img[src*="hack23.jpg"], .carousel img[src*="mainSlider"]');
+            carouselImages.forEach(function(img) {
+                var carousel = img.closest('.carousel');
+                if (carousel && !carousel.classList.contains('main-carousel') && !carousel.classList.contains('highlights-carousel')) {
+                    img.style.display = 'none';
+                    if (carousel) {
+                        carousel.style.display = 'none';
+                    }
+                }
+            });
+        }
     }
 
     function debouncedHide() {
@@ -85,25 +113,39 @@
         startObserver();
     }
 
-    // Listen for route changes
-    window.addEventListener('popstate', function() {
-        setTimeout(function() {
-            hideEmptyCarousels();
-            startObserver();
-        }, 50);
+    // Listen for React Router hash changes (most important for SPA routing)
+    window.addEventListener('hashchange', function() {
+        setTimeout(hideEmptyCarousels, 50);
+        setTimeout(hideEmptyCarousels, 200);
+        setTimeout(hideEmptyCarousels, 500);
     });
 
-    // Monitor URL changes for React Router
+    // Listen for route changes
+    window.addEventListener('popstate', function() {
+        setTimeout(hideEmptyCarousels, 50);
+        setTimeout(hideEmptyCarousels, 200);
+    });
+
+    // Monitor hash changes for React Router
+    var lastHash = window.location.hash;
+    setInterval(function() {
+        if (window.location.hash !== lastHash) {
+            lastHash = window.location.hash;
+            setTimeout(hideEmptyCarousels, 50);
+            setTimeout(hideEmptyCarousels, 200);
+            setTimeout(hideEmptyCarousels, 500);
+        }
+    }, 100);
+
+    // Also monitor path changes
     var lastPath = window.location.pathname;
     setInterval(function() {
         if (window.location.pathname !== lastPath) {
             lastPath = window.location.pathname;
-            setTimeout(function() {
-                hideEmptyCarousels();
-                startObserver();
-            }, 50);
+            setTimeout(hideEmptyCarousels, 50);
+            setTimeout(hideEmptyCarousels, 200);
         }
     }, 300);
 
-    console.log('Department carousel hider loaded - aggressive mode');
+    console.log('Department carousel hider loaded - aggressive mode with React Router support');
 })();

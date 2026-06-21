@@ -108,22 +108,35 @@
                 history.replaceState(null, null, redirect);
             }
             
+            // Prevent infinite refresh loop - track refresh attempts
+            var refreshCount = parseInt(sessionStorage.getItem('refreshCount') || '0');
+            
             // CRITICAL: Check if React has loaded after 1 second
             setTimeout(function() {
                 var root = document.getElementById('root');
                 
                 // If root exists but is empty, React failed to load
                 if (root && (!root.innerHTML || root.innerHTML.trim() === '' || root.children.length === 0)) {
-                    console.warn('React failed to load on refresh. Forcing redirect to home...');
+                    console.warn('React failed to load on refresh. Checking refresh count...');
                     
-                    // Save the current path
-                    var currentPath = window.location.pathname + window.location.search + window.location.hash;
-                    
-                    if (currentPath !== '/' && currentPath !== '/index.html') {
-                        sessionStorage.redirect = window.location.origin + currentPath;
-                        // Force reload from root
-                        window.location.href = '/';
+                    // Only redirect if we haven't tried more than 2 times
+                    if (refreshCount < 2) {
+                        var currentPath = window.location.pathname + window.location.search + window.location.hash;
+                        
+                        if (currentPath !== '/' && currentPath !== '/index.html') {
+                            sessionStorage.setItem('refreshCount', (refreshCount + 1).toString());
+                            sessionStorage.redirect = window.location.origin + currentPath;
+                            console.warn('Attempting redirect to home (attempt ' + (refreshCount + 1) + ')');
+                            // Force reload from root
+                            window.location.href = '/';
+                        }
+                    } else {
+                        console.error('Max refresh attempts reached. Stopping to prevent infinite loop.');
+                        sessionStorage.removeItem('refreshCount');
                     }
+                } else {
+                    // React loaded successfully, reset counter
+                    sessionStorage.removeItem('refreshCount');
                 }
             }, 1000);
             
@@ -132,13 +145,24 @@
                 var root = document.getElementById('root');
                 
                 if (root && (!root.innerHTML || root.innerHTML.trim() === '' || root.children.length === 0)) {
-                    console.error('React still not loaded. Forcing hard refresh...');
-                    var currentPath = window.location.pathname + window.location.search + window.location.hash;
+                    refreshCount = parseInt(sessionStorage.getItem('refreshCount') || '0');
                     
-                    if (currentPath !== '/' && currentPath !== '/index.html') {
-                        sessionStorage.redirect = window.location.origin + currentPath;
-                        window.location.replace('/');
+                    if (refreshCount < 2) {
+                        console.error('React still not loaded. Attempting hard refresh...');
+                        var currentPath = window.location.pathname + window.location.search + window.location.hash;
+                        
+                        if (currentPath !== '/' && currentPath !== '/index.html') {
+                            sessionStorage.setItem('refreshCount', (refreshCount + 1).toString());
+                            sessionStorage.redirect = window.location.origin + currentPath;
+                            window.location.replace('/');
+                        }
+                    } else {
+                        console.error('Max refresh attempts reached. Stopping to prevent infinite loop.');
+                        sessionStorage.removeItem('refreshCount');
                     }
+                } else {
+                    // React loaded successfully, reset counter
+                    sessionStorage.removeItem('refreshCount');
                 }
             }, 2500);
         })();
@@ -534,6 +558,19 @@
             overflow: hidden !important;
             position: absolute !important;
             left: -9999px !important;
+        }
+        
+        /* Additional targeting for department page carousels */
+        body:not([data-page="home"]) .carousel:not(.main-carousel):not(.highlights-carousel),
+        [class*="department"] .carousel,
+        [class*="Department"] .carousel,
+        .col-md-8 .carousel img[src*="hack23.jpg"],
+        .col-md-8 .carousel img[src*="mainSlider"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
         }
         
         /* ALWAYS show main hero carousel and highlights carousel */
