@@ -485,6 +485,18 @@
             opacity: 0 !important;
         }
         
+        /* Hide blue carousel/slider placeholder in departments */
+        .carousel-inner:empty,
+        .carousel:has(.carousel-inner:empty),
+        section .carousel:not(:has(img)),
+        .pt-25 .carousel:not(:has(.carousel-item img)) {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            min-height: 0 !important;
+        }
+        
         /* Hide images.png logo - prevent loading and display */
         img[src*="images.png"],
         img[src*="/images.png"],
