@@ -450,9 +450,75 @@
     <script defer="defer" src="./cse-newsletter-link-updater.js"></script>
     <script defer="defer" src="./department-image-fixer.js"></script>
     <script defer="defer" src="./newsletter-menu-injector.js"></script>
-    <script defer="defer" src="./hide-department-carousel.js"></script>
+    <!-- Carousel hiding is now handled by CSS only - script disabled -->
+    <!--<script defer="defer" src="./hide-department-carousel.js"></script>-->
     <!--<script defer="defer" src="./hide-placeholder-images.js"></script>-->
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
+    
+    <!-- CRITICAL: Override styles that must load AFTER React CSS -->
+    <style id="department-carousel-override">
+        /* NUCLEAR OPTION: Hide ALL carousels on ALL pages except homepage */
+        /* This CSS loads last, so it overrides React's styles */
+        
+        /* Step 1: Hide all carousels by default on non-root pages */
+        body .carousel:not(.main-carousel):not(.highlights-carousel) {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0px !important;
+            min-height: 0px !important;
+            max-height: 0px !important;
+            overflow: hidden !important;
+            position: absolute !important;
+            top: -9999px !important;
+            left: -9999px !important;
+            pointer-events: none !important;
+            z-index: -1 !important;
+        }
+        
+        /* Step 2: Hide carousel contents */
+        body .carousel:not(.main-carousel):not(.highlights-carousel) * {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+        }
+        
+        /* Step 3: Hide carousel images specifically */
+        body .carousel img[src*="hack23.jpg"],
+        body .carousel img[src*="mainSlider"],
+        body .carousel img[src*="allimages/mainSlider"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+        
+        /* Step 4: Force show ONLY main and highlights carousels */
+        body .main-carousel,
+        body .highlights-carousel,
+        body .carousel.main-carousel,
+        body .carousel.highlights-carousel {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            min-height: auto !important;
+            max-height: none !important;
+            position: relative !important;
+            top: auto !important;
+            left: auto !important;
+            pointer-events: auto !important;
+            z-index: auto !important;
+        }
+        
+        body .main-carousel *,
+        body .highlights-carousel * {
+            display: revert !important;
+            visibility: revert !important;
+            opacity: revert !important;
+        }
+    </style>
     
     <style>
         /* CRITICAL: Override React CSS that hides select and option elements */
@@ -489,83 +555,6 @@
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
-        }
-        
-        /* Hide ONLY department page carousels (not home page) */
-        .pt-25.col-md-8 .carousel:not(.main-carousel):not(.highlights-carousel),
-        .col-md-8 .carousel:not(.main-carousel):not(.highlights-carousel),
-        .pt-25 .carousel:not(.main-carousel):not(.highlights-carousel),
-        section:not(:first-of-type) .carousel:not(.main-carousel):not(.highlights-carousel) {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            height: 0 !important;
-            min-height: 0 !important;
-            max-height: 0 !important;
-            overflow: hidden !important;
-            position: absolute !important;
-            left: -9999px !important;
-            pointer-events: none !important;
-        }
-        
-        /* Additional targeting for department page carousels */
-        body:not([data-page="home"]) .carousel:not(.main-carousel):not(.highlights-carousel),
-        [class*="department"] .carousel:not(.main-carousel):not(.highlights-carousel),
-        [class*="Department"] .carousel:not(.main-carousel):not(.highlights-carousel) {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            height: 0 !important;
-            overflow: hidden !important;
-        }
-        
-        /* Hide carousel images in department sections */
-        .col-md-8 .carousel img[src*="hack23.jpg"],
-        .col-md-8 .carousel img[src*="mainSlider"],
-        .pt-25 .carousel img[src*="hack23.jpg"],
-        .pt-25 .carousel img[src*="mainSlider"] {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            height: 0 !important;
-            overflow: hidden !important;
-        }
-        
-        /* Hide carousel containers that are not on homepage */
-        .carousel:not(.main-carousel):not(.highlights-carousel) .carousel-inner,
-        .carousel:not(.main-carousel):not(.highlights-carousel) .carousel-item {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            height: 0 !important;
-        }
-        
-        /* ALWAYS show main hero carousel and highlights carousel */
-        .main-carousel,
-        .highlights-carousel,
-        .carousel.main-carousel,
-        .carousel.highlights-carousel {
-            display: block !important;
-            visibility: visible !important;
-            opacity: 1 !important;
-            height: auto !important;
-            position: relative !important;
-            left: auto !important;
-            max-height: none !important;
-        }
-        
-        /* Ensure main carousel items are visible */
-        .main-carousel .carousel-inner,
-        .highlights-carousel .carousel-inner {
-            display: block !important;
-            visibility: visible !important;
-        }
-        
-        /* Hide carousel controls in department pages only */
-        .pt-25 .carousel-control-prev:not(.main-carousel .carousel-control-prev),
-        .pt-25 .carousel-control-next:not(.main-carousel .carousel-control-next),
-        .pt-25 .carousel-indicators:not(.main-carousel .carousel-indicators) {
-            display: none !important;
         }
         
         /* Hide images.png logo - prevent loading and display */
