@@ -99,7 +99,7 @@
     </style>
 
     <script>
-        // Enhanced GitHub Pages SPA redirect handler with aggressive fallback
+        // GitHub Pages SPA redirect handler - DISABLED to prevent refresh loop
         (function(){
             var redirect = sessionStorage.redirect;
             delete sessionStorage.redirect;
@@ -108,63 +108,9 @@
                 history.replaceState(null, null, redirect);
             }
             
-            // Prevent infinite refresh loop - track refresh attempts
-            var refreshCount = parseInt(sessionStorage.getItem('refreshCount') || '0');
-            
-            // CRITICAL: Check if React has loaded after 1 second
-            setTimeout(function() {
-                var root = document.getElementById('root');
-                
-                // If root exists but is empty, React failed to load
-                if (root && (!root.innerHTML || root.innerHTML.trim() === '' || root.children.length === 0)) {
-                    console.warn('React failed to load on refresh. Checking refresh count...');
-                    
-                    // Only redirect if we haven't tried more than 2 times
-                    if (refreshCount < 2) {
-                        var currentPath = window.location.pathname + window.location.search + window.location.hash;
-                        
-                        if (currentPath !== '/' && currentPath !== '/index.html') {
-                            sessionStorage.setItem('refreshCount', (refreshCount + 1).toString());
-                            sessionStorage.redirect = window.location.origin + currentPath;
-                            console.warn('Attempting redirect to home (attempt ' + (refreshCount + 1) + ')');
-                            // Force reload from root
-                            window.location.href = '/';
-                        }
-                    } else {
-                        console.error('Max refresh attempts reached. Stopping to prevent infinite loop.');
-                        sessionStorage.removeItem('refreshCount');
-                    }
-                } else {
-                    // React loaded successfully, reset counter
-                    sessionStorage.removeItem('refreshCount');
-                }
-            }, 1000);
-            
-            // Second check after 2.5 seconds (for slower connections)
-            setTimeout(function() {
-                var root = document.getElementById('root');
-                
-                if (root && (!root.innerHTML || root.innerHTML.trim() === '' || root.children.length === 0)) {
-                    refreshCount = parseInt(sessionStorage.getItem('refreshCount') || '0');
-                    
-                    if (refreshCount < 2) {
-                        console.error('React still not loaded. Attempting hard refresh...');
-                        var currentPath = window.location.pathname + window.location.search + window.location.hash;
-                        
-                        if (currentPath !== '/' && currentPath !== '/index.html') {
-                            sessionStorage.setItem('refreshCount', (refreshCount + 1).toString());
-                            sessionStorage.redirect = window.location.origin + currentPath;
-                            window.location.replace('/');
-                        }
-                    } else {
-                        console.error('Max refresh attempts reached. Stopping to prevent infinite loop.');
-                        sessionStorage.removeItem('refreshCount');
-                    }
-                } else {
-                    // React loaded successfully, reset counter
-                    sessionStorage.removeItem('refreshCount');
-                }
-            }, 2500);
+            // React loading check is DISABLED to prevent infinite refresh
+            // The app will load naturally through React Router
+            console.log('SPA redirect handler loaded - refresh loop prevention active');
         })();
     </script>
 
@@ -548,6 +494,7 @@
         /* Hide ONLY department page carousels (not home page) */
         .pt-25.col-md-8 .carousel:not(.main-carousel):not(.highlights-carousel),
         .col-md-8 .carousel:not(.main-carousel):not(.highlights-carousel),
+        .pt-25 .carousel:not(.main-carousel):not(.highlights-carousel),
         section:not(:first-of-type) .carousel:not(.main-carousel):not(.highlights-carousel) {
             display: none !important;
             visibility: hidden !important;
@@ -558,19 +505,39 @@
             overflow: hidden !important;
             position: absolute !important;
             left: -9999px !important;
+            pointer-events: none !important;
         }
         
         /* Additional targeting for department page carousels */
         body:not([data-page="home"]) .carousel:not(.main-carousel):not(.highlights-carousel),
-        [class*="department"] .carousel,
-        [class*="Department"] .carousel,
-        .col-md-8 .carousel img[src*="hack23.jpg"],
-        .col-md-8 .carousel img[src*="mainSlider"] {
+        [class*="department"] .carousel:not(.main-carousel):not(.highlights-carousel),
+        [class*="Department"] .carousel:not(.main-carousel):not(.highlights-carousel) {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
             height: 0 !important;
             overflow: hidden !important;
+        }
+        
+        /* Hide carousel images in department sections */
+        .col-md-8 .carousel img[src*="hack23.jpg"],
+        .col-md-8 .carousel img[src*="mainSlider"],
+        .pt-25 .carousel img[src*="hack23.jpg"],
+        .pt-25 .carousel img[src*="mainSlider"] {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+        }
+        
+        /* Hide carousel containers that are not on homepage */
+        .carousel:not(.main-carousel):not(.highlights-carousel) .carousel-inner,
+        .carousel:not(.main-carousel):not(.highlights-carousel) .carousel-item {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
         }
         
         /* ALWAYS show main hero carousel and highlights carousel */

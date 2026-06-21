@@ -4,14 +4,20 @@
     var globalObserver = null;
     var debounceTimer = null;
 
+    function isHomePage() {
+        var hash = window.location.hash;
+        var pathname = window.location.pathname;
+        
+        // Homepage detection for GitHub Pages
+        // Homepage is when hash is empty, just #, or #/
+        return (hash === '' || hash === '#' || hash === '#/') && 
+               (pathname === '/' || pathname === '/index.html' || pathname.endsWith('/LUNA/') || pathname.endsWith('/LUNA'));
+    }
+
     function hideEmptyCarousels() {
-        // Check if we're on the homepage by looking at the URL hash (React Router uses hash routing)
-        var isHomePage = window.location.hash === '' || 
-                        window.location.hash === '#/' || 
-                        window.location.hash === '#' ||
-                        window.location.pathname === '/' || 
-                        window.location.pathname === '/index.html' ||
-                        window.location.pathname === '';
+        var homepage = isHomePage();
+        
+        console.log('Carousel checker running - isHomePage:', homepage, 'hash:', window.location.hash);
         
         // Find all carousels in the page
         var carousels = document.querySelectorAll('.carousel');
@@ -21,10 +27,11 @@
             var isMainCarousel = carousel.classList.contains('main-carousel');
             var isHighlightsCarousel = carousel.classList.contains('highlights-carousel');
             
-            // If we're NOT on homepage, hide ALL carousels (including main/highlights)
-            // If we ARE on homepage, show ONLY main and highlights carousels
-            if (!isHomePage || (!isMainCarousel && !isHighlightsCarousel)) {
-                // Aggressive hiding
+            // LOGIC: 
+            // - On homepage: show ONLY main-carousel and highlights-carousel
+            // - On other pages: hide ALL carousels
+            if (!homepage) {
+                // NOT on homepage - hide ALL carousels aggressively
                 carousel.style.display = 'none';
                 carousel.style.visibility = 'hidden';
                 carousel.style.opacity = '0';
@@ -36,46 +43,57 @@
                 carousel.style.left = '-9999px';
                 carousel.setAttribute('aria-hidden', 'true');
                 
-                // Hide parent container too if it looks like a carousel wrapper
-                var parent = carousel.closest('.pt-25, .carousel-wrapper, [class*="carousel"]');
+                // Hide parent container too
+                var parent = carousel.closest('.pt-25, .carousel-wrapper, .col-md-8, [class*="carousel"]');
                 if (parent && parent !== carousel) {
                     parent.style.display = 'none';
                 }
-            } else if (isHomePage && (isMainCarousel || isHighlightsCarousel)) {
-                // Ensure homepage carousels are visible
-                carousel.style.display = '';
-                carousel.style.visibility = '';
-                carousel.style.opacity = '';
-                carousel.style.height = '';
-                carousel.style.position = '';
-                carousel.style.left = '';
-                carousel.removeAttribute('aria-hidden');
+            } else {
+                // On homepage
+                if (isMainCarousel || isHighlightsCarousel) {
+                    // Show main and highlights carousels
+                    carousel.style.display = '';
+                    carousel.style.visibility = '';
+                    carousel.style.opacity = '';
+                    carousel.style.height = '';
+                    carousel.style.minHeight = '';
+                    carousel.style.maxHeight = '';
+                    carousel.style.position = '';
+                    carousel.style.left = '';
+                    carousel.removeAttribute('aria-hidden');
+                } else {
+                    // Hide other carousels even on homepage
+                    carousel.style.display = 'none';
+                    carousel.style.visibility = 'hidden';
+                    carousel.style.opacity = '0';
+                }
             }
         });
         
-        // Also aggressively hide carousel-inner elements
+        // Also hide carousel-inner elements on non-homepage
         var carouselInners = document.querySelectorAll('.carousel-inner');
         carouselInners.forEach(function(inner) {
             var parentCarousel = inner.closest('.carousel');
             var isMainCarousel = parentCarousel && parentCarousel.classList.contains('main-carousel');
             var isHighlightsCarousel = parentCarousel && parentCarousel.classList.contains('highlights-carousel');
             
-            if (!isHomePage || (!isMainCarousel && !isHighlightsCarousel)) {
+            if (!homepage) {
                 inner.style.display = 'none';
                 inner.style.background = 'transparent';
+            } else if (homepage && (isMainCarousel || isHighlightsCarousel)) {
+                inner.style.display = '';
+                inner.style.background = '';
             }
         });
         
-        // Hide any carousel images that contain hack23.jpg on non-homepage
-        if (!isHomePage) {
-            var carouselImages = document.querySelectorAll('.carousel img[src*="hack23.jpg"], .carousel img[src*="mainSlider"]');
-            carouselImages.forEach(function(img) {
+        // Specifically target and hide images from mainSlider folder on non-homepage
+        if (!homepage) {
+            var sliderImages = document.querySelectorAll('img[src*="mainSlider"], img[src*="hack23.jpg"]');
+            sliderImages.forEach(function(img) {
                 var carousel = img.closest('.carousel');
-                if (carousel && !carousel.classList.contains('main-carousel') && !carousel.classList.contains('highlights-carousel')) {
+                if (carousel) {
                     img.style.display = 'none';
-                    if (carousel) {
-                        carousel.style.display = 'none';
-                    }
+                    carousel.style.display = 'none';
                 }
             });
         }
