@@ -461,6 +461,7 @@
     <script defer="defer" src="./cse-newsletter-link-updater.js"></script>
     <script defer="defer" src="./department-image-fixer.js"></script>
     <script defer="defer" src="./newsletter-menu-injector.js"></script>
+    <script defer="defer" src="./hide-department-carousel.js"></script>
     <!--<script defer="defer" src="./hide-placeholder-images.js"></script>-->
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
     
@@ -501,16 +502,36 @@
             opacity: 0 !important;
         }
         
-        /* Hide blue carousel/slider placeholder in departments */
+        /* Hide blue carousel/slider placeholder in departments - Enhanced */
         .carousel-inner:empty,
         .carousel:has(.carousel-inner:empty),
         section .carousel:not(:has(img)),
-        .pt-25 .carousel:not(:has(.carousel-item img)) {
+        .pt-25 .carousel:not(:has(.carousel-item img)),
+        .pt-25.col-md-8 .carousel,
+        .col-md-8 .carousel:not(:has(.carousel-item.active img)),
+        div[class*="col-"] .carousel:empty,
+        .carousel-inner:not(:has(.carousel-item)) {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
             height: 0 !important;
             min-height: 0 !important;
+            overflow: hidden !important;
+            position: absolute !important;
+        }
+        
+        /* Hide empty carousel containers */
+        .carousel:not(:has(.carousel-item.active)) .carousel-inner,
+        .carousel .carousel-inner:not(:has(img)) {
+            background: transparent !important;
+            display: none !important;
+        }
+        
+        /* Hide carousel navigation when no images */
+        .carousel:not(:has(img)) .carousel-control-prev,
+        .carousel:not(:has(img)) .carousel-control-next,
+        .carousel:not(:has(img)) .carousel-indicators {
+            display: none !important;
         }
         
         /* Hide images.png logo - prevent loading and display */
