@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./images/unnamed.webp" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#192f59" />
+    <meta name="description" content="ISL Engineering College Department Newsletters - Stay updated with CSE, IT, and AIDS department news." />
+    <link rel="apple-touch-icon" href="./images/logo.png" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="manifest" href="./manifest.json" />
+    <title>Department Newsletters - ISL Engineering College</title>
+    
+    <script defer="defer" src="./static/js/main.64d07445.js"></script>
+    <script defer="defer" src="./academic-council-pdf.js"></script>
+    <script defer="defer" src="./navigation-pdf-handler.js"></script>
+    <script defer="defer" src="./cse-newsletter-link-updater.js"></script>
+    <script defer="defer" src="./department-image-fixer.js"></script>
+    <script defer="defer" src="./newsletter-menu-injector.js"></script>
+    <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
+    
+    <style>
+        /* Hide images.png logo */
+        img[src*="images.png"],
+        img[src*="/images.png"],
+        img[src*="https://the.islec.edu.in/images.png"] {
+            display: none !important;
+            visibility: hidden !important;
+        }
+        
+        .newsletter-content {
+            padding: 60px 0;
+            background: #f8f9fa;
+        }
+        
+        .newsletter-section {
+            margin-bottom: 50px;
+        }
+        
+        .newsletter-section h2 {
+            color: #192f59;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .newsletter-section p {
+            color: #555;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .view-newsletter-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 12px 28px;
+            background: #192f59;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .view-newsletter-btn:hover {
+            background: #0d1f3a;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .view-newsletter-btn i {
+            margin-left: 10px;
+        }
+        
+        .dept-divider {
+            height: 2px;
+            background: linear-gradient(to right, #192f59, transparent);
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    
+    <script>
+        // Wait for React to mount, then inject newsletter content
+        (function() {
+            function injectNewsletterContent() {
+                // Look for main content area
+                var mainContent = document.querySelector('main, .main-content, #root > div');
+                
+                if (!mainContent) {
+                    return false;
+                }
+                
+                // Check if already injected
+                if (document.querySelector('.newsletter-content')) {
+                    return true;
+                }
+                
+                // Create newsletter content
+                var newsletterHTML = `
+                    <div class="newsletter-content">
+                        <div class="container">
+                            <h1 style="color: #192f59; font-size: 2.5rem; font-weight: 700; margin-bottom: 40px; text-align: center;">Department Newsletters</h1>
+                            
+                            <div class="newsletter-section">
+                                <h2>CSE Department Newsletter</h2>
+                                <p>Stay informed about the latest innovations, research breakthroughs, student achievements, and events from the Computer Science Engineering department. Our newsletter covers hackathons, workshops, placements, and technical seminars conducted throughout the academic year.</p>
+                                <a href="https://the.islec.edu.in/NEWSLETTER/CSE.pdf" class="view-newsletter-btn" target="_blank" rel="noopener noreferrer">
+                                    View Newsletter
+                                    <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                            
+                            <div class="dept-divider"></div>
+                            
+                            <div class="newsletter-section">
+                                <h2>IT Department Newsletter</h2>
+                                <p>Discover the exciting developments in Information Technology at ISL Engineering College. Our newsletter highlights student projects, industry collaborations, faculty research, coding competitions, and career opportunities in the rapidly evolving IT landscape.</p>
+                                <a href="https://the.islec.edu.in/NEWSLETTER/IT.pdf" class="view-newsletter-btn" target="_blank" rel="noopener noreferrer">
+                                    View Newsletter
+                                    <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                            
+                            <div class="dept-divider"></div>
+                            
+                            <div class="newsletter-section">
+                                <h2>AIDS Department Newsletter</h2>
+                                <p>Explore the cutting-edge world of Artificial Intelligence and Data Science through our department newsletter. Read about machine learning projects, AI workshops, data analytics competitions, internship opportunities, and the latest trends shaping the future of technology.</p>
+                                <a href="https://the.islec.edu.in/NEWSLETTER/AIDS.pdf" class="view-newsletter-btn" target="_blank" rel="noopener noreferrer">
+                                    View Newsletter
+                                    <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Inject content
+                mainContent.innerHTML = newsletterHTML;
+                return true;
+            }
+            
+            // Try immediately
+            if (!injectNewsletterContent()) {
+                // Wait for React to render
+                var observer = new MutationObserver(function() {
+                    if (injectNewsletterContent()) {
+                        observer.disconnect();
+                    }
+                });
+                
+                observer.observe(document.body, {
+                    childList: true,
+                    subtree: true
+                });
+                
+                setTimeout(function() {
+                    observer.disconnect();
+                }, 10000);
+            }
+        })();
+    </script>
+</body>
+</html>
