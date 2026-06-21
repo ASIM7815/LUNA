@@ -387,6 +387,7 @@
     <script defer="defer" src="./navigation-pdf-handler.js"></script>
     <script defer="defer" src="./cse-newsletter-link-updater.js"></script>
     <script defer="defer" src="./department-image-fixer.js"></script>
+    <script defer="defer" src="./hide-placeholder-images.js"></script>
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
     
     <style>
@@ -415,18 +416,48 @@
             color: black !important;
         }
         
-        /* Hide template/placeholder HOD images */
-        img.author[src*="csehod.png"],
-        img.author[src*="mbahodnov22.jpeg"],
-        img.author[src*="docs/"][src*="hod"] {
+        /* Hide template/placeholder HOD images - left side */
+        img.author[src*="csehod"],
+        img.author[src*="hod"],
+        img.author[src*="docs/"],
+        img[src*="/docs/"],
+        .media-left img,
+        .author-image img,
+        .hod-image img {
+            display: none !important;
+            visibility: hidden !important;
+        }
+        
+        /* Hide parent container of HOD images */
+        .media-left,
+        .author-image,
+        div:has(> img[src*="docs/"]) {
             display: none !important;
         }
         
-        /* Hide images in Quick Links section */
+        /* Hide images in Quick Links section - right side */
         .sidebar-info img,
-        .widget:has(h4:contains("Quick Links")) img,
-        [class*="quick"] img {
+        .widget img,
+        .quicklinks img,
+        aside img,
+        [class*="quick"] img,
+        [class*="sidebar"] img {
             display: none !important;
+            visibility: hidden !important;
+        }
+        
+        /* Hide quick links image containers */
+        .sidebar-info .widget-body,
+        .quicklinks-image-container {
+            display: none !important;
+        }
+        
+        /* Hide images.png logo */
+        img[src*="images.png"],
+        img[src*="/images.png"],
+        img[src*="https://the.islec.edu.in/images.png"] {
+            display: none !important;
+            visibility: hidden !important;
         }
         
         /* Ensure More link is visible in Quick Links */
