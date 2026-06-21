@@ -474,12 +474,57 @@
     </script>
 
     <script defer="defer" src="./static/js/main.64d07445.js"></script>
+    
+    <!-- CRITICAL: Run carousel hider BEFORE other scripts load -->
+    <script>
+    (function() {
+        function isHomePage() {
+            var hash = window.location.hash;
+            return hash === '' || hash === '#' || hash === '#/';
+        }
+
+        function hideCarousels() {
+            if (isHomePage()) return;
+            
+            var carousels = document.querySelectorAll('.carousel');
+            for (var i = 0; i < carousels.length; i++) {
+                carousels[i].style.cssText = 'display:none!important;visibility:hidden!important;opacity:0!important;height:0!important;overflow:hidden!important;position:absolute!important;left:-9999px!important;';
+            }
+            
+            var images = document.querySelectorAll('img[src*="hack23.jpg"], img[src*="mainSlider"]');
+            for (var j = 0; j < images.length; j++) {
+                images[j].style.cssText = 'display:none!important;visibility:hidden!important;opacity:0!important;';
+            }
+        }
+
+        // Run immediately and continuously
+        hideCarousels();
+        setInterval(hideCarousels, 100);
+        
+        // Watch for DOM changes
+        var observer = new MutationObserver(hideCarousels);
+        var startObserver = function() {
+            if (document.body) {
+                observer.observe(document.body, { childList: true, subtree: true });
+            } else {
+                setTimeout(startObserver, 10);
+            }
+        };
+        startObserver();
+        
+        window.addEventListener('hashchange', function() {
+            setTimeout(hideCarousels, 0);
+            setTimeout(hideCarousels, 50);
+            setTimeout(hideCarousels, 100);
+        });
+    })();
+    </script>
+    
     <script defer="defer" src="./academic-council-pdf.js"></script>
     <script defer="defer" src="./navigation-pdf-handler.js"></script>
     <script defer="defer" src="./cse-newsletter-link-updater.js"></script>
     <script defer="defer" src="./department-image-fixer.js"></script>
     <script defer="defer" src="./newsletter-menu-injector.js"></script>
-    <script src="./hide-department-carousel.js"></script>
     <!--<script defer="defer" src="./hide-placeholder-images.js"></script>-->
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
     
