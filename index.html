@@ -13,6 +13,35 @@
     <link rel="manifest" href="./manifest.json" />
     <title>ISL Engineering College</title>
 
+    <!-- CRITICAL: Hide carousels IMMEDIATELY - before any other CSS loads -->
+    <style>
+        /* Emergency carousel hiding - loads first to prevent flash */
+        .carousel:not(.main-carousel):not(.highlights-carousel) {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            overflow: hidden !important;
+            position: absolute !important;
+            left: -9999px !important;
+        }
+        
+        .carousel:not(.main-carousel):not(.highlights-carousel) * {
+            display: none !important;
+        }
+        
+        /* Allow main and highlights to show */
+        .main-carousel,
+        .highlights-carousel {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            position: relative !important;
+            left: auto !important;
+        }
+    </style>
+
     <style>
         .carousel {
             --bs-carousel-transition: transform 700ms cubic-bezier(.22, .61, .36, 1);
@@ -450,8 +479,7 @@
     <script defer="defer" src="./cse-newsletter-link-updater.js"></script>
     <script defer="defer" src="./department-image-fixer.js"></script>
     <script defer="defer" src="./newsletter-menu-injector.js"></script>
-    <!-- Carousel hiding is now handled by CSS only - script disabled -->
-    <!--<script defer="defer" src="./hide-department-carousel.js"></script>-->
+    <script src="./hide-department-carousel.js"></script>
     <!--<script defer="defer" src="./hide-placeholder-images.js"></script>-->
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
     
@@ -584,7 +612,12 @@
     </style>
 </head>
 
-<body><noscript>You need to enable JavaScript to run this app.</noscript>
+<body>
+    <!-- Inline style to prevent carousel flash on page load -->
+    <style>
+        .carousel:not(.main-carousel):not(.highlights-carousel) { display: none !important; }
+    </style>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
 
     <!-- Admission Form Popup -->

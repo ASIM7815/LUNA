@@ -1,169 +1,137 @@
 (function() {
     'use strict';
 
-    var globalObserver = null;
-    var debounceTimer = null;
+    var hasRun = false;
+    var observer = null;
 
     function isHomePage() {
         var hash = window.location.hash;
-        var pathname = window.location.pathname;
-        
-        // Homepage detection for GitHub Pages
         // Homepage is when hash is empty, just #, or #/
-        return (hash === '' || hash === '#' || hash === '#/') && 
-               (pathname === '/' || pathname === '/index.html' || pathname.endsWith('/LUNA/') || pathname.endsWith('/LUNA'));
+        return hash === '' || hash === '#' || hash === '#/';
     }
 
-    function hideEmptyCarousels() {
+    function hideCarousels() {
         var homepage = isHomePage();
         
-        console.log('Carousel checker running - isHomePage:', homepage, 'hash:', window.location.hash);
+        if (homepage) {
+            // On homepage - don't hide anything, stop observing
+            if (observer) {
+                observer.disconnect();
+                observer = null;
+            }
+            return;
+        }
         
-        // Find all carousels in the page
+        // NOT on homepage - hide ALL carousels
         var carousels = document.querySelectorAll('.carousel');
+        var hiddenCount = 0;
         
-        carousels.forEach(function(carousel) {
-            // Check if this is the main hero carousel or highlights carousel
-            var isMainCarousel = carousel.classList.contains('main-carousel');
-            var isHighlightsCarousel = carousel.classList.contains('highlights-carousel');
+        for (var i = 0; i < carousels.length; i++) {
+            var carousel = carousels[i];
             
-            // LOGIC: 
-            // - On homepage: show ONLY main-carousel and highlights-carousel
-            // - On other pages: hide ALL carousels
-            if (!homepage) {
-                // NOT on homepage - hide ALL carousels aggressively
-                carousel.style.display = 'none';
-                carousel.style.visibility = 'hidden';
-                carousel.style.opacity = '0';
-                carousel.style.height = '0';
-                carousel.style.minHeight = '0';
-                carousel.style.maxHeight = '0';
-                carousel.style.overflow = 'hidden';
-                carousel.style.position = 'absolute';
-                carousel.style.left = '-9999px';
-                carousel.setAttribute('aria-hidden', 'true');
-                
-                // Hide parent container too
-                var parent = carousel.closest('.pt-25, .carousel-wrapper, .col-md-8, [class*="carousel"]');
-                if (parent && parent !== carousel) {
-                    parent.style.display = 'none';
-                }
-            } else {
-                // On homepage
-                if (isMainCarousel || isHighlightsCarousel) {
-                    // Show main and highlights carousels
-                    carousel.style.display = '';
-                    carousel.style.visibility = '';
-                    carousel.style.opacity = '';
-                    carousel.style.height = '';
-                    carousel.style.minHeight = '';
-                    carousel.style.maxHeight = '';
-                    carousel.style.position = '';
-                    carousel.style.left = '';
-                    carousel.removeAttribute('aria-hidden');
-                } else {
-                    // Hide other carousels even on homepage
-                    carousel.style.display = 'none';
-                    carousel.style.visibility = 'hidden';
-                    carousel.style.opacity = '0';
+            // Skip if already hidden
+            if (carousel.style.display === 'none') continue;
+            
+            // Hide this carousel
+            carousel.style.setProperty('display', 'none', 'important');
+            carousel.style.setProperty('visibility', 'hidden', 'important');
+            carousel.style.setProperty('opacity', '0', 'important');
+            carousel.style.setProperty('height', '0px', 'important');
+            carousel.style.setProperty('min-height', '0px', 'important');
+            carousel.style.setProperty('max-height', '0px', 'important');
+            carousel.style.setProperty('overflow', 'hidden', 'important');
+            carousel.style.setProperty('position', 'absolute', 'important');
+            carousel.style.setProperty('left', '-9999px', 'important');
+            carousel.style.setProperty('top', '-9999px', 'important');
+            carousel.style.setProperty('pointer-events', 'none', 'important');
+            carousel.style.setProperty('z-index', '-1', 'important');
+            
+            hiddenCount++;
+            
+            // Also hide parent containers
+            var parent = carousel.parentElement;
+            if (parent && (parent.classList.contains('pt-25') || parent.classList.contains('col-md-8'))) {
+                parent.style.setProperty('display', 'none', 'important');
+            }
+        }
+        
+        // Hide carousel images
+        var images = document.querySelectorAll('img[src*="hack23.jpg"], img[src*="mainSlider"], img[src*="allimages/mainSlider"]');
+        for (var j = 0; j < images.length; j++) {
+            if (images[j].style.display === 'none') continue;
+            images[j].style.setProperty('display', 'none', 'important');
+            images[j].style.setProperty('visibility', 'hidden', 'important');
+            images[j].style.setProperty('opacity', '0', 'important');
+            images[j].style.setProperty('width', '0', 'important');
+            images[j].style.setProperty('height', '0', 'important');
+        }
+        
+        if (hiddenCount > 0) {
+            console.log('Hidden', hiddenCount, 'carousels on non-homepage');
+        }
+    }
+
+    function startMonitoring() {
+        if (observer || isHomePage()) return;
+        
+        observer = new MutationObserver(function(mutations) {
+            // Only hide if new nodes are added
+            var shouldHide = false;
+            for (var i = 0; i < mutations.length; i++) {
+                if (mutations[i].addedNodes.length > 0) {
+                    shouldHide = true;
+                    break;
                 }
             }
-        });
-        
-        // Also hide carousel-inner elements on non-homepage
-        var carouselInners = document.querySelectorAll('.carousel-inner');
-        carouselInners.forEach(function(inner) {
-            var parentCarousel = inner.closest('.carousel');
-            var isMainCarousel = parentCarousel && parentCarousel.classList.contains('main-carousel');
-            var isHighlightsCarousel = parentCarousel && parentCarousel.classList.contains('highlights-carousel');
-            
-            if (!homepage) {
-                inner.style.display = 'none';
-                inner.style.background = 'transparent';
-            } else if (homepage && (isMainCarousel || isHighlightsCarousel)) {
-                inner.style.display = '';
-                inner.style.background = '';
+            if (shouldHide) {
+                hideCarousels();
             }
         });
-        
-        // Specifically target and hide images from mainSlider folder on non-homepage
-        if (!homepage) {
-            var sliderImages = document.querySelectorAll('img[src*="mainSlider"], img[src*="hack23.jpg"]');
-            sliderImages.forEach(function(img) {
-                var carousel = img.closest('.carousel');
-                if (carousel) {
-                    img.style.display = 'none';
-                    carousel.style.display = 'none';
-                }
+
+        if (document.body) {
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
             });
         }
     }
 
-    function debouncedHide() {
-        clearTimeout(debounceTimer);
-        debounceTimer = setTimeout(hideEmptyCarousels, 50);
-    }
-
-    function startObserver() {
-        if (globalObserver) {
-            globalObserver.disconnect();
-        }
-
-        globalObserver = new MutationObserver(debouncedHide);
-        globalObserver.observe(document.body, {
-            childList: true,
-            subtree: true,
-            attributes: true,
-            attributeFilter: ['style', 'class']
-        });
-    }
-
     // Run immediately
-    hideEmptyCarousels();
+    hideCarousels();
 
-    // Run on page load
+    // Run a few more times with delays
+    setTimeout(hideCarousels, 100);
+    setTimeout(hideCarousels, 300);
+    setTimeout(hideCarousels, 600);
+
+    // Start monitoring after initial hiding
+    setTimeout(startMonitoring, 700);
+
+    // Run on DOMContentLoaded
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', function() {
-            hideEmptyCarousels();
-            startObserver();
+            hideCarousels();
+            setTimeout(hideCarousels, 100);
+            setTimeout(startMonitoring, 200);
         });
-    } else {
-        startObserver();
     }
 
-    // Listen for React Router hash changes (most important for SPA routing)
+    // Listen for hash changes (React Router navigation)
     window.addEventListener('hashchange', function() {
-        setTimeout(hideEmptyCarousels, 50);
-        setTimeout(hideEmptyCarousels, 200);
-        setTimeout(hideEmptyCarousels, 500);
+        // Stop observer
+        if (observer) {
+            observer.disconnect();
+            observer = null;
+        }
+        
+        // Hide after navigation
+        setTimeout(hideCarousels, 50);
+        setTimeout(hideCarousels, 200);
+        setTimeout(hideCarousels, 500);
+        
+        // Restart monitoring
+        setTimeout(startMonitoring, 600);
     });
 
-    // Listen for route changes
-    window.addEventListener('popstate', function() {
-        setTimeout(hideEmptyCarousels, 50);
-        setTimeout(hideEmptyCarousels, 200);
-    });
-
-    // Monitor hash changes for React Router
-    var lastHash = window.location.hash;
-    setInterval(function() {
-        if (window.location.hash !== lastHash) {
-            lastHash = window.location.hash;
-            setTimeout(hideEmptyCarousels, 50);
-            setTimeout(hideEmptyCarousels, 200);
-            setTimeout(hideEmptyCarousels, 500);
-        }
-    }, 100);
-
-    // Also monitor path changes
-    var lastPath = window.location.pathname;
-    setInterval(function() {
-        if (window.location.pathname !== lastPath) {
-            lastPath = window.location.pathname;
-            setTimeout(hideEmptyCarousels, 50);
-            setTimeout(hideEmptyCarousels, 200);
-        }
-    }, 300);
-
-    console.log('Department carousel hider loaded - aggressive mode with React Router support');
+    console.log('Department carousel hider loaded');
 })();
