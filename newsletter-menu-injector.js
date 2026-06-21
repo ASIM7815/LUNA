@@ -11,6 +11,9 @@
         ]
     };
 
+    var isInjected = false;
+    var globalObserver = null;
+
     function findAboutUsMenu() {
         // Find the About Us dropdown or menu container
         var navLinks = document.querySelectorAll('nav a, .navbar a, .menu a, .nav-link');
@@ -84,7 +87,36 @@
         container.appendChild(listItem);
         
         console.log('Newsletter menu item added to About Us dropdown');
+        isInjected = true;
         return true;
+    }
+
+    function tryInject() {
+        if (isInjected) return true;
+        
+        var aboutUsMenu = findAboutUsMenu();
+        if (aboutUsMenu) {
+            createNewsletterMenuItem(aboutUsMenu);
+            return true;
+        }
+        return false;
+    }
+
+    function startObserver() {
+        if (globalObserver) {
+            globalObserver.disconnect();
+        }
+
+        globalObserver = new MutationObserver(function() {
+            if (tryInject() && globalObserver) {
+                globalObserver.disconnect();
+            }
+        });
+        
+        globalObserver.observe(document.body || document.documentElement, {
+            childList: true,
+            subtree: true
+        });
     }
 
     function injectNewsletterMenuItem() {
@@ -93,31 +125,34 @@
             return;
         }
         
-        var aboutUsMenu = findAboutUsMenu();
-        
-        if (aboutUsMenu) {
-            createNewsletterMenuItem(aboutUsMenu);
-        } else {
-            // If menu not found, wait for React to render
-            var observer = new MutationObserver(function() {
-                var menu = findAboutUsMenu();
-                if (menu) {
-                    createNewsletterMenuItem(menu);
-                    observer.disconnect();
-                }
-            });
-            
-            observer.observe(document.body || document.documentElement, {
-                childList: true,
-                subtree: true
-            });
-            
-            // Stop observing after 15 seconds
-            setTimeout(function() {
-                observer.disconnect();
-            }, 15000);
+        if (!tryInject()) {
+            startObserver();
         }
     }
+
+    // Listen for route changes
+    window.addEventListener('popstate', function() {
+        isInjected = false;
+        setTimeout(function() {
+            if (!tryInject()) {
+                startObserver();
+            }
+        }, 100);
+    });
+
+    // Monitor URL changes for React Router
+    var lastPath = window.location.pathname;
+    setInterval(function() {
+        if (window.location.pathname !== lastPath) {
+            lastPath = window.location.pathname;
+            isInjected = false;
+            setTimeout(function() {
+                if (!tryInject()) {
+                    startObserver();
+                }
+            }, 100);
+        }
+    }, 500);
 
     // Initialize
     injectNewsletterMenuItem();

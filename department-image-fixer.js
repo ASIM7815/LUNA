@@ -1,6 +1,9 @@
 (function() {
     'use strict';
 
+    var debounceTimer = null;
+    var globalObserver = null;
+
     function hideHodImagePlaceholder() {
         // Find all images with className "author" that are placeholder/template images
         var images = document.querySelectorAll('img.author');
@@ -18,10 +21,8 @@
                 var mediaBlock = img.closest('.media') || img.closest('.single_advisor_profile');
                 if (mediaBlock) {
                     mediaBlock.style.display = 'none';
-                    console.log('Hidden HOD template image:', src);
                 } else {
                     img.style.display = 'none';
-                    console.log('Hidden template image:', src);
                 }
             }
         });
@@ -45,7 +46,6 @@
                     var images = container.querySelectorAll('img');
                     images.forEach(function(img) {
                         img.style.display = 'none';
-                        console.log('Hidden quick link image');
                     });
                     
                     // Ensure "More" text is visible and styled
@@ -60,7 +60,6 @@
                             link.style.color = '#192f59';
                             link.style.textDecoration = 'none';
                             link.style.marginTop = '10px';
-                            console.log('Styled More link');
                         }
                     });
                 }
@@ -73,44 +72,53 @@
         updateQuickLinksImages();
     }
 
-    // Run on page load
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', applyFixes);
-    } else {
-        applyFixes();
+    function debouncedApplyFixes() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(applyFixes, 150);
     }
 
-    // Watch for React re-renders using MutationObserver
-    var observer = new MutationObserver(function(mutations) {
-        // Debounce the execution
-        clearTimeout(window.departmentImageFixerTimeout);
-        window.departmentImageFixerTimeout = setTimeout(applyFixes, 100);
-    });
+    function startObserver() {
+        if (globalObserver) {
+            globalObserver.disconnect();
+        }
 
-    observer.observe(document.body, {
-        childList: true,
-        subtree: true
-    });
+        globalObserver = new MutationObserver(debouncedApplyFixes);
+        globalObserver.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    }
 
-    // Also run on route changes (for SPAs)
-    var originalPushState = history.pushState;
-    var originalReplaceState = history.replaceState;
+    // Run on page load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', function() {
+            applyFixes();
+            startObserver();
+        });
+    } else {
+        applyFixes();
+        startObserver();
+    }
 
-    history.pushState = function() {
-        var result = originalPushState.apply(this, arguments);
-        setTimeout(applyFixes, 100);
-        return result;
-    };
-
-    history.replaceState = function() {
-        var result = originalReplaceState.apply(this, arguments);
-        setTimeout(applyFixes, 100);
-        return result;
-    };
-
+    // Listen for route changes
     window.addEventListener('popstate', function() {
-        setTimeout(applyFixes, 100);
+        setTimeout(function() {
+            applyFixes();
+            startObserver();
+        }, 100);
     });
+
+    // Monitor URL changes for React Router
+    var lastPath = window.location.pathname;
+    setInterval(function() {
+        if (window.location.pathname !== lastPath) {
+            lastPath = window.location.pathname;
+            setTimeout(function() {
+                applyFixes();
+                startObserver();
+            }, 100);
+        }
+    }, 500);
 
     console.log('Department image fixer loaded');
 })();

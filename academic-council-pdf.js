@@ -20,6 +20,9 @@
     { file: '3ac.jpeg', alt: 'Academic Council – Image 3' }
   ];
 
+  var globalObserver = null;
+  var debounceTimer = null;
+
   function normalizedPathname() {
     return (window.location.pathname || '').replace(/\/+$/, '');
   }
@@ -33,14 +36,11 @@
   }
 
   function getPdfUrl(pdfFile) {
-    // The route is `/about/academicouncil` (2 levels deep), while the PDF lives at the site root.
-    // Using a relative URL keeps it working even if the site is deployed under a sub-path.
     var url = new URL('../../' + pdfFile, window.location.href);
     return url.toString() + '#' + PDF_HASH;
   }
 
   function getRootAssetUrl(file) {
-    // The route is `/about/academicouncil` (2 levels deep), while assets live at the site root.
     var url = new URL('../../' + file, window.location.href);
     return url.toString();
   }
@@ -59,7 +59,6 @@
     grid.style.gridTemplateColumns = 'repeat(3, minmax(0, 1fr))';
     grid.style.gap = '16px';
 
-    // Responsive fallback for narrow screens.
     var mq = window.matchMedia && window.matchMedia('(max-width: 768px)');
     function applyColumns() {
       if (!mq) return;
@@ -116,7 +115,6 @@
 
     var pdfUrl = getPdfUrl(routeConfig.pdfFile);
 
-    // Replace only the inner content area so the existing header/footer remain intact.
     var notFoundImg = root.querySelector('img[alt="404"], img[src*="404.png"]');
     var target = notFoundImg
       ? notFoundImg.closest('.pt-90') || notFoundImg.parentElement
@@ -131,13 +129,11 @@
 
     var shouldReplaceChildren = true;
     if (!target) {
-      // Fallback: inject a full-width block without destroying the app UI.
       target = root;
       shouldReplaceChildren = false;
     }
 
     if (shouldReplaceChildren) {
-      // Clear only the 404 content area.
       while (target.firstChild) target.removeChild(target.firstChild);
     }
 
@@ -159,8 +155,6 @@
     frame.style.width = '100%';
     frame.style.height = '85vh';
     frame.style.border = '0';
-
-    // Basic UX hardening (cannot fully prevent downloads in browsers).
     frame.setAttribute('loading', 'lazy');
 
     wrapper.appendChild(title);
@@ -176,42 +170,50 @@
     }
   }
 
-  function scheduleInject() {
-    window.setTimeout(injectPdfViewer, 0);
+  function debouncedInject() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(injectPdfViewer, 150);
   }
 
-  // Handle first load.
+  function startObserver() {
+    if (globalObserver) {
+      globalObserver.disconnect();
+    }
+
+    globalObserver = new MutationObserver(debouncedInject);
+    
+    try {
+      globalObserver.observe(document.documentElement, { subtree: true, childList: true });
+    } catch (e) {
+      // Ignore if observer fails
+    }
+  }
+
+  function scheduleInject() {
+    window.setTimeout(function() {
+      injectPdfViewer();
+      startObserver();
+    }, 0);
+  }
+
+  // Handle first load
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', scheduleInject);
   } else {
     scheduleInject();
   }
 
-  // Handle SPA navigation (react-router uses the History API).
-  var originalPushState = history.pushState;
-  history.pushState = function () {
-    var result = originalPushState.apply(this, arguments);
-    scheduleInject();
-    return result;
-  };
-
-  var originalReplaceState = history.replaceState;
-  history.replaceState = function () {
-    var result = originalReplaceState.apply(this, arguments);
-    scheduleInject();
-    return result;
-  };
-
-  window.addEventListener('popstate', scheduleInject);
-
-  // As a safety net, watch for React re-rendering the 404 area.
-  var mo = new MutationObserver(function () {
-    injectPdfViewer();
+  // Listen for route changes
+  window.addEventListener('popstate', function() {
+    setTimeout(scheduleInject, 100);
   });
 
-  try {
-    mo.observe(document.documentElement, { subtree: true, childList: true });
-  } catch (e) {
-    // Ignore if observer fails.
-  }
+  // Monitor URL changes for React Router
+  var lastPath = window.location.pathname;
+  setInterval(function() {
+    if (window.location.pathname !== lastPath) {
+      lastPath = window.location.pathname;
+      setTimeout(scheduleInject, 100);
+    }
+  }, 500);
 })();

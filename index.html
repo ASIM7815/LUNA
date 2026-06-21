@@ -125,6 +125,9 @@
                 { id: "highlight-antidrug", src: "./allimages/mainSlider/antidrug2024.jpg", alt: "Campus Highlights" }
             ];
 
+            var activeCarousels = [];
+            var globalObserver = null;
+
             function toArray(list) {
                 return Array.prototype.slice.call(list || []);
             }
@@ -185,12 +188,32 @@
                 }
             }
 
+            function cleanupCarousel(carousel) {
+                if (!carousel) return;
+                var timer = carousel._carouselTimer;
+                if (timer) {
+                    window.clearInterval(timer);
+                    carousel._carouselTimer = null;
+                }
+                carousel.removeAttribute("data-local-carousel-ready");
+            }
+
             function enhanceCarousel(carousel, slides, extraClasses, intervalMs) {
                 if (!carousel) return false;
-                if (carousel.getAttribute("data-local-carousel-ready") === "true") return true;
-
+                
                 var inner = carousel.querySelector(".carousel-inner");
                 if (!inner || !slides || !slides.length) return false;
+
+                // Check if carousel needs reinitialization
+                var isReady = carousel.getAttribute("data-local-carousel-ready") === "true";
+                var hasSlides = inner.querySelectorAll(".carousel-item").length > 0;
+                
+                if (isReady && hasSlides) {
+                    return true;
+                }
+
+                // Cleanup old carousel if exists
+                cleanupCarousel(carousel);
 
                 carousel.setAttribute("data-local-carousel-ready", "true");
                 carousel.classList.add("js-fallback-carousel");
@@ -238,12 +261,14 @@
                     cycleTimer = window.setInterval(function () {
                         applySlide(currentIndex + 1);
                     }, intervalMs);
+                    carousel._carouselTimer = cycleTimer;
                 }
 
                 function stopCycle() {
                     if (!cycleTimer) return;
                     window.clearInterval(cycleTimer);
                     cycleTimer = null;
+                    carousel._carouselTimer = null;
                 }
 
                 function restartCycle() {
@@ -295,6 +320,7 @@
                 setControlsVisible(carousel, items.length > 1);
                 startCycle();
 
+                activeCarousels.push(carousel);
                 return true;
             }
 
@@ -331,16 +357,47 @@
                 return mainReady && highlightsReady;
             }
 
-            if (!tryInit()) {
-                var observer = new MutationObserver(function () {
-                    if (tryInit()) observer.disconnect();
+            function startObserver() {
+                if (globalObserver) {
+                    globalObserver.disconnect();
+                }
+
+                globalObserver = new MutationObserver(function () {
+                    tryInit();
                 });
 
-                observer.observe(document.documentElement, { childList: true, subtree: true });
-                window.setTimeout(function () {
-                    observer.disconnect();
-                }, 15000);
+                globalObserver.observe(document.documentElement, { childList: true, subtree: true });
             }
+
+            // Listen for route changes (popstate for back/forward, and monitor hash/path changes)
+            window.addEventListener('popstate', function() {
+                setTimeout(function() {
+                    activeCarousels.forEach(cleanupCarousel);
+                    activeCarousels = [];
+                    tryInit();
+                }, 100);
+            });
+
+            // Monitor URL changes for React Router
+            var lastPath = window.location.pathname;
+            setInterval(function() {
+                if (window.location.pathname !== lastPath) {
+                    lastPath = window.location.pathname;
+                    activeCarousels.forEach(cleanupCarousel);
+                    activeCarousels = [];
+                    setTimeout(tryInit, 100);
+                }
+            }, 500);
+
+            // Initial setup
+            if (!tryInit()) {
+                startObserver();
+            }
+
+            // Preload all images
+            HERO_SLIDES.concat(HIGHLIGHT_SLIDES).forEach(function(slide) {
+                warmImage(slide.src);
+            });
         })();
     </script>
 
@@ -428,12 +485,17 @@
             opacity: 0 !important;
         }
         
-        /* Hide images.png logo */
+        /* Hide images.png logo - prevent loading and display */
         img[src*="images.png"],
         img[src*="/images.png"],
         img[src*="https://the.islec.edu.in/images.png"] {
             display: none !important;
             visibility: hidden !important;
+            opacity: 0 !important;
+            width: 0 !important;
+            height: 0 !important;
+            position: absolute !important;
+            pointer-events: none !important;
         }
         
         /* Ensure More link is visible in Quick Links */

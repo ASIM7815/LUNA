@@ -7,6 +7,9 @@
         "Magazine 23'": 'https://drive.google.com/file/d/1FU80c-jf_Un_atWNiccCtTauRgUB3cUI/view?usp=drive_link'
     };
 
+    var globalObserver = null;
+    var debounceTimer = null;
+
     function updateCSENewsletterLink() {
         // Find all links on the page
         var links = document.querySelectorAll('a');
@@ -23,7 +26,6 @@
                     link.href = NEWSLETTER_LINKS[linkText];
                     link.target = '_blank';
                     link.rel = 'noopener noreferrer';
-                    console.log('Updated ' + linkText + ' link to Google Drive');
                     updatedCount++;
                 }
             }
@@ -32,27 +34,26 @@
         return updatedCount > 0;
     }
 
-    function tryUpdate() {
-        if (updateCSENewsletterLink()) {
-            return;
+    function debouncedUpdate() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(updateCSENewsletterLink, 150);
+    }
+
+    function startObserver() {
+        if (globalObserver) {
+            globalObserver.disconnect();
         }
 
-        // If not found immediately, watch for DOM changes
-        var observer = new MutationObserver(function() {
-            if (updateCSENewsletterLink()) {
-                observer.disconnect();
-            }
-        });
-
-        observer.observe(document.body || document.documentElement, {
+        globalObserver = new MutationObserver(debouncedUpdate);
+        globalObserver.observe(document.body || document.documentElement, {
             childList: true,
             subtree: true
         });
+    }
 
-        // Stop observing after 10 seconds
-        setTimeout(function() {
-            observer.disconnect();
-        }, 10000);
+    function tryUpdate() {
+        updateCSENewsletterLink();
+        startObserver();
     }
 
     // Wait for DOM to be ready
@@ -61,4 +62,24 @@
     } else {
         tryUpdate();
     }
+
+    // Listen for route changes
+    window.addEventListener('popstate', function() {
+        setTimeout(function() {
+            updateCSENewsletterLink();
+            startObserver();
+        }, 100);
+    });
+
+    // Monitor URL changes for React Router
+    var lastPath = window.location.pathname;
+    setInterval(function() {
+        if (window.location.pathname !== lastPath) {
+            lastPath = window.location.pathname;
+            setTimeout(function() {
+                updateCSENewsletterLink();
+                startObserver();
+            }, 100);
+        }
+    }, 500);
 })();
