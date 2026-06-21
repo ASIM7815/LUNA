@@ -3,7 +3,7 @@
     "_id": "sports-2024-judo",
     "title": "2024 Inter College Judo Tournament",
     "descp": "Inter college sports participation and tournament highlights from 2024.",
-    "img": "./allimages/mainSlider/judo2024.jpg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/judo2024.jpg",
     "link": ""
   },
   {
@@ -17,28 +17,28 @@
     "_id": "sports-2024-participation",
     "title": "2024 Sports Participation Highlights",
     "descp": "Campus-wide sports and physical activity participation from the 2024 season.",
-    "img": "./allimages/sp1.jpg",
+    "img": "https://the.islec.edu.in/allimages/sp1.jpg",
     "link": ""
   },
   {
     "_id": "sports-2023-champions",
     "title": "2023 Champions Celebration",
     "descp": "Team and individual championship moments celebrated on campus in 2023.",
-    "img": "./allimages/Champions.webp",
+    "img": "https://the.islec.edu.in/allimages/Champions.webp",
     "link": ""
   },
   {
     "_id": "sports-2023-awards",
     "title": "2023 Sports Awards and Recognition",
     "descp": "Achievement and recognition moments from sports events during 2023.",
-    "img": "./allimages/awards23.jpg",
+    "img": "https://the.islec.edu.in/allimages/awards23.jpg",
     "link": ""
   },
   {
     "_id": "sports-2022-football",
     "title": "2022 Football Activity",
     "descp": "Outdoor football and regular physical activity highlights from 2022.",
-    "img": "./allimages/footc.jpeg",
+    "img": "https://the.islec.edu.in/allimages/footc.jpeg",
     "link": ""
   }
 ]

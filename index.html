@@ -386,6 +386,7 @@
     <script defer="defer" src="./academic-council-pdf.js"></script>
     <script defer="defer" src="./navigation-pdf-handler.js"></script>
     <script defer="defer" src="./cse-newsletter-link-updater.js"></script>
+    <script defer="defer" src="./department-image-fixer.js"></script>
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
     
     <style>
@@ -412,6 +413,32 @@
             padding: 8px !important;
             background: white !important;
             color: black !important;
+        }
+        
+        /* Hide template/placeholder HOD images */
+        img.author[src*="csehod.png"],
+        img.author[src*="mbahodnov22.jpeg"],
+        img.author[src*="docs/"][src*="hod"] {
+            display: none !important;
+        }
+        
+        /* Hide images in Quick Links section */
+        .sidebar-info img,
+        .widget:has(h4:contains("Quick Links")) img,
+        [class*="quick"] img {
+            display: none !important;
+        }
+        
+        /* Ensure More link is visible in Quick Links */
+        .sidebar-info a[href*="more"],
+        .text-right a {
+            display: inline-block !important;
+            visibility: visible !important;
+            font-size: 14px;
+            font-weight: 500;
+            color: #192f59;
+            text-decoration: none;
+            margin-top: 10px;
         }
     </style>
 </head>

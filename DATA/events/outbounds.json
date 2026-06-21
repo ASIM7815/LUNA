@@ -3,42 +3,42 @@
     "_id": "outbound-2025-exposure",
     "title": "2025 Outbound Exposure Visit",
     "descp": "Outbound learning and exposure visit highlights captured during 2025.",
-    "img": "./allimages/OUTBI.webp",
+    "img": "https://the.islec.edu.in/allimages/OUTBI.webp",
     "link": ""
   },
   {
     "_id": "outbound-2024-industrial",
     "title": "2024 Industrial Visit",
     "descp": "Industrial visit activity connecting classroom learning with field exposure in 2024.",
-    "img": "./allimages/OUTBI.jpg",
+    "img": "https://the.islec.edu.in/allimages/OUTBI.jpg",
     "link": ""
   },
   {
     "_id": "outbound-2023-thub",
     "title": "2023 Innovation Exposure at T-Hub",
     "descp": "Outbound innovation and startup ecosystem exposure visit conducted during 2023.",
-    "img": "./allimages/thub.jpg",
+    "img": "https://the.islec.edu.in/allimages/thub.jpg",
     "link": ""
   },
   {
     "_id": "outbound-2023-ecell",
     "title": "2023 Entrepreneurship Cell Visit",
     "descp": "Entrepreneurship-focused outbound activity and student engagement highlights from 2023.",
-    "img": "./allimages/ecell.jpeg",
+    "img": "https://the.islec.edu.in/allimages/ecell.jpeg",
     "link": ""
   },
   {
     "_id": "outbound-2022-byjus",
     "title": "2022 BYJU'S Outreach Session",
     "descp": "Industry interaction and student exposure activity hosted during 2022.",
-    "img": "./allimages/byjus10.jpeg",
+    "img": "https://the.islec.edu.in/allimages/byjus10.jpeg",
     "link": ""
   },
   {
     "_id": "outbound-2022-infosys",
     "title": "2022 Infosys Campus Connect",
     "descp": "Industry connect and off-campus exposure activity conducted for students in 2022.",
-    "img": "./allimages/infosys2022.webp",
+    "img": "https://the.islec.edu.in/allimages/infosys2022.webp",
     "link": ""
   }
 ]

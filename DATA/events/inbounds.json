@@ -3,119 +3,119 @@
     "_id": "inbound-2025-recognition",
     "title": "2025 Recognition Ceremony",
     "descp": "Institutional recognition and campus milestone celebrations held during 2025.",
-    "img": "./allimages/mainSlider/Recognition25.jpg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/Recognition25.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2025-nov15",
     "title": "2025 Campus Event Highlights - 15 Nov",
     "descp": "Inbound campus event photo highlights from 15 November 2025.",
-    "img": "./allimages/mainSlider/15112025.jpg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/15112025.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2025-oct23",
     "title": "2025 Campus Event Highlights - 23 Oct",
     "descp": "Inbound campus event photo highlights from 23 October 2025.",
-    "img": "./allimages/mainSlider/23102025.jpg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/23102025.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2025-oct10",
     "title": "2025 Campus Event Highlights - 10 Oct",
     "descp": "Inbound campus event photo highlights from 10 October 2025.",
-    "img": "./allimages/mainSlider/10102025.jpg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/10102025.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2025-sep11",
     "title": "2025 Campus Event Highlights - 11 Sep",
     "descp": "Inbound campus event photo highlights from 11 September 2025.",
-    "img": "./allimages/mainSlider/11092025.jpg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/11092025.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2025-aug19",
     "title": "2025 Campus Event Highlights - 19 Aug",
     "descp": "Inbound campus event photo highlights from 19 August 2025.",
-    "img": "./allimages/mainSlider/19082025.jpg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/19082025.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2025-jul28",
     "title": "2025 Campus Event Highlights - 28 Jul",
     "descp": "Inbound campus event photo highlights from 28 July 2025.",
-    "img": "./allimages/mainSlider/28072025.jpg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/28072025.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2025-jul15",
     "title": "2025 Campus Event Highlights - 15 Jul",
     "descp": "Inbound campus event photo highlights from 15 July 2025.",
-    "img": "./allimages/mainSlider/15072025.jpg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/15072025.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2024-orientation",
     "title": "2024 Orientation Day",
     "descp": "Orientation and induction event for new students conducted during 2024.",
-    "img": "./allimages/mainSlider/orientation24.jpeg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/orientation24.jpeg",
     "link": ""
   },
   {
     "_id": "inbound-2024-antiragging",
     "title": "2024 Anti-Ragging Awareness Drive",
     "descp": "Awareness and student engagement event promoting a safe campus in 2024.",
-    "img": "./allimages/mainSlider/antiriba2024.jpg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/antiriba2024.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2024-antidrug",
     "title": "2024 Anti-Drug Awareness Drive",
     "descp": "Campus-wide awareness event and student participation highlights from 2024.",
-    "img": "./allimages/mainSlider/antidrug2024.jpg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/antidrug2024.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2023-hackathon",
     "title": "2023 Hackathon Highlights",
     "descp": "Student hackathon event featuring innovation, teamwork, and technical participation in 2023.",
-    "img": "./allimages/mainSlider/hack23.jpg",
+    "img": "https://the.islec.edu.in/allimages/mainSlider/hack23.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2023-orientation",
     "title": "2023 Student Orientation Program",
     "descp": "Orientation and welcome event for incoming students organized during 2023.",
-    "img": "./allimages/orientation23.jpg",
+    "img": "https://the.islec.edu.in/allimages/orientation23.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2022-enthusiac",
     "title": "2022 Enthusiac Cultural Event",
     "descp": "Student cultural celebration and campus participation highlights from 2022.",
-    "img": "./allimages/enthusiac2022.jpeg",
+    "img": "https://the.islec.edu.in/allimages/enthusiac2022.jpeg",
     "link": ""
   },
   {
     "_id": "inbound-2022-eloquence",
     "title": "2022 Eloquence Literary Event",
     "descp": "Literary and communication-focused student event conducted in 2022.",
-    "img": "./allimages/eloquence2022.jpg",
+    "img": "https://the.islec.edu.in/allimages/eloquence2022.jpg",
     "link": ""
   },
   {
     "_id": "inbound-2022-eid",
     "title": "2022 Eid-ul-Adha Celebration",
     "descp": "Campus celebration and student participation event observed during 2022.",
-    "img": "./allimages/eiduladha2022.png",
+    "img": "https://the.islec.edu.in/allimages/eiduladha2022.png",
     "link": ""
   },
   {
     "_id": "inbound-2021-induction",
     "title": "2021 Student Induction Program",
     "descp": "Student induction and campus welcome event captured during 2021.",
-    "img": "./allimages/orien2021.jpeg",
+    "img": "https://the.islec.edu.in/allimages/orien2021.jpeg",
     "link": ""
   }
 ]
