@@ -502,35 +502,41 @@
             opacity: 0 !important;
         }
         
-        /* Hide blue carousel/slider placeholder in departments - Enhanced */
-        .carousel-inner:empty,
-        .carousel:has(.carousel-inner:empty),
-        section .carousel:not(:has(img)),
-        .pt-25 .carousel:not(:has(.carousel-item img)),
-        .pt-25.col-md-8 .carousel,
-        .col-md-8 .carousel:not(:has(.carousel-item.active img)),
-        div[class*="col-"] .carousel:empty,
-        .carousel-inner:not(:has(.carousel-item)) {
+        /* AGGRESSIVELY Hide ALL carousels in department pages */
+        body:not(.home-page) .carousel,
+        [class*="department"] .carousel,
+        .pt-25 .carousel,
+        .col-md-8 .carousel,
+        section .carousel {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
             height: 0 !important;
             min-height: 0 !important;
+            max-height: 0 !important;
             overflow: hidden !important;
             position: absolute !important;
+            left: -9999px !important;
         }
         
-        /* Hide empty carousel containers */
-        .carousel:not(:has(.carousel-item.active)) .carousel-inner,
-        .carousel .carousel-inner:not(:has(img)) {
-            background: transparent !important;
-            display: none !important;
+        /* Only show main carousel on home page */
+        body .main-carousel,
+        body .highlights-carousel {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            position: relative !important;
+            left: auto !important;
         }
         
-        /* Hide carousel navigation when no images */
-        .carousel:not(:has(img)) .carousel-control-prev,
-        .carousel:not(:has(img)) .carousel-control-next,
-        .carousel:not(:has(img)) .carousel-indicators {
+        /* Hide carousel navigation and controls in departments */
+        .pt-25 .carousel-control-prev,
+        .pt-25 .carousel-control-next,
+        .pt-25 .carousel-indicators,
+        .col-md-8 .carousel-control-prev,
+        .col-md-8 .carousel-control-next,
+        .col-md-8 .carousel-indicators {
             display: none !important;
         }
         
