@@ -99,29 +99,48 @@
     </style>
 
     <script>
-        // Enhanced GitHub Pages SPA redirect handler with error recovery
+        // Enhanced GitHub Pages SPA redirect handler with aggressive fallback
         (function(){
             var redirect = sessionStorage.redirect;
             delete sessionStorage.redirect;
+            
             if (redirect && redirect != location.href) {
                 history.replaceState(null, null, redirect);
             }
             
-            // Additional check: if we're on a non-root path and React hasn't loaded yet
-            // This handles cases where .htaccess isn't working
+            // CRITICAL: Check if React has loaded after 1 second
             setTimeout(function() {
                 var root = document.getElementById('root');
-                if (root && (!root.innerHTML || root.innerHTML.trim() === '')) {
-                    // React hasn't rendered, likely because the page didn't load index.html
-                    // Force redirect to home and let React Router handle it
-                    var currentPath = window.location.pathname;
+                
+                // If root exists but is empty, React failed to load
+                if (root && (!root.innerHTML || root.innerHTML.trim() === '' || root.children.length === 0)) {
+                    console.warn('React failed to load on refresh. Forcing redirect to home...');
+                    
+                    // Save the current path
+                    var currentPath = window.location.pathname + window.location.search + window.location.hash;
+                    
                     if (currentPath !== '/' && currentPath !== '/index.html') {
-                        console.warn('SPA routing issue detected, storing path and redirecting...');
-                        sessionStorage.redirect = window.location.href;
+                        sessionStorage.redirect = window.location.origin + currentPath;
+                        // Force reload from root
                         window.location.href = '/';
                     }
                 }
-            }, 2000);
+            }, 1000);
+            
+            // Second check after 2.5 seconds (for slower connections)
+            setTimeout(function() {
+                var root = document.getElementById('root');
+                
+                if (root && (!root.innerHTML || root.innerHTML.trim() === '' || root.children.length === 0)) {
+                    console.error('React still not loaded. Forcing hard refresh...');
+                    var currentPath = window.location.pathname + window.location.search + window.location.hash;
+                    
+                    if (currentPath !== '/' && currentPath !== '/index.html') {
+                        sessionStorage.redirect = window.location.origin + currentPath;
+                        window.location.replace('/');
+                    }
+                }
+            }, 2500);
         })();
     </script>
 
