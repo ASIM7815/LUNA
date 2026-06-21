@@ -1,89 +1,56 @@
 /**
- * Hide Placeholder Images in Department Pages
- * This script removes placeholder loading images that don't look good
+ * Hide Skeleton Loading Placeholders in Department Pages
+ * This script removes React skeleton loaders that don't look good
  */
 (function() {
     'use strict';
     
-    function hideImages() {
-        // Hide all images with docs/ in their src (HOD images)
+    function hideSkeletons() {
+        // Hide all React skeleton loading placeholders
+        var skeletons = document.querySelectorAll('.react-loading-skeleton, span.react-loading-skeleton, [class*="skeleton"], [class*="Skeleton"]');
+        
+        for (var i = 0; i < skeletons.length; i++) {
+            skeletons[i].style.display = 'none';
+            skeletons[i].style.visibility = 'hidden';
+            skeletons[i].style.opacity = '0';
+        }
+        
+        // Hide images.png logo specifically
         var allImages = document.querySelectorAll('img');
-        for (var i = 0; i < allImages.length; i++) {
-            var img = allImages[i];
+        for (var j = 0; j < allImages.length; j++) {
+            var img = allImages[j];
             var src = img.getAttribute('src') || '';
             
-            // Check if it's images.png logo
             if (src.includes('images.png')) {
                 img.style.display = 'none';
                 img.style.visibility = 'hidden';
                 img.style.opacity = '0';
-                console.log('Hidden images.png logo');
-                continue;
-            }
-            
-            // Check if it's a docs/ image or HOD image
-            if (src.includes('/docs/') || 
-                src.includes('hod') || 
-                src.includes('csehod') ||
-                src.includes('ithod') ||
-                src.includes('ecehod') ||
-                src.includes('eeehod') ||
-                src.includes('civilhod') ||
-                src.includes('mechhod') ||
-                src.includes('mbahod')) {
-                
-                // Hide the image
-                img.style.display = 'none';
-                img.style.visibility = 'hidden';
-                img.style.opacity = '0';
-                
-                // Hide parent containers
-                var parent = img.parentElement;
-                if (parent) {
-                    var className = parent.className || '';
-                    if (className.includes('media-left') || 
-                        className.includes('author') ||
-                        className.includes('hod')) {
-                        parent.style.display = 'none';
-                    }
-                }
             }
         }
         
-        // Hide sidebar/quicklinks images
-        var sidebarImages = document.querySelectorAll('.sidebar-info img, .widget img, aside img, [class*="quick"] img');
-        for (var j = 0; j < sidebarImages.length; j++) {
-            sidebarImages[j].style.display = 'none';
-            sidebarImages[j].style.visibility = 'hidden';
-            
-            // Hide parent if it's just an image container
-            var sidebarParent = sidebarImages[j].parentElement;
-            if (sidebarParent && sidebarParent.children.length === 1) {
-                sidebarParent.style.display = 'none';
-            }
+        if (skeletons.length > 0) {
+            console.log('Hidden ' + skeletons.length + ' skeleton loaders');
         }
-        
-        console.log('Placeholder images hidden successfully');
     }
     
     // Run immediately
-    hideImages();
+    hideSkeletons();
     
     // Run again after DOM is fully loaded
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', hideImages);
+        document.addEventListener('DOMContentLoaded', hideSkeletons);
     }
     
-    // Run after a delay to catch dynamically loaded images
-    setTimeout(hideImages, 1000);
-    setTimeout(hideImages, 2000);
-    setTimeout(hideImages, 3000);
+    // Run after delays to catch late-loading skeletons
+    setTimeout(hideSkeletons, 500);
+    setTimeout(hideSkeletons, 1000);
+    setTimeout(hideSkeletons, 2000);
     
-    // Watch for new images being added
+    // Watch for new skeleton loaders being added
     var observer = new MutationObserver(function(mutations) {
         mutations.forEach(function(mutation) {
             if (mutation.addedNodes.length) {
-                hideImages();
+                hideSkeletons();
             }
         });
     });

@@ -416,40 +416,15 @@
             color: black !important;
         }
         
-        /* Hide template/placeholder HOD images - left side */
-        img.author[src*="csehod"],
-        img.author[src*="hod"],
-        img.author[src*="docs/"],
-        img[src*="/docs/"],
-        .media-left img,
-        .author-image img,
-        .hod-image img {
+        /* Hide React skeleton loading placeholders */
+        .react-loading-skeleton,
+        span.react-loading-skeleton,
+        .css-1q79kkk-skeletonStyles-Skeleton,
+        [class*="skeleton"],
+        [class*="Skeleton"] {
             display: none !important;
             visibility: hidden !important;
-        }
-        
-        /* Hide parent container of HOD images */
-        .media-left,
-        .author-image,
-        div:has(> img[src*="docs/"]) {
-            display: none !important;
-        }
-        
-        /* Hide images in Quick Links section - right side */
-        .sidebar-info img,
-        .widget img,
-        .quicklinks img,
-        aside img,
-        [class*="quick"] img,
-        [class*="sidebar"] img {
-            display: none !important;
-            visibility: hidden !important;
-        }
-        
-        /* Hide quick links image containers */
-        .sidebar-info .widget-body,
-        .quicklinks-image-container {
-            display: none !important;
+            opacity: 0 !important;
         }
         
         /* Hide images.png logo */
