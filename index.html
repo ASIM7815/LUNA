@@ -386,6 +386,15 @@
             }
 
             function tryInit() {
+                // CRITICAL: Only initialize carousels on homepage
+                var hash = window.location.hash;
+                var isHomePage = hash === '' || hash === '#' || hash === '#/';
+                
+                if (!isHomePage) {
+                    // Not on homepage - don't initialize carousels
+                    return false;
+                }
+                
                 var mainReady = enhanceCarousel(findMainCarousel(), HERO_SLIDES, ["main-carousel", "carousel-fade"], 4500);
                 var highlightsReady = enhanceCarousel(findHighlightsCarousel(), HIGHLIGHT_SLIDES, ["highlights-carousel"], 5000);
                 return mainReady && highlightsReady;
