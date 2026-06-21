@@ -521,12 +521,10 @@
             opacity: 0 !important;
         }
         
-        /* AGGRESSIVELY Hide ALL carousels in department pages */
-        body:not(.home-page) .carousel,
-        [class*="department"] .carousel,
-        .pt-25 .carousel,
-        .col-md-8 .carousel,
-        section .carousel {
+        /* Hide ONLY department page carousels (not home page) */
+        .pt-25.col-md-8 .carousel:not(.main-carousel):not(.highlights-carousel),
+        .col-md-8 .carousel:not(.main-carousel):not(.highlights-carousel),
+        section:not(:first-of-type) .carousel:not(.main-carousel):not(.highlights-carousel) {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
@@ -538,24 +536,31 @@
             left: -9999px !important;
         }
         
-        /* Only show main carousel on home page */
-        body .main-carousel,
-        body .highlights-carousel {
+        /* ALWAYS show main hero carousel and highlights carousel */
+        .main-carousel,
+        .highlights-carousel,
+        .carousel.main-carousel,
+        .carousel.highlights-carousel {
             display: block !important;
             visibility: visible !important;
             opacity: 1 !important;
             height: auto !important;
             position: relative !important;
             left: auto !important;
+            max-height: none !important;
         }
         
-        /* Hide carousel navigation and controls in departments */
-        .pt-25 .carousel-control-prev,
-        .pt-25 .carousel-control-next,
-        .pt-25 .carousel-indicators,
-        .col-md-8 .carousel-control-prev,
-        .col-md-8 .carousel-control-next,
-        .col-md-8 .carousel-indicators {
+        /* Ensure main carousel items are visible */
+        .main-carousel .carousel-inner,
+        .highlights-carousel .carousel-inner {
+            display: block !important;
+            visibility: visible !important;
+        }
+        
+        /* Hide carousel controls in department pages only */
+        .pt-25 .carousel-control-prev:not(.main-carousel .carousel-control-prev),
+        .pt-25 .carousel-control-next:not(.main-carousel .carousel-control-next),
+        .pt-25 .carousel-indicators:not(.main-carousel .carousel-indicators) {
             display: none !important;
         }
         
