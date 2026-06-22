@@ -10,16 +10,40 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="manifest" href="./manifest.json" />
     <title>AIDS Department Newsletter - ISL Engineering College</title>
-
-    <script defer="defer" src="./static/js/main.64d07445.js"></script>
-    <script defer="defer" src="./academic-council-pdf.js"></script>
-    <script defer="defer" src="./navigation-pdf-handler.js"></script>
-    <script defer="defer" src="./newsletter-menu-injector.js"></script>
+    <!-- Standalone page - no React app needed -->
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
 
     <style>
         html,body{margin:0;overflow-x:hidden}
         #dnl-aids-page{width:100vw!important;max-width:none!important;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;box-sizing:border-box;overflow-x:hidden}
+        /* Enhanced Header Styles */
+        .newsletter-header{background:#bf3a1a;padding:16px 24px;box-shadow:0 2px 12px rgba(0,0,0,0.15);position:relative;z-index:100}
+        .header-container{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+        .header-logo-link{text-decoration:none;display:flex;align-items:center;gap:12px;transition:opacity .2s}
+        .header-logo-link:hover{opacity:.9}
+        .header-logo{height:40px;width:40px;border-radius:8px;object-fit:cover}
+        .header-title{color:#fff;font-size:1.3rem;font-weight:700;letter-spacing:-0.5px}
+        .header-nav{display:flex;align-items:center;gap:8px}
+        .header-nav-btn{color:rgba(255,255,255,0.9);text-decoration:none;padding:8px 18px;background:rgba(255,255,255,0.12);border-radius:6px;font-size:0.9rem;font-weight:600;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+        .header-nav-btn:hover{background:rgba(255,255,255,0.2);transform:translateY(-1px)}
+        /* Professional Footer */
+        .newsletter-footer{background:linear-gradient(135deg,#401010 0%,#8c1818 100%);color:#fff;padding:48px 24px 24px;margin-top:60px}
+        .footer-container{max-width:1400px;margin:0 auto}
+        .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:32px}
+        .footer-col h3{font-size:1.1rem;font-weight:700;margin:0 0 16px;color:#fff}
+        .footer-col p{color:rgba(255,255,255,0.7);font-size:0.9rem;line-height:1.7;margin:0 0 12px}
+        .footer-links{list-style:none;padding:0;margin:0}
+        .footer-links li{margin-bottom:10px}
+        .footer-links a{color:rgba(255,255,255,0.75);text-decoration:none;font-size:0.9rem;transition:color .2s;display:flex;align-items:center;gap:8px}
+        .footer-links a:hover{color:#fff}
+        .footer-social{display:flex;gap:10px;margin-top:12px}
+        .footer-social-link{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;transition:all .2s;font-size:1rem}
+        .footer-social-link:hover{background:rgba(255,255,255,0.2);transform:translateY(-2px)}
+        .footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding-top:20px;text-align:center;color:rgba(255,255,255,0.6);font-size:0.85rem}
+        .footer-bottom a{color:rgba(255,255,255,0.8);text-decoration:none}
+        .footer-bottom a:hover{color:#fff}
+        @media(max-width:992px){.footer-grid{grid-template-columns:1fr 1fr;gap:30px}.header-title{font-size:1.1rem}}
+        @media(max-width:640px){.footer-grid{grid-template-columns:1fr}.header-nav{gap:4px}.header-nav-btn{padding:6px 12px;font-size:0.85rem}}
         .dnl-hero{background:linear-gradient(135deg,#401010 0%,#8c1818 55%,#bf3a1a 100%);padding:64px 6% 56px;position:relative;overflow:hidden}.dnl-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:360px;height:360px;border-radius:50%;background:rgba(255,255,255,.04)}
         .dnl-crumbs{display:flex;align-items:center;gap:6px;list-style:none;padding:0;margin:0 0 18px;font-size:.85rem}.dnl-crumbs li{color:rgba(255,255,255,.55)}.dnl-crumbs li+li::before{content:"›";margin-right:6px}.dnl-crumbs a{color:rgba(255,255,255,.8);text-decoration:none}.dnl-crumbs a:hover{color:#fff}
         .dnl-hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-size:.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:14px}.dnl-hero h1{color:#fff;font-size:2.4rem;font-weight:800;margin:0 0 10px;line-height:1.2}.dnl-hero-sub{color:rgba(255,255,255,.65);font-size:1rem}
@@ -35,8 +59,124 @@
         @media(max-width:640px){.dnl-hero h1{font-size:1.7rem}.dnl-card-header{padding:22px 24px;flex-wrap:wrap}.dnl-card-body{padding:28px 24px 32px}.dnl-card-body h2{font-size:1.35rem}.dnl-highlights{grid-template-columns:1fr}.dnl-sidebar{grid-template-columns:1fr}.dnl-cta-btn{width:100%;justify-content:center}}
     </style>
 </head>
-<body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+<body style="margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif;">
+    <noscript>You need to enable JavaScript to view this page.</noscript>
+    <!-- Home Page Header - Top Bar -->
+    <div class="header-top">
+        <div class="container-fluid">
+            <div class="row mt-2">
+                <div class="col-xl-5 col-lg-6 col-md-6 col-12">
+                    <div class="header_left">
+                        <ul class="header_ul">
+                            <li><img src="https://the.islec.edu.in/allimages/OU.png" height="40" alt="OU"></li>
+                            <li><img src="https://the.islec.edu.in/allimages/AICTE.png" height="40" alt="AICTE"></li>
+                            <li><img src="https://the.islec.edu.in/allimages/MoE.png" height="40" alt="MoE"></li>
+                            <li><img src="https://i.ibb.co/kK7CHC8/EE0v-CMf-VAAA-Lxj-removebg-preview.png" height="40" alt="IIC"></li>
+                            <li><img src="https://i.ibb.co/KVjJxD1/IEEE.png" height="40" alt="IEEE"></li>
+                            <li><img src="https://the.islec.edu.in/images/NAAC_LOGO.png" height="40" alt="NAAC"></li>
+                            <li><img src="https://the.islec.edu.in/images/naac_a.png" height="40" alt="NAAC A"></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-12">
+                    <div class="header_left mt-10 copyright social text-left">
+                        <ul class="header_ul">
+                            <li><a href="./#/rti" rel="noopener">RTI</a></li>
+                            <li><a href="./#/committees" rel="noopener">Committees</a></li>
+                            <li><a href="./#/naac" rel="noopener"><b>NAAC</b></a></li>
+                            <li><a href="./#/dvvs" rel="noopener"><b>DVV</b></a></li>
+                            <li><a href="./#/iqac" rel="noopener"><b>IQAC</b></a></li>
+                            <li><a href="./#/aqar" rel="noopener"><b>AQAR</b></a></li>
+                            <li><a href="./#/nirf" rel="noopener"><b>NIRF</b></a></li>
+                            <li><a href="https://the.islec.edu.in/NAAC/feedback.pdf" rel="noopener"><b>Feedback</b></a></li>
+                            <li><a href="https://islec.edu.in" rel="noopener">Alumni</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="./">
+                <img src="https://the.islec.edu.in/allimages/Website-Logo.webp" class="img-fluid" alt="ISL Engineering College" style="max-height:60px;">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNavbar">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="aboutDd" role="button" data-bs-toggle="dropdown" aria-expanded="false">About us</a>
+                        <ul class="dropdown-menu" aria-labelledby="aboutDd">
+                            <li><a class="dropdown-item" href="./#/chairman">Chairman</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><h6 class="dropdown-header text-center">Statutory Bodies</h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="./#/about/GoverningBody">Governing Body</a></li>
+                            <li><a class="dropdown-item" href="./#/about/FinanceCommittee">Finance Committee</a></li>
+                            <li><a class="dropdown-item" href="./#/about/CentralCommittee">Central Committee</a></li>
+                            <li><a class="dropdown-item" href="./#/about/academicouncil">Academic Council</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="adminDd" role="button" data-bs-toggle="dropdown" aria-expanded="false">Administration</a>
+                        <ul class="dropdown-menu" aria-labelledby="adminDd">
+                            <li><a class="dropdown-item" href="./#/principal">Principal</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="acadDd" role="button" data-bs-toggle="dropdown" aria-expanded="false">Academics</a>
+                        <ul class="dropdown-menu" aria-labelledby="acadDd">
+                            <li><a class="dropdown-item" href="./#/admissions">Admissions</a></li>
+                            <li><a class="dropdown-item" href="./#/syllabus">Syllabus</a></li>
+                            <li><a class="dropdown-item" href="./#/library">Library</a></li>
+                            <li><a class="dropdown-item" href="https://the.islec.edu.in/DATA/NAAC/7/7.2.1/7.2.1.Best_Practices.pdf">Best Practices</a></li>
+                            <li><a class="dropdown-item" href="https://the.islec.edu.in/DATA/NAAC/7/7.3.1/7.3.1Distinctiveness.pdf">Distinctiveness</a></li>
+                            <li><a class="dropdown-item" href="./#/fdp">Faculty Development Program</a></li>
+                            <li><a class="dropdown-item" href="./#/fdp">Institution Development Plan</a></li>
+                            <li><a class="dropdown-item" href="./#/fdp">Guidelines Students with Disabilities</a></li>
+                            <li><a class="dropdown-item" href="./#/fdp">UCG Fee Refund Policy</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="deptDd" role="button" data-bs-toggle="dropdown" aria-expanded="false">Department</a>
+                        <ul class="dropdown-menu" aria-labelledby="deptDd">
+                            <li><a class="dropdown-item" href="./#/department/hs">Humanities and Sciences</a></li>
+                            <li><a class="dropdown-item" href="./#/department/ce">Civil Engineering</a></li>
+                            <li><a class="dropdown-item" href="./#/department/cse">Computer Science &amp; Engineering</a></li>
+                            <li><a class="dropdown-item" href="./#/department/ds">Artificial Intelligence &amp; Data Science</a></li>
+                            <li><a class="dropdown-item" href="./#/department/ece">Electronics &amp; Communication Engineering</a></li>
+                            <li><a class="dropdown-item" href="./#/department/eee">Electrical &amp; Electronics Engineering</a></li>
+                            <li><a class="dropdown-item" href="./#/department/it">Information Technology</a></li>
+                            <li><a class="dropdown-item" href="./#/department/me">Mechanical Engineering</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="./#/department/mba">Master of Business Administration</a></li>
+                            <li><a class="dropdown-item" href="./#/department/mcse">M.Tech CSE</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="./#/library">Library</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./#/events">Events</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="infraDd" role="button" data-bs-toggle="dropdown" aria-expanded="false">Infrastructure</a>
+                        <ul class="dropdown-menu" aria-labelledby="infraDd">
+                            <li><a class="dropdown-item" href="./#/Infrastructure/WorldClassFacilities">World Class Facilities</a></li>
+                            <li><a class="dropdown-item" href="./#/Infrastructure/AcademicFacilities">Academic Facilities</a></li>
+                            <li><a class="dropdown-item" href="./#/Infrastructure/ComputingFacilities">Computing Facilities</a></li>
+                            <li><a class="dropdown-item" href="./#/Infrastructure/CanteenFacilities">Canteen Facilities</a></li>
+                            <li><a class="dropdown-item" href="./#/Infrastructure/TransportFacilities">Transport Facilities</a></li>
+                            <li><a class="dropdown-item" href="./#/Infrastructure/MedicalFacilities">Medical Facilities</a></li>
+                            <li><a class="dropdown-item" href="./#/Infrastructure/StudioFacilities">Studio Facilities</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="./#/researchdevelopment">R &amp; D</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./#/exambranch">Exam Branch</a></li>
+                    <li class="nav-item"><a class="nav-link" href="./#/placement">Training &amp; Placement</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div id="root"></div>
 
     <script>
@@ -44,37 +184,96 @@
         var PDF_LINK = "#"; // Replace with actual AIDS 2026 newsletter PDF link
         var PAGE_HTML = `<div id="dnl-aids-page"><div class="dnl-hero"><ul class="dnl-crumbs"><li><a href="./">Home</a></li><li><a href="./newsletter.html">Newsletters</a></li><li>AIDS 2026</li></ul><div class="dnl-hero-badge"><i class="fa fa-newspaper-o"></i> Department Newsletter</div><h1>Artificial Intelligence &amp; Data Science</h1><p class="dnl-hero-sub">Academic Year 2025–26 &nbsp;&middot;&nbsp; Vol. 2026</p></div><div class="dnl-body"><div class="dnl-inner"><div><div class="dnl-main-card"><div class="dnl-card-header"><span class="dnl-year-pill">2026</span><span class="dnl-edition-tag">Latest Edition</span></div><div class="dnl-card-body"><h2>Artificial Intelligence &amp; Data Science Newsletter 2026</h2><p>The AIDS Department Newsletter 2026 spotlights the remarkable advancements, student innovations, and research breakthroughs from the Artificial Intelligence &amp; Data Science department throughout the academic year.</p><p>Dive into stories of machine learning projects, AI-driven research, data science competitions, and the passionate community of learners and researchers shaping the intelligent future of technology.</p><div class="dnl-highlights-title">What's Inside</div><ul class="dnl-highlights"><li><i class="fa fa-check-circle"></i>Machine learning &amp; AI projects</li><li><i class="fa fa-check-circle"></i>Data science competitions &amp; hackathons</li><li><i class="fa fa-check-circle"></i>Industry internships &amp; placements</li><li><i class="fa fa-check-circle"></i>AI workshops &amp; expert sessions</li><li><i class="fa fa-check-circle"></i>Faculty research &amp; publications</li><li><i class="fa fa-check-circle"></i>Student achievements &amp; certifications</li></ul><a href="${PDF_LINK}" class="dnl-cta-btn" target="_blank" rel="noopener noreferrer"><i class="fa fa-file-pdf-o"></i>View 2026 Newsletter<i class="fa fa-long-arrow-right"></i></a></div></div><a href="./newsletter.html" class="dnl-back"><i class="fa fa-arrow-left"></i> Back to All Newsletters</a></div><div class="dnl-sidebar"><div class="dnl-info-card"><div class="dnl-info-card-head">Newsletter Details</div><ul class="dnl-info-list"><li><span class="label">Edition</span><span class="value">2026</span></li><li><span class="label">Academic Year</span><span class="value">2025–26</span></li><li><span class="label">Department</span><span class="value">AIDS</span></li><li><span class="label">Institution</span><span class="value">ISLEC</span></li><li><span class="label">Affiliation</span><span class="value">Osmania Univ.</span></li></ul></div><div class="dnl-dept-card"><div class="dept-initial">AI</div><h3>AIDS Department</h3><p>Artificial Intelligence &amp; Data Science<br/>ISL Engineering College</p></div></div></div></div></div>`;
 
-        function escapeContainer(el){var p=el.parentElement;document.documentElement.style.overflowX='hidden';document.body.style.overflowX='hidden';while(p&&p!==document.body){p.style.overflow='visible';p.style.maxWidth='none';p.style.width='100%';p.style.marginLeft='0';p.style.marginRight='0';p.style.paddingLeft='0';p.style.paddingRight='0';p.style.left='auto';p.style.right='auto';p=p.parentElement;}}
-        function inject() {
-            var root = document.querySelector('#root > div');
-            if (!root) return false;
-            if (document.getElementById('dnl-aids-page')) return true;
-            var nav = root.querySelector('header, nav, [class*="navbar"], [class*="header"]');
-            if (nav && nav.parentNode) {
-                var wrapper = document.createElement('div');
-                wrapper.innerHTML = PAGE_HTML;
-                nav.parentNode.insertBefore(wrapper.firstElementChild, nav.nextSibling);
-                var inserted = nav.nextSibling;
-                var toRemove = [];
-                var sibling = inserted ? inserted.nextSibling : null;
-                while (sibling) { toRemove.push(sibling); sibling = sibling.nextSibling; }
-                toRemove.forEach(function(el) { el.parentNode && el.parentNode.removeChild(el); });
-                escapeContainer(inserted);
-            } else {
-                root.innerHTML = PAGE_HTML;
-                escapeContainer(root.firstElementChild || root);
-            }
-            return true;
-        }
-
-        if (!inject()) {
-            var obs = new MutationObserver(function () {
-                if (inject()) obs.disconnect();
-            });
-            obs.observe(document.body, { childList: true, subtree: true });
-            setTimeout(function () { obs.disconnect(); }, 15000);
-        }
+        // Direct injection since this is now a standalone page
+        document.getElementById('root').innerHTML = PAGE_HTML;
+        document.documentElement.style.overflowX='hidden';
+        document.body.style.overflowX='hidden';
     })();
     </script>
+
+    <!-- Home Page Footer -->
+    <footer>
+        <div class="footer-top pt-30">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="footer-address mt-40">
+                            <div class="footer-title pb-25">
+                                <img src="https://the.islec.edu.in/allimages/Website-Logo.webp" class="img-fluid" alt="Logo">
+                            </div>
+                            <p>International Airport Road, Bandlaguda, Chandrayangutta Hyderabad - 500005 Telangana, India.</p>
+                            <a class="map" href="tel:04029880083"><p>040 - 29880083</p></a><br>
+                            <a class="map" href="mailto:info@islec.edu.in"><p>info@islec.edu.in</p></a><br>
+                            <a class="map" href="https://g.page/ISLEC?share"><p>View Location on Google Map</p></a>
+                            <ul style="list-style:none;padding:0;margin:0;">
+                                <li><img src="https://the.islec.edu.in/allimages/NORagging.png" alt="noRagging" width="70" height="50"></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="footer-link mt-40">
+                            <div class="footer-title pb-25"><h6>Academics</h6></div>
+                            <ul>
+                                <li><a href="./#/admissions"><i class="fa fa-angle-right"></i> Admissions</a></li>
+                                <li><a href="https://drive.google.com/file/d/1e0y49PBcyvNmx0m5DJ2jHdyjWA2BbXyO/view"><i class="fa fa-angle-right"></i> Almanac</a></li>
+                                <li><a href="./#/syllabus"><i class="fa fa-angle-right"></i> Syllabus</a></li>
+                                <li><a href="./#/research"><i class="fa fa-angle-right"></i> R &amp; D</a></li>
+                                <li><a href="https://drive.google.com/file/d/1T1kL1677llUwx56Ruc7JIU1SfSY2bqw7/view"><i class="fa fa-angle-right"></i> Rules &amp; Regulations</a></li>
+                                <li><a href="https://forms.gle/sd53QUSfRM2dU63J9"><i class="fa fa-angle-right"></i> Grievance redressal Form</a></li>
+                                <li><a href="https://forms.gle/xZd4yoAeLjjjbp7SA"><i class="fa fa-angle-right"></i> Student Feedback Form</a></li>
+                                <li><a href="https://the.islec.edu.in/Contact"><i class="fa fa-angle-right"></i> Contact Us</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="footer-link mt-40">
+                            <div class="footer-title pb-25"><h6>Departments</h6></div>
+                            <ul>
+                                <li><a href="./#/department/ce"><i class="fa fa-angle-right"></i> Civil Engineering</a></li>
+                                <li><a href="./#/department/cse"><i class="fa fa-angle-right"></i> Computer Science Engineering</a></li>
+                                <li><a href="./#/department/ece"><i class="fa fa-angle-right"></i> Electronics &amp; Communication Engineering</a></li>
+                                <li><a href="./#/department/ds"><i class="fa fa-angle-right"></i> Artificial Intelligence &amp; Data Science</a></li>
+                                <li><a href="./#/department/it"><i class="fa fa-angle-right"></i> Information Technology</a></li>
+                                <li><a href="./#/department/me"><i class="fa fa-angle-right"></i> Mechanical Engineering</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <div class="footer-link mt-40">
+                            <div class="footer-title pb-25"><h6>Campus Life</h6></div>
+                            <ul>
+                                <li><a href="./#/library"><i class="fa fa-angle-right"></i> Library</a></li>
+                                <li><a href="./#/"><i class="fa fa-angle-right"></i> Laboratories</a></li>
+                                <li><a href="./#/"><i class="fa fa-angle-right"></i> Student Life</a></li>
+                                <li><a href="./#/"><i class="fa fa-angle-right"></i> Gallery</a></li>
+                                <li><a href="./#/events"><i class="fa fa-angle-right"></i> Events</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-copyright">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 text-center">
+                        <div class="copyright text-md-left">
+                            <p>&copy; Copyrights 2020 ISL Engineering College.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6 text-center">
+                        <div class="copyright social text-md-right">
+                            <ul class="mt-0">
+                                <p>Follow us on</p>
+                                <li><a href="https://www.linkedin.com/school/isl-engineering-college/" target="_blank" rel="noopener"><i class="fa fa-linkedin"></i></a></li>
+                                <li><a href="https://www.instagram.com/islengineeringcollege/?hl=en" target="_blank" rel="noopener"><i class="fa fa-instagram"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

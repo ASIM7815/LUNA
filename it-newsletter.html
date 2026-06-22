@@ -10,16 +10,40 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="manifest" href="./manifest.json" />
     <title>IT Department Newsletter - ISL Engineering College</title>
-
-    <script defer="defer" src="./static/js/main.64d07445.js"></script>
-    <script defer="defer" src="./academic-council-pdf.js"></script>
-    <script defer="defer" src="./navigation-pdf-handler.js"></script>
-    <script defer="defer" src="./newsletter-menu-injector.js"></script>
+    <!-- Standalone page - no React app needed -->
     <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
 
     <style>
         html,body{margin:0;overflow-x:hidden}
         #dnl-it-page{width:100vw!important;max-width:none!important;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;box-sizing:border-box;overflow-x:hidden}
+        /* Enhanced Header Styles */
+        .newsletter-header{background:#1a6b4a;padding:16px 24px;box-shadow:0 2px 12px rgba(0,0,0,0.15);position:relative;z-index:100}
+        .header-container{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+        .header-logo-link{text-decoration:none;display:flex;align-items:center;gap:12px;transition:opacity .2s}
+        .header-logo-link:hover{opacity:.9}
+        .header-logo{height:40px;width:40px;border-radius:8px;object-fit:cover}
+        .header-title{color:#fff;font-size:1.3rem;font-weight:700;letter-spacing:-0.5px}
+        .header-nav{display:flex;align-items:center;gap:8px}
+        .header-nav-btn{color:rgba(255,255,255,0.9);text-decoration:none;padding:8px 18px;background:rgba(255,255,255,0.12);border-radius:6px;font-size:0.9rem;font-weight:600;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
+        .header-nav-btn:hover{background:rgba(255,255,255,0.2);transform:translateY(-1px)}
+        /* Professional Footer */
+        .newsletter-footer{background:linear-gradient(135deg,#0d1f3a 0%,#15503e 100%);color:#fff;padding:48px 24px 24px;margin-top:60px}
+        .footer-container{max-width:1400px;margin:0 auto}
+        .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:32px}
+        .footer-col h3{font-size:1.1rem;font-weight:700;margin:0 0 16px;color:#fff}
+        .footer-col p{color:rgba(255,255,255,0.7);font-size:0.9rem;line-height:1.7;margin:0 0 12px}
+        .footer-links{list-style:none;padding:0;margin:0}
+        .footer-links li{margin-bottom:10px}
+        .footer-links a{color:rgba(255,255,255,0.75);text-decoration:none;font-size:0.9rem;transition:color .2s;display:flex;align-items:center;gap:8px}
+        .footer-links a:hover{color:#fff}
+        .footer-social{display:flex;gap:10px;margin-top:12px}
+        .footer-social-link{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;color:#fff;text-decoration:none;transition:all .2s;font-size:1rem}
+        .footer-social-link:hover{background:rgba(255,255,255,0.2);transform:translateY(-2px)}
+        .footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding-top:20px;text-align:center;color:rgba(255,255,255,0.6);font-size:0.85rem}
+        .footer-bottom a{color:rgba(255,255,255,0.8);text-decoration:none}
+        .footer-bottom a:hover{color:#fff}
+        @media(max-width:992px){.footer-grid{grid-template-columns:1fr 1fr;gap:30px}.header-title{font-size:1.1rem}}
+        @media(max-width:640px){.footer-grid{grid-template-columns:1fr}.header-nav{gap:4px}.header-nav-btn{padding:6px 12px;font-size:0.85rem}}
         .dnl-hero{background:linear-gradient(135deg,#0d1f3a 0%,#15503e 55%,#1a6b4a 100%);padding:64px 6% 56px;position:relative;overflow:hidden}
         .dnl-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:360px;height:360px;border-radius:50%;background:rgba(255,255,255,.04)}
         .dnl-crumbs{display:flex;align-items:center;gap:6px;list-style:none;padding:0;margin:0 0 18px;font-size:.85rem}.dnl-crumbs li{color:rgba(255,255,255,.55)}.dnl-crumbs li+li::before{content:"›";margin-right:6px}.dnl-crumbs a{color:rgba(255,255,255,.8);text-decoration:none}.dnl-crumbs a:hover{color:#fff}
@@ -37,8 +61,21 @@
         @media(max-width:640px){.dnl-hero h1{font-size:1.7rem}.dnl-card-header{padding:22px 24px;flex-wrap:wrap}.dnl-card-body{padding:28px 24px 32px}.dnl-card-body h2{font-size:1.35rem}.dnl-highlights{grid-template-columns:1fr}.dnl-sidebar{grid-template-columns:1fr}.dnl-cta-btn{width:100%;justify-content:center}}
     </style>
 </head>
-<body>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
+<body style="margin:0;padding:0;font-family:system-ui,-apple-system,sans-serif;">
+    <noscript>You need to enable JavaScript to view this page.</noscript>
+    <!-- Enhanced Header -->
+    <header class="newsletter-header">
+        <div class="header-container">
+            <a href="./" class="header-logo-link">
+                <img src="./images/unnamed.webp" alt="ISL Engineering College" class="header-logo" onerror="this.style.display='none'">
+                <span class="header-title">ISL Engineering College</span>
+            </a>
+            <nav class="header-nav">
+                <a href="./" class="header-nav-btn"><i class="fa fa-home"></i> Home</a>
+                <a href="./newsletter.html" class="header-nav-btn"><i class="fa fa-newspaper-o"></i> Newsletters</a>
+            </nav>
+        </div>
+    </header>
     <div id="root"></div>
 
     <script>
@@ -46,36 +83,64 @@
         var PDF_LINK = "#"; // Replace with actual IT 2026 newsletter PDF link
         var PAGE_HTML = `<div id="dnl-it-page"><div class="dnl-hero"><ul class="dnl-crumbs"><li><a href="./">Home</a></li><li><a href="./newsletter.html">Newsletters</a></li><li>IT 2026</li></ul><div class="dnl-hero-badge"><i class="fa fa-newspaper-o"></i> Department Newsletter</div><h1>Information Technology</h1><p class="dnl-hero-sub">Academic Year 2025–26 &nbsp;&middot;&nbsp; Vol. 2026</p></div><div class="dnl-body"><div class="dnl-inner"><div><div class="dnl-main-card"><div class="dnl-card-header"><span class="dnl-year-pill">2026</span><span class="dnl-edition-tag">Latest Edition</span></div><div class="dnl-card-body"><h2>Information Technology Newsletter 2026</h2><p>The IT Department Newsletter 2026 captures the vibrant academic journey of our department — from cutting-edge projects and industry collaborations to student milestones and faculty achievements throughout the year.</p><p>This edition reflects our department's drive to stay ahead in the ever-evolving technology landscape, nurturing talent and fostering innovation at every step.</p><div class="dnl-highlights-title">What's Inside</div><ul class="dnl-highlights"><li><i class="fa fa-check-circle"></i>Coding competitions &amp; tech fests</li><li><i class="fa fa-check-circle"></i>Industry visits &amp; expert talks</li><li><i class="fa fa-check-circle"></i>Student project exhibitions</li><li><i class="fa fa-check-circle"></i>Internship &amp; placement updates</li><li><i class="fa fa-check-circle"></i>Faculty research contributions</li><li><i class="fa fa-check-circle"></i>Department events &amp; workshops</li></ul><a href="${PDF_LINK}" class="dnl-cta-btn" target="_blank" rel="noopener noreferrer"><i class="fa fa-file-pdf-o"></i>View 2026 Newsletter<i class="fa fa-long-arrow-right"></i></a></div></div><a href="./newsletter.html" class="dnl-back"><i class="fa fa-arrow-left"></i> Back to All Newsletters</a></div><div class="dnl-sidebar"><div class="dnl-info-card"><div class="dnl-info-card-head">Newsletter Details</div><ul class="dnl-info-list"><li><span class="label">Edition</span><span class="value">2026</span></li><li><span class="label">Academic Year</span><span class="value">2025–26</span></li><li><span class="label">Department</span><span class="value">IT</span></li><li><span class="label">Institution</span><span class="value">ISLEC</span></li><li><span class="label">Affiliation</span><span class="value">Osmania Univ.</span></li></ul></div><div class="dnl-dept-card"><div class="dept-initial">IT</div><h3>IT Department</h3><p>Information Technology<br/>ISL Engineering College</p></div></div></div></div></div>`;
 
-        function escapeContainer(el){var p=el.parentElement;document.documentElement.style.overflowX='hidden';document.body.style.overflowX='hidden';while(p&&p!==document.body){p.style.overflow='visible';p.style.maxWidth='none';p.style.width='100%';p.style.marginLeft='0';p.style.marginRight='0';p.style.paddingLeft='0';p.style.paddingRight='0';p.style.left='auto';p.style.right='auto';p=p.parentElement;}}
-        function inject() {
-            var root = document.querySelector('#root > div');
-            if (!root) return false;
-            if (document.getElementById('dnl-it-page')) return true;
-            var nav = root.querySelector('header, nav, [class*="navbar"], [class*="header"]');
-            if (nav && nav.parentNode) {
-                var wrapper = document.createElement('div');
-                wrapper.innerHTML = PAGE_HTML;
-                nav.parentNode.insertBefore(wrapper.firstElementChild, nav.nextSibling);
-                var inserted = nav.nextSibling;
-                var toRemove = [];
-                var sibling = inserted ? inserted.nextSibling : null;
-                while (sibling) { toRemove.push(sibling); sibling = sibling.nextSibling; }
-                toRemove.forEach(function(el) { el.parentNode && el.parentNode.removeChild(el); });
-                escapeContainer(inserted);
-            } else {
-                root.innerHTML = PAGE_HTML;
-                escapeContainer(root.firstElementChild || root);
-            }
-            return true;
-        }
-
-        if (!inject()) {
-            var obs = new MutationObserver(function () {
-                if (inject()) obs.disconnect();
-            });
-            obs.observe(document.body, { childList: true, subtree: true });
-            setTimeout(function () { obs.disconnect(); }, 15000);
-        }
+        // Direct injection since this is now a standalone page
+        document.getElementById('root').innerHTML = PAGE_HTML;
+        document.documentElement.style.overflowX='hidden';
+        document.body.style.overflowX='hidden';
+        
+        // Inject Professional Footer
+        var footer = document.createElement('footer');
+        footer.className = 'newsletter-footer';
+        footer.innerHTML = `
+            <div class="footer-container">
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <h3>ISL Engineering College</h3>
+                        <p>Affiliated to Osmania University &amp; Approved by AICTE. Established in 2008, ISL Engineering College is committed to excellence in technical education and holistic student development.</p>
+                        <p><i class="fa fa-map-marker"></i> &nbsp;Bandlaguda, Hyderabad, Telangana</p>
+                        <div class="footer-social">
+                            <a href="#" class="footer-social-link" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa fa-facebook"></i></a>
+                            <a href="#" class="footer-social-link" target="_blank" rel="noopener" aria-label="Twitter"><i class="fa fa-twitter"></i></a>
+                            <a href="#" class="footer-social-link" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="fa fa-linkedin"></i></a>
+                            <a href="#" class="footer-social-link" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa fa-instagram"></i></a>
+                            <a href="#" class="footer-social-link" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa fa-youtube-play"></i></a>
+                        </div>
+                    </div>
+                    <div class="footer-col">
+                        <h3>Quick Links</h3>
+                        <ul class="footer-links">
+                            <li><a href="./"><i class="fa fa-angle-right"></i> Home</a></li>
+                            <li><a href="./#/about"><i class="fa fa-angle-right"></i> About Us</a></li>
+                            <li><a href="./#/admissions"><i class="fa fa-angle-right"></i> Admissions</a></li>
+                            <li><a href="./#/departments"><i class="fa fa-angle-right"></i> Departments</a></li>
+                            <li><a href="./#/placements"><i class="fa fa-angle-right"></i> Placements</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h3>Departments</h3>
+                        <ul class="footer-links">
+                            <li><a href="./cse-newsletter.html"><i class="fa fa-angle-right"></i> CSE</a></li>
+                            <li><a href="./it-newsletter.html"><i class="fa fa-angle-right"></i> IT</a></li>
+                            <li><a href="./aids-newsletter.html"><i class="fa fa-angle-right"></i> AI &amp; DS</a></li>
+                            <li><a href="./#/departments"><i class="fa fa-angle-right"></i> All Departments</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-col">
+                        <h3>Contact</h3>
+                        <ul class="footer-links">
+                            <li><a href="tel:+914024154555"><i class="fa fa-phone"></i> +91 40 2415 4555</a></li>
+                            <li><a href="mailto:info@islec.edu.in"><i class="fa fa-envelope"></i> info@islec.edu.in</a></li>
+                            <li><a href="./#/contact"><i class="fa fa-map-marker"></i> Campus Location</a></li>
+                            <li><a href="./#/contact"><i class="fa fa-paper-plane"></i> Get Directions</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; ${new Date().getFullYear()} ISL Engineering College. All Rights Reserved. | <a href="./#/privacy">Privacy Policy</a> | <a href="./#/terms">Terms &amp; Conditions</a></p>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(footer);
     })();
     </script>
 </body>
