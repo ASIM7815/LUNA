@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="./images/unnamed.webp" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#192f59" />
+    <meta name="description" content="AIDS Department Newsletter 2026 - ISL Engineering College" />
+    <link rel="apple-touch-icon" href="./images/logo.png" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="manifest" href="./manifest.json" />
+    <title>AIDS Department Newsletter - ISL Engineering College</title>
+
+    <script defer="defer" src="./static/js/main.64d07445.js"></script>
+    <script defer="defer" src="./academic-council-pdf.js"></script>
+    <script defer="defer" src="./navigation-pdf-handler.js"></script>
+    <script defer="defer" src="./newsletter-menu-injector.js"></script>
+    <link href="./static/css/main.f1b4b188.css" rel="stylesheet">
+
+    <style>
+        html,body{margin:0;overflow-x:hidden}
+        #dnl-aids-page{width:100vw!important;max-width:none!important;position:relative;left:50%;right:50%;margin-left:-50vw;margin-right:-50vw;box-sizing:border-box;overflow-x:hidden}
+        .dnl-hero{background:linear-gradient(135deg,#401010 0%,#8c1818 55%,#bf3a1a 100%);padding:64px 6% 56px;position:relative;overflow:hidden}.dnl-hero::after{content:"";position:absolute;right:-60px;top:-60px;width:360px;height:360px;border-radius:50%;background:rgba(255,255,255,.04)}
+        .dnl-crumbs{display:flex;align-items:center;gap:6px;list-style:none;padding:0;margin:0 0 18px;font-size:.85rem}.dnl-crumbs li{color:rgba(255,255,255,.55)}.dnl-crumbs li+li::before{content:"›";margin-right:6px}.dnl-crumbs a{color:rgba(255,255,255,.8);text-decoration:none}.dnl-crumbs a:hover{color:#fff}
+        .dnl-hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.85);font-size:.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;margin-bottom:14px}.dnl-hero h1{color:#fff;font-size:2.4rem;font-weight:800;margin:0 0 10px;line-height:1.2}.dnl-hero-sub{color:rgba(255,255,255,.65);font-size:1rem}
+        .dnl-body{background:#edf1f7;padding:60px 6% 80px}.dnl-inner{max-width:1360px;margin:0 auto;display:grid;grid-template-columns:1fr 340px;gap:32px;align-items:start}
+        .dnl-main-card{background:#fff;border-radius:18px;box-shadow:0 2px 16px rgba(25,47,89,.09);overflow:hidden}.dnl-card-header{background:linear-gradient(90deg,#8c1818 0%,#bf3a1a 100%);padding:32px 44px;display:flex;align-items:center;gap:18px}.dnl-year-pill{background:#fff;color:#8c1818;font-size:1.6rem;font-weight:900;padding:8px 24px;border-radius:40px;letter-spacing:1px;white-space:nowrap}.dnl-edition-tag{background:rgba(255,255,255,.18);color:#fff;font-size:.78rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.25)}
+        .dnl-card-body{padding:40px 44px 44px}.dnl-card-body h2{color:#0d1f3a;font-size:1.75rem;font-weight:800;margin:0 0 20px;line-height:1.3}.dnl-card-body p{color:#5a6880;font-size:1.04rem;line-height:1.85;margin:0 0 14px}
+        .dnl-highlights-title{font-size:.82rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:#8c1818;margin:28px 0 16px;padding-bottom:10px;border-bottom:2px solid #edf1f7}.dnl-highlights{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;list-style:none;padding:0;margin:0 0 36px}.dnl-highlights li{display:flex;align-items:flex-start;gap:10px;background:#fff5f4;border-radius:10px;padding:12px 16px;color:#334155;font-size:.94rem;line-height:1.45}.dnl-highlights li i{color:#bf3a1a;margin-top:2px;flex-shrink:0;font-size:1rem}
+        .dnl-cta-btn{display:inline-flex;align-items:center;gap:12px;padding:16px 40px;background:#bf3a1a;color:#fff!important;text-decoration:none!important;border-radius:10px;font-size:1.05rem;font-weight:700;letter-spacing:.3px;transition:background .22s,transform .2s,box-shadow .2s;box-shadow:0 6px 20px rgba(191,58,26,.25)}.dnl-cta-btn:hover{background:#8c1818;transform:translateY(-2px);box-shadow:0 10px 28px rgba(191,58,26,.35)}
+        .dnl-sidebar{display:flex;flex-direction:column;gap:20px}.dnl-info-card{background:#fff;border-radius:16px;box-shadow:0 2px 12px rgba(25,47,89,.08);overflow:hidden}.dnl-info-card-head{background:#8c1818;color:#fff;font-size:.82rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:14px 22px}.dnl-info-list{list-style:none;padding:16px 22px 20px;margin:0}.dnl-info-list li{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f0f4f8;font-size:.92rem}.dnl-info-list li:last-child{border-bottom:none}.dnl-info-list .label{color:#7a8fa6;font-weight:500}.dnl-info-list .value{color:#0d1f3a;font-weight:700}
+        .dnl-dept-card{background:linear-gradient(135deg,#8c1818,#bf3a1a);border-radius:16px;padding:28px 24px;color:#fff;text-align:center}.dnl-dept-card .dept-initial{width:70px;height:70px;background:rgba(255,255,255,.15);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:900;margin:0 auto 14px;border:2px solid rgba(255,255,255,.25)}.dnl-dept-card h3{font-size:1.05rem;font-weight:700;margin:0 0 6px}.dnl-dept-card p{font-size:.85rem;color:rgba(255,255,255,.7);margin:0}
+        .dnl-back{display:inline-flex;align-items:center;gap:8px;margin-top:32px;color:#8c1818;text-decoration:none;font-weight:600;font-size:.92rem;transition:gap .2s}.dnl-back:hover{gap:14px;color:#6b1212}
+        @media(max-width:1024px){.dnl-inner{grid-template-columns:1fr}.dnl-sidebar{display:grid;grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:640px){.dnl-hero h1{font-size:1.7rem}.dnl-card-header{padding:22px 24px;flex-wrap:wrap}.dnl-card-body{padding:28px 24px 32px}.dnl-card-body h2{font-size:1.35rem}.dnl-highlights{grid-template-columns:1fr}.dnl-sidebar{grid-template-columns:1fr}.dnl-cta-btn{width:100%;justify-content:center}}
+    </style>
+</head>
+<body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+
+    <script>
+    (function () {
+        var PDF_LINK = "#"; // Replace with actual AIDS 2026 newsletter PDF link
+        var PAGE_HTML = `<div id="dnl-aids-page"><div class="dnl-hero"><ul class="dnl-crumbs"><li><a href="./">Home</a></li><li><a href="./newsletter.html">Newsletters</a></li><li>AIDS 2026</li></ul><div class="dnl-hero-badge"><i class="fa fa-newspaper-o"></i> Department Newsletter</div><h1>Artificial Intelligence &amp; Data Science</h1><p class="dnl-hero-sub">Academic Year 2025–26 &nbsp;&middot;&nbsp; Vol. 2026</p></div><div class="dnl-body"><div class="dnl-inner"><div><div class="dnl-main-card"><div class="dnl-card-header"><span class="dnl-year-pill">2026</span><span class="dnl-edition-tag">Latest Edition</span></div><div class="dnl-card-body"><h2>Artificial Intelligence &amp; Data Science Newsletter 2026</h2><p>The AIDS Department Newsletter 2026 spotlights the remarkable advancements, student innovations, and research breakthroughs from the Artificial Intelligence &amp; Data Science department throughout the academic year.</p><p>Dive into stories of machine learning projects, AI-driven research, data science competitions, and the passionate community of learners and researchers shaping the intelligent future of technology.</p><div class="dnl-highlights-title">What's Inside</div><ul class="dnl-highlights"><li><i class="fa fa-check-circle"></i>Machine learning &amp; AI projects</li><li><i class="fa fa-check-circle"></i>Data science competitions &amp; hackathons</li><li><i class="fa fa-check-circle"></i>Industry internships &amp; placements</li><li><i class="fa fa-check-circle"></i>AI workshops &amp; expert sessions</li><li><i class="fa fa-check-circle"></i>Faculty research &amp; publications</li><li><i class="fa fa-check-circle"></i>Student achievements &amp; certifications</li></ul><a href="${PDF_LINK}" class="dnl-cta-btn" target="_blank" rel="noopener noreferrer"><i class="fa fa-file-pdf-o"></i>View 2026 Newsletter<i class="fa fa-long-arrow-right"></i></a></div></div><a href="./newsletter.html" class="dnl-back"><i class="fa fa-arrow-left"></i> Back to All Newsletters</a></div><div class="dnl-sidebar"><div class="dnl-info-card"><div class="dnl-info-card-head">Newsletter Details</div><ul class="dnl-info-list"><li><span class="label">Edition</span><span class="value">2026</span></li><li><span class="label">Academic Year</span><span class="value">2025–26</span></li><li><span class="label">Department</span><span class="value">AIDS</span></li><li><span class="label">Institution</span><span class="value">ISLEC</span></li><li><span class="label">Affiliation</span><span class="value">Osmania Univ.</span></li></ul></div><div class="dnl-dept-card"><div class="dept-initial">AI</div><h3>AIDS Department</h3><p>Artificial Intelligence &amp; Data Science<br/>ISL Engineering College</p></div></div></div></div></div>`;
+
+        function escapeContainer(el){var p=el.parentElement;document.documentElement.style.overflowX='hidden';document.body.style.overflowX='hidden';while(p&&p!==document.body){p.style.overflow='visible';p.style.maxWidth='none';p.style.width='100%';p.style.marginLeft='0';p.style.marginRight='0';p.style.paddingLeft='0';p.style.paddingRight='0';p.style.left='auto';p.style.right='auto';p=p.parentElement;}}
+        function inject() {
+            var root = document.querySelector('#root > div');
+            if (!root) return false;
+            if (document.getElementById('dnl-aids-page')) return true;
+            var nav = root.querySelector('header, nav, [class*="navbar"], [class*="header"]');
+            if (nav && nav.parentNode) {
+                var wrapper = document.createElement('div');
+                wrapper.innerHTML = PAGE_HTML;
+                nav.parentNode.insertBefore(wrapper.firstElementChild, nav.nextSibling);
+                var inserted = nav.nextSibling;
+                var toRemove = [];
+                var sibling = inserted ? inserted.nextSibling : null;
+                while (sibling) { toRemove.push(sibling); sibling = sibling.nextSibling; }
+                toRemove.forEach(function(el) { el.parentNode && el.parentNode.removeChild(el); });
+                escapeContainer(inserted);
+            } else {
+                root.innerHTML = PAGE_HTML;
+                escapeContainer(root.firstElementChild || root);
+            }
+            return true;
+        }
+
+        if (!inject()) {
+            var obs = new MutationObserver(function () {
+                if (inject()) obs.disconnect();
+            });
+            obs.observe(document.body, { childList: true, subtree: true });
+            setTimeout(function () { obs.disconnect(); }, 15000);
+        }
+    })();
+    </script>
+</body>
+</html>
