@@ -13,10 +13,29 @@
     <link rel="manifest" href="./manifest.json" />
     <title>ISL Engineering College</title>
 
+    <script>
+        (function () {
+            function isHomeRoute() {
+                var path = window.location.pathname.replace(/\/+$/, "") || "/";
+                var hash = window.location.hash;
+                return (path === "/" || path === "/index.html") && (hash === "" || hash === "#" || hash === "#/");
+            }
+
+            function syncRouteClass() {
+                document.documentElement.classList.toggle("is-home-route", isHomeRoute());
+                document.documentElement.classList.toggle("is-non-home-route", !isHomeRoute());
+            }
+
+            syncRouteClass();
+            window.__isISLECHomeRoute = isHomeRoute;
+            window.__syncISLECRouteClass = syncRouteClass;
+        })();
+    </script>
+
     <!-- CRITICAL: Hide carousels IMMEDIATELY - before any other CSS loads -->
     <style>
-        /* Emergency carousel hiding - loads first to prevent flash */
-        .carousel:not(.main-carousel):not(.highlights-carousel) {
+        /* Emergency carousel hiding - loads first to prevent flash on inner pages only */
+        html.is-non-home-route .carousel:not(.main-carousel):not(.highlights-carousel) {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
@@ -26,7 +45,7 @@
             left: -9999px !important;
         }
         
-        .carousel:not(.main-carousel):not(.highlights-carousel) * {
+        html.is-non-home-route .carousel:not(.main-carousel):not(.highlights-carousel) * {
             display: none !important;
         }
         
@@ -91,6 +110,98 @@
             cursor: pointer;
         }
 
+        .main-carousel .carousel-control-prev,
+        .main-carousel .carousel-control-next,
+        .highlights-carousel .carousel-control-prev,
+        .highlights-carousel .carousel-control-next {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            top: 50%;
+            bottom: auto;
+            width: 52px;
+            height: 52px;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(8, 22, 48, 0.78);
+            box-shadow: 0 10px 26px rgba(8, 22, 48, 0.28);
+            opacity: 0.92;
+            outline: 2px solid rgba(255, 255, 255, 0.42);
+            outline-offset: -4px;
+            transform: translateY(-50%);
+            transition: background 160ms ease, box-shadow 160ms ease, opacity 160ms ease, transform 160ms ease;
+            z-index: 4;
+        }
+
+        .main-carousel .carousel-control-prev,
+        .highlights-carousel .carousel-control-prev {
+            left: 18px;
+        }
+
+        .main-carousel .carousel-control-next,
+        .highlights-carousel .carousel-control-next {
+            right: 18px;
+        }
+
+        .main-carousel .carousel-control-prev-icon,
+        .main-carousel .carousel-control-next-icon,
+        .highlights-carousel .carousel-control-prev-icon,
+        .highlights-carousel .carousel-control-next-icon {
+            display: block !important;
+            position: relative;
+            width: 20px;
+            height: 20px;
+            background-image: none !important;
+            background-size: 0 !important;
+        }
+
+        .main-carousel .carousel-control-prev-icon::before,
+        .main-carousel .carousel-control-next-icon::before,
+        .highlights-carousel .carousel-control-prev-icon::before,
+        .highlights-carousel .carousel-control-next-icon::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 14px;
+            height: 14px;
+            border-top: 4px solid #ffffff;
+            border-radius: 1px;
+        }
+
+        .main-carousel .carousel-control-prev-icon::before,
+        .highlights-carousel .carousel-control-prev-icon::before {
+            border-left: 4px solid #ffffff;
+            transform: translate(-35%, -50%) rotate(-45deg);
+        }
+
+        .main-carousel .carousel-control-next-icon::before,
+        .highlights-carousel .carousel-control-next-icon::before {
+            border-right: 4px solid #ffffff;
+            transform: translate(-65%, -50%) rotate(45deg);
+        }
+
+        .main-carousel .carousel-control-prev:hover,
+        .main-carousel .carousel-control-next:hover,
+        .main-carousel .carousel-control-prev:focus,
+        .main-carousel .carousel-control-next:focus,
+        .highlights-carousel .carousel-control-prev:hover,
+        .highlights-carousel .carousel-control-next:hover,
+        .highlights-carousel .carousel-control-prev:focus,
+        .highlights-carousel .carousel-control-next:focus {
+            background: rgba(20, 176, 104, 0.92);
+            box-shadow: 0 14px 30px rgba(8, 22, 48, 0.34);
+            opacity: 1;
+            transform: translateY(-50%) scale(1.06);
+        }
+
+        .main-carousel .carousel-control-prev:active,
+        .main-carousel .carousel-control-next:active,
+        .highlights-carousel .carousel-control-prev:active,
+        .highlights-carousel .carousel-control-next:active {
+            transform: translateY(-50%) scale(0.98);
+        }
+
         .main-carousel .carousel-item {
             background: linear-gradient(135deg, #062a6a 0%, #0b3b91 45%, #082a66 100%);
         }
@@ -116,13 +227,110 @@
             background: #edf1f7;
         }
 
+        .homepage-news-visual {
+            display: block;
+            margin: 14px 0 18px;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid rgba(25, 47, 89, 0.12);
+            background: #ffffff;
+            box-shadow: 0 10px 24px rgba(25, 47, 89, 0.08);
+        }
+
+        .homepage-news-visual img {
+            display: block;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            object-position: center;
+        }
+
+        .homepage-highlight-feature {
+            display: block;
+            margin: 14px 0 18px;
+            overflow: hidden;
+            border-radius: 8px;
+            border: 1px solid rgba(25, 47, 89, 0.12);
+            background: #edf1f7;
+            box-shadow: 0 10px 24px rgba(25, 47, 89, 0.08);
+        }
+
+        .homepage-highlight-feature img {
+            display: block;
+            width: 100%;
+            height: clamp(220px, 24vw, 340px);
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .homepage-useful-links {
+            display: grid;
+            gap: 10px;
+            margin: 14px 0 18px;
+        }
+
+        .homepage-useful-links a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            min-height: 52px;
+            padding: 12px 14px;
+            border: 1px solid rgba(25, 47, 89, 0.14);
+            border-radius: 8px;
+            background: #ffffff;
+            color: #192f59;
+            font-size: 15px;
+            font-weight: 600;
+            line-height: 1.25;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(25, 47, 89, 0.06);
+            transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+        }
+
+        .homepage-useful-links a:hover,
+        .homepage-useful-links a:focus {
+            border-color: rgba(25, 47, 89, 0.32);
+            color: #10274f;
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: 0 12px 24px rgba(25, 47, 89, 0.11);
+        }
+
+        .homepage-useful-links i {
+            flex: 0 0 auto;
+            color: #c99a2e;
+        }
+
         @media (max-width: 576px) {
+            .main-carousel .carousel-control-prev,
+            .main-carousel .carousel-control-next,
+            .highlights-carousel .carousel-control-prev,
+            .highlights-carousel .carousel-control-next {
+                width: 42px;
+                height: 42px;
+            }
+
+            .main-carousel .carousel-control-prev,
+            .highlights-carousel .carousel-control-prev {
+                left: 10px;
+            }
+
+            .main-carousel .carousel-control-next,
+            .highlights-carousel .carousel-control-next {
+                right: 10px;
+            }
+
             .main-carousel .carousel-item img {
                 height: clamp(220px, 45vh, 420px);
             }
 
             .highlights-carousel .carousel-item img {
                 height: 240px;
+            }
+
+            .homepage-highlight-feature img {
+                height: 220px;
             }
         }
     </style>
@@ -153,6 +361,7 @@
             ];
 
             var HIGHLIGHT_SLIDES = [
+                { id: "highlight-event-15112025", src: "./allimages/mainSlider/15112025.jpg", alt: "Campus Event Highlights" },
                 { id: "highlight-recognition", src: "./allimages/mainSlider/Recognition25.jpg", alt: "Recognition 2025" },
                 { id: "highlight-orientation", src: "./allimages/mainSlider/orientation24.jpeg", alt: "Orientation Highlights" },
                 { id: "highlight-judo", src: "./allimages/mainSlider/judo2024.jpg", alt: "Sports Highlights" },
@@ -222,6 +431,40 @@
                 }
             }
 
+            function createControl(direction) {
+                var control = document.createElement("button");
+                control.type = "button";
+                control.className = "carousel-control-" + direction;
+                control.setAttribute("aria-label", direction === "prev" ? "Previous slide" : "Next slide");
+
+                var icon = document.createElement("span");
+                icon.className = "carousel-control-" + direction + "-icon";
+                icon.setAttribute("aria-hidden", "true");
+
+                var label = document.createElement("span");
+                label.className = "sr-only";
+                label.textContent = direction === "prev" ? "Previous" : "Next";
+
+                control.appendChild(icon);
+                control.appendChild(label);
+                return control;
+            }
+
+            function ensureControls(carousel) {
+                if (!carousel.querySelector(".carousel-control-prev")) {
+                    carousel.appendChild(createControl("prev"));
+                }
+
+                if (!carousel.querySelector(".carousel-control-next")) {
+                    carousel.appendChild(createControl("next"));
+                }
+
+                var prev = carousel.querySelector(".carousel-control-prev");
+                var next = carousel.querySelector(".carousel-control-next");
+                if (prev) prev.replaceWith(prev.cloneNode(true));
+                if (next) next.replaceWith(next.cloneNode(true));
+            }
+
             function cleanupCarousel(carousel) {
                 if (!carousel) return;
                 var timer = carousel._carouselTimer;
@@ -243,6 +486,7 @@
                 var hasSlides = inner.querySelectorAll(".carousel-item").length > 0;
                 
                 if (isReady && hasSlides) {
+                    setControlsVisible(carousel, inner.querySelectorAll(".carousel-item").length > 1);
                     return true;
                 }
 
@@ -262,6 +506,7 @@
                 }
 
                 var indicators = rebuildIndicators(carousel, slides.length);
+                ensureControls(carousel);
                 var items = toArray(inner.querySelectorAll(".carousel-item"));
                 var indicatorItems = toArray(indicators.children);
                 var currentIndex = 0;
@@ -387,8 +632,13 @@
 
             function tryInit() {
                 // CRITICAL: Only initialize carousels on homepage
-                var hash = window.location.hash;
-                var isHomePage = hash === '' || hash === '#' || hash === '#/';
+                if (typeof window.__syncISLECRouteClass === "function") {
+                    window.__syncISLECRouteClass();
+                }
+
+                var isHomePage = typeof window.__isISLECHomeRoute === "function"
+                    ? window.__isISLECHomeRoute()
+                    : (window.location.hash === '' || window.location.hash === '#' || window.location.hash === '#/');
                 
                 if (!isHomePage) {
                     // Not on homepage - don't initialize carousels
@@ -421,11 +671,37 @@
                 }, 100);
             });
 
+            window.addEventListener('hashchange', function() {
+                if (typeof window.__syncISLECRouteClass === "function") {
+                    window.__syncISLECRouteClass();
+                }
+                setTimeout(function() {
+                    activeCarousels.forEach(cleanupCarousel);
+                    activeCarousels = [];
+                    tryInit();
+                }, 100);
+            });
+
+            document.addEventListener("click", function(event) {
+                var logoLink = event.target && event.target.closest ? event.target.closest(".navbar-brand") : null;
+                if (!logoLink) return;
+                setTimeout(function() {
+                    if (typeof window.__syncISLECRouteClass === "function") {
+                        window.__syncISLECRouteClass();
+                    }
+                    tryInit();
+                }, 150);
+            }, true);
+
             // Monitor URL changes for React Router
-            var lastPath = window.location.pathname;
+            var lastRoute = window.location.pathname + window.location.hash;
             setInterval(function() {
-                if (window.location.pathname !== lastPath) {
-                    lastPath = window.location.pathname;
+                var currentRoute = window.location.pathname + window.location.hash;
+                if (currentRoute !== lastRoute) {
+                    lastRoute = currentRoute;
+                    if (typeof window.__syncISLECRouteClass === "function") {
+                        window.__syncISLECRouteClass();
+                    }
                     activeCarousels.forEach(cleanupCarousel);
                     activeCarousels = [];
                     setTimeout(tryInit, 100);
@@ -433,14 +709,146 @@
             }, 500);
 
             // Initial setup
-            if (!tryInit()) {
-                startObserver();
-            }
+            tryInit();
+            startObserver();
 
             // Preload all images
             HERO_SLIDES.concat(HIGHLIGHT_SLIDES).forEach(function(slide) {
                 warmImage(slide.src);
             });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            var NEWS_IMAGE_URL = "https://the.islec.edu.in/news/news.jpg";
+            var HIGHLIGHT_IMAGE_URL = "./allimages/mainSlider/15112025.jpg";
+            var USEFUL_LINKS = [
+                { title: "Osmania University", href: "https://www.osmania.ac.in/" },
+                { title: "ISL Pharmacy", href: "https://www.islpharmacy.in/" }
+            ];
+            var observer = null;
+
+            function isHomePage() {
+                return typeof window.__isISLECHomeRoute === "function"
+                    ? window.__isISLECHomeRoute()
+                    : (window.location.hash === "" || window.location.hash === "#" || window.location.hash === "#/");
+            }
+
+            function toArray(list) {
+                return Array.prototype.slice.call(list || []);
+            }
+
+            function findSectionByHeading(label) {
+                var target = label.toLowerCase();
+                var headings = toArray(document.querySelectorAll("h1, h2, h3, h4, h5, h6"));
+                for (var i = 0; i < headings.length; i++) {
+                    var text = (headings[i].textContent || "").replace(/\s+/g, " ").trim().toLowerCase();
+                    if (text !== target) continue;
+                    return headings[i].closest("section");
+                }
+                return null;
+            }
+
+            function enhanceNewsSection() {
+                var section = findSectionByHeading("News & Updates");
+                if (!section || section.querySelector(".homepage-news-visual")) return false;
+
+                var visual = document.createElement("a");
+                visual.className = "homepage-news-visual";
+                visual.href = NEWS_IMAGE_URL;
+                visual.target = "_blank";
+                visual.rel = "noopener noreferrer";
+
+                var image = document.createElement("img");
+                image.src = NEWS_IMAGE_URL;
+                image.alt = "News and updates";
+                try { image.loading = "lazy"; } catch (e) { }
+                try { image.decoding = "async"; } catch (e) { }
+
+                visual.appendChild(image);
+                var heading = section.querySelector(".site-heading");
+                section.insertBefore(visual, heading ? heading.nextSibling : section.firstChild);
+                return true;
+            }
+
+            function enhanceUsefulLinksSection() {
+                var section = findSectionByHeading("Useful Links");
+                if (!section || section.querySelector(".homepage-useful-links")) return false;
+
+                var list = document.createElement("div");
+                list.className = "homepage-useful-links";
+
+                for (var i = 0; i < USEFUL_LINKS.length; i++) {
+                    var item = USEFUL_LINKS[i];
+                    var link = document.createElement("a");
+                    link.href = item.href;
+                    link.target = "_blank";
+                    link.rel = "noopener noreferrer";
+                    link.textContent = item.title;
+
+                    var icon = document.createElement("i");
+                    icon.className = "fa fa-external-link";
+                    icon.setAttribute("aria-hidden", "true");
+                    link.appendChild(icon);
+
+                    list.appendChild(link);
+                }
+
+                var heading = section.querySelector(".site-heading");
+                section.insertBefore(list, heading ? heading.nextSibling : section.firstChild);
+                return true;
+            }
+
+            function enhanceHighlightsSection() {
+                var section = findSectionByHeading("Highlights");
+                if (!section || section.querySelector(".homepage-highlight-feature")) return false;
+
+                var visual = document.createElement("a");
+                visual.className = "homepage-highlight-feature";
+                visual.href = "#/events";
+
+                var image = document.createElement("img");
+                image.src = HIGHLIGHT_IMAGE_URL;
+                image.alt = "Campus event highlights";
+                try { image.loading = "lazy"; } catch (e) { }
+                try { image.decoding = "async"; } catch (e) { }
+
+                visual.appendChild(image);
+                var heading = section.querySelector(".site-heading");
+                section.insertBefore(visual, heading ? heading.nextSibling : section.firstChild);
+                return true;
+            }
+
+            function applyEnhancements() {
+                if (!isHomePage()) return false;
+                var newsReady = enhanceNewsSection();
+                var usefulReady = enhanceUsefulLinksSection();
+                var highlightsReady = enhanceHighlightsSection();
+                return newsReady || usefulReady || highlightsReady;
+            }
+
+            function startObserver() {
+                if (observer) observer.disconnect();
+                observer = new MutationObserver(function () {
+                    applyEnhancements();
+                });
+                observer.observe(document.documentElement, { childList: true, subtree: true });
+            }
+
+            window.addEventListener("hashchange", function () {
+                window.setTimeout(applyEnhancements, 100);
+            });
+
+            if (document.readyState === "loading") {
+                document.addEventListener("DOMContentLoaded", function () {
+                    applyEnhancements();
+                    startObserver();
+                });
+            } else {
+                applyEnhancements();
+                startObserver();
+            }
         })();
     </script>
 
@@ -488,11 +896,15 @@
     <script>
     (function() {
         function isHomePage() {
-            var hash = window.location.hash;
-            return hash === '' || hash === '#' || hash === '#/';
+            return typeof window.__isISLECHomeRoute === "function"
+                ? window.__isISLECHomeRoute()
+                : (window.location.hash === '' || window.location.hash === '#' || window.location.hash === '#/');
         }
 
         function hideCarousels() {
+            if (typeof window.__syncISLECRouteClass === "function") {
+                window.__syncISLECRouteClass();
+            }
             if (isHomePage()) return;
             
             var carousels = document.querySelectorAll('.carousel');
@@ -543,7 +955,7 @@
         /* This CSS loads last, so it overrides React's styles */
         
         /* Step 1: Hide all carousels by default on non-root pages */
-        body .carousel:not(.main-carousel):not(.highlights-carousel) {
+        html.is-non-home-route body .carousel:not(.main-carousel):not(.highlights-carousel) {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
@@ -559,16 +971,16 @@
         }
         
         /* Step 2: Hide carousel contents */
-        body .carousel:not(.main-carousel):not(.highlights-carousel) * {
+        html.is-non-home-route body .carousel:not(.main-carousel):not(.highlights-carousel) * {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
         }
         
         /* Step 3: Hide carousel images specifically */
-        body .carousel img[src*="hack23.jpg"],
-        body .carousel img[src*="mainSlider"],
-        body .carousel img[src*="allimages/mainSlider"] {
+        html.is-non-home-route body .carousel img[src*="hack23.jpg"],
+        html.is-non-home-route body .carousel img[src*="mainSlider"],
+        html.is-non-home-route body .carousel img[src*="allimages/mainSlider"] {
             display: none !important;
             visibility: hidden !important;
             opacity: 0 !important;
@@ -663,13 +1075,17 @@
             text-decoration: none;
             margin-top: 10px;
         }
+
+        .header_right .header_ul a {
+            font-weight: 700 !important;
+        }
     </style>
 </head>
 
 <body>
     <!-- Inline style to prevent carousel flash on page load -->
     <style>
-        .carousel:not(.main-carousel):not(.highlights-carousel) { display: none !important; }
+        html.is-non-home-route .carousel:not(.main-carousel):not(.highlights-carousel) { display: none !important; }
     </style>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
@@ -678,15 +1094,15 @@
     <script>
     (function() {
         var WHATSAPP_NUMBER = '918686300801';
-        var FORM_KEY = 'islec_form_v6';
-
-        if (localStorage.getItem(FORM_KEY) === 'true') {
-            return;
-        }
 
         setTimeout(function() {
+            if (document.getElementById('admissionFormOverlay')) {
+                return;
+            }
+
             // Create overlay
             var overlay = document.createElement('div');
+            overlay.id = 'admissionFormOverlay';
             overlay.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:999999;display:flex;justify-content:center;align-items:center;padding:20px;overflow-y:auto;';
             
             // Create modal container
@@ -707,7 +1123,6 @@
             closeBtn.type = 'button';
             closeBtn.style.cssText = 'position:absolute;top:16px;right:16px;background:transparent;border:none;color:white;font-size:32px;cursor:pointer;width:36px;height:36px;border-radius:50%;line-height:1;';
             closeBtn.onclick = function() {
-                localStorage.setItem(FORM_KEY, 'true');
                 document.body.removeChild(overlay);
             };
             header.appendChild(title);
@@ -961,8 +1376,6 @@
                 msg += '\n_Submitted via Website_';
 
                 formContainer.innerHTML = '<div style="padding:60px 40px;text-align:center;"><div style="width:80px;height:80px;background:#4CAF50;border-radius:50%;margin:0 auto 24px;display:flex;align-items:center;justify-content:center;"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg></div><h2 style="color:#192f59;margin:0 0 12px;font-size:24px;">Thank You!</h2><p style="color:#666;margin:0 0 8px;">Your application has been submitted.</p><p style="color:#666;margin:0;font-size:14px;">Redirecting to WhatsApp...</p></div>';
-                
-                localStorage.setItem(FORM_KEY, 'true');
                 
                 setTimeout(function() {
                     window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(msg), '_blank');
