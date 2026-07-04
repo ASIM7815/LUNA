@@ -245,24 +245,6 @@
             object-position: center;
         }
 
-        .homepage-highlight-feature {
-            display: block;
-            margin: 14px 0 18px;
-            overflow: hidden;
-            border-radius: 8px;
-            border: 1px solid rgba(25, 47, 89, 0.12);
-            background: #edf1f7;
-            box-shadow: 0 10px 24px rgba(25, 47, 89, 0.08);
-        }
-
-        .homepage-highlight-feature img {
-            display: block;
-            width: 100%;
-            height: clamp(220px, 24vw, 340px);
-            object-fit: cover;
-            object-position: center;
-        }
-
         .homepage-useful-links {
             display: grid;
             gap: 10px;
@@ -329,9 +311,6 @@
                 height: 240px;
             }
 
-            .homepage-highlight-feature img {
-                height: 220px;
-            }
         }
     </style>
 
@@ -722,7 +701,6 @@
     <script>
         (function () {
             var NEWS_IMAGE_URL = "https://the.islec.edu.in/news/news.jpg";
-            var HIGHLIGHT_IMAGE_URL = "./allimages/mainSlider/15112025.jpg";
             var USEFUL_LINKS = [
                 { title: "Osmania University", href: "https://www.osmania.ac.in/" },
                 { title: "ISL Pharmacy", href: "https://www.islpharmacy.in/" }
@@ -800,32 +778,11 @@
                 return true;
             }
 
-            function enhanceHighlightsSection() {
-                var section = findSectionByHeading("Highlights");
-                if (!section || section.querySelector(".homepage-highlight-feature")) return false;
-
-                var visual = document.createElement("a");
-                visual.className = "homepage-highlight-feature";
-                visual.href = "#/events";
-
-                var image = document.createElement("img");
-                image.src = HIGHLIGHT_IMAGE_URL;
-                image.alt = "Campus event highlights";
-                try { image.loading = "lazy"; } catch (e) { }
-                try { image.decoding = "async"; } catch (e) { }
-
-                visual.appendChild(image);
-                var heading = section.querySelector(".site-heading");
-                section.insertBefore(visual, heading ? heading.nextSibling : section.firstChild);
-                return true;
-            }
-
             function applyEnhancements() {
                 if (!isHomePage()) return false;
                 var newsReady = enhanceNewsSection();
                 var usefulReady = enhanceUsefulLinksSection();
-                var highlightsReady = enhanceHighlightsSection();
-                return newsReady || usefulReady || highlightsReady;
+                return newsReady || usefulReady;
             }
 
             function startObserver() {
