@@ -1,43 +1,40 @@
-// Hide broken placeholder images in department pages
+// Show broken images with placeholder instead of hiding them
 (function() {
     // Wait for DOM to load
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', hideBrokenImages);
+        document.addEventListener('DOMContentLoaded', handleBrokenImages);
     } else {
-        hideBrokenImages();
+        handleBrokenImages();
     }
 
-    function hideBrokenImages() {
-        // Hide all images that fail to load
+    function handleBrokenImages() {
+        // Show broken images with red border for debugging
         const images = document.querySelectorAll('img');
         
         images.forEach(img => {
             // Add error handler
             img.addEventListener('error', function() {
-                console.log('Hiding broken image:', this.src);
+                console.warn('⚠️ Image failed to load:', this.src);
                 
-                // Hide the image
-                this.style.display = 'none';
+                // Instead of hiding, show with a placeholder style for debugging
+                this.style.border = '3px solid red';
+                this.style.minHeight = '200px';
+                this.style.backgroundColor = '#ffebee';
+                this.style.display = 'block';
                 
-                // Also hide parent containers if they're just image wrappers
-                let parent = this.parentElement;
+                // Add title to show the URL on hover
+                this.title = 'Image not found: ' + this.src;
                 
-                // Check if parent only contains this image
-                if (parent && parent.children.length === 1) {
-                    parent.style.display = 'none';
-                    
-                    // Check grandparent too
-                    let grandparent = parent.parentElement;
-                    if (grandparent && grandparent.classList.contains('col-md-6')) {
-                        grandparent.style.display = 'none';
-                    }
-                }
+                // Log to console for easy tracking
+                console.error('Missing image file:', this.src);
             });
             
             // Check if image is already broken
-            if (img.complete && img.naturalHeight === 0) {
+            if (img.complete && img.naturalHeight === 0 && img.src) {
                 img.dispatchEvent(new Event('error'));
             }
         });
     }
+    
+    console.log('🔍 Image debugging mode enabled - broken images will show with red border');
 })();
